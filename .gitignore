@@ -1,7 +1,7 @@
 # Gitignore for SmallGame!
 
 # Visual studio working files
-.vs/
+*.vs/
 *.user
 
 # Sublime temporary file
@@ -10,9 +10,12 @@
 # Build/intermediary files
 Game/build/
 
-# Binary files
-Game/bin/
+# Executable and database files from build
+*.exe
+*.ilk
+*.pdb
+*.ipdb
+*.iobj
 
 # (but we want to commit binary files we but next to our built binaries)
-!Game/bin/*.dll
-
+!Game/bin/Debug/assimp.dll
