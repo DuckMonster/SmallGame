@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?> 
+<AutoVisualizer xmlns="http://schemas.microsoft.com/vstudio/debugger/natvis/2010">
+  <Type Name="StringBase&lt;*&gt;">
+    <DisplayString>{data,na}</DisplayString>
+  </Type>
+  <Type Name="ArrayBase&lt;*, *&gt;">
+    <DisplayString>{{ size={size} capacity={capacity} }}</DisplayString>
+    <Expand>
+      <ArrayItems>
+        <Size>size</Size>
+        <ValuePointer>data</ValuePointer>
+      </ArrayItems>
+    </Expand>
+  </Type>
+  <Type Name="Matrix4">
+    <Expand>
+      <ArrayItems>
+        <Rank>2</Rank>
+        <Size>4</Size>
+        <ValuePointer>(float*)this</ValuePointer>
+      </ArrayItems>
+    </Expand>
+  </Type>
+</AutoVisualizer>

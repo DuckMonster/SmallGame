@@ -1,0 +1,42 @@
+{
+	"parent": "Style/default.json",
+
+	"tags":
+	[
+		{
+			"name": "entity",
+			"foreground": [1.0, 0.8, 0.5, 1.0],
+			"background": [0.2, 0.12, 0.05, 0.8]
+		},
+		{
+			"name": "entity_selected",
+			"foreground": [0.0, 0.0, 0.0, 1.0],
+			"background": [1.0, 0.8, 0.5, 1.0]
+		},
+		{
+			"name": "entity_empty",
+			"foreground": [0.5, 0.5, 0.5, 1.0],
+			"background": [0.1, 0.1, 0.1, 0.8]
+		},
+		{
+			"name": "entity_empty_selected",
+			"foreground": [0.1, 0.1, 0.1, 1.0],
+			"background": [0.7, 0.7, 0.7, 1.0]
+		},
+		{
+			"name": "component",
+			"foreground": [1.0, 0.6, 0.2, 1.0],
+			"background": [0.2, 0.09, 0.02, 0.8]
+		},
+		{
+			"name": "property",
+			"foreground": [0.7, 0.7, 0.7, 1.0],
+			"background": [0.2, 0.2, 0.2, 0.8]
+		},
+		{
+			"name": "property_value",
+			"foreground": [0.9, 0.9, 0.9, 1.0],
+			"background": [0.2, 0.2, 0.2, 0.8]
+		}
+	]
+}

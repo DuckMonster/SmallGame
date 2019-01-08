@@ -1,0 +1,4 @@
+{
+	"vertex": "Shader/font_background.vert",
+	"fragment": "Shader/font_background.frag"
+}

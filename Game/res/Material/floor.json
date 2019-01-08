@@ -1,0 +1,4 @@
+{
+	"parent": "Material/default.json",
+	"fragment": "Shader/floor.frag"
+}

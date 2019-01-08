@@ -1,0 +1,23 @@
+{
+	"texture": "Texture/font9x11.tga",
+
+	"material":
+	{
+		"foreground": "Material/font.json",
+		"background": "Material/font_background.json"
+	},
+
+	"glyph":
+	{
+		"width": 9,
+		"height": 11
+	},
+
+	"spacing":
+	{
+		"x": 1,
+		"y": 1
+	},
+
+	"kerning": 1
+}

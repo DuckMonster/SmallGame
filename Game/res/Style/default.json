@@ -1,0 +1,42 @@
+{
+	"font": "Font/7x11.json",
+	"default":
+	{
+		"foreground": [1.0, 1.0, 1.0, 1.0],
+		"background": [0.2, 0.2, 0.2, 0.8]
+	},
+
+	"tags":
+	[
+		{
+			"name": "red",
+			"foreground": [1.0, 0.1, 0.1, 1.0],
+			"background": [0.2, 0.05, 0.05, 0.8]
+		},
+		{
+			"name": "green",
+			"foreground": [0.1, 1.0, 0.1, 1.0],
+			"background": [0.05, 0.2, 0.05, 0.8]
+		},
+		{
+			"name": "blue",
+			"foreground": [0.1, 0.1, 1.0, 1.0],
+			"background": [0.05, 0.05, 0.2, 0.8]
+		},
+		{
+			"name": "cyan",
+			"foreground": [0.1, 1.0, 1.0, 1.0],
+			"background": [0.05, 0.2, 0.2, 0.8]
+		},
+		{
+			"name": "yellow",
+			"foreground": [1.0, 1.0, 0.0, 1.0],
+			"background": [0.2, 0.2, 0.05, 0.8]
+		},
+		{
+			"name": "print",
+			"foreground": [1.0, 0.8, 0.8, 1.0],
+			"background": [0.2, 0.12, 0.05, 0.8]
+		}
+	]
+}

@@ -1,0 +1,4 @@
+{
+	"vertex": "Shader/Debug/cube.vert",
+	"fragment": "Shader/Debug/debug.frag"
+}

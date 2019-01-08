@@ -2,6 +2,17 @@
 
 # Visual studio working files
 .vs/
+*.user
 
-# 
-.sublime-workspace
+# Sublime temporary file
+*.sublime-workspace
+
+# Build/intermediary files
+Game/build/
+
+# Binary files
+Game/bin/
+
+# (but we want to commit binary files we but next to our built binaries)
+!Game/bin/*.dll
+
