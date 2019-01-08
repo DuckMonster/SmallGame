@@ -1,0 +1,7 @@
+# Gitignore for SmallGame!
+
+# Visual studio working files
+.vs/
+
+# 
+.sublime-workspace
