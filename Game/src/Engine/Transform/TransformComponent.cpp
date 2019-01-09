@@ -20,9 +20,9 @@ Vec3 TransformComponent::GetWorldPosition() const
 }
 
 // Sets the position of this transform
-void TransformComponent::SetPosition(const Vec3& inPosition)
+void TransformComponent::SetPosition(const Vec3& in_position)
 {
-	position = inPosition;
+	position = in_position;
 	Invalidate();
 }
 // Translates this transform by some delta location
@@ -33,9 +33,9 @@ void TransformComponent::Translate(const Vec3& delta)
 }
 
 // Sets the rotation of this transform
-void TransformComponent::SetRotation(const Quat& inRotation)
+void TransformComponent::SetRotation(const Quat& in_rotation)
 {
-	rotation = inRotation;
+	rotation = in_rotation;
 	Invalidate();
 }
 // Rotates this transform by some delta
@@ -48,23 +48,23 @@ void TransformComponent::Rotate(const Quat& delta)
 }
 
 // Sets the scale of this transform
-void TransformComponent::SetScale(const Vec3& inScale)
+void TransformComponent::SetScale(const Vec3& in_scale)
 {
-	scale = inScale;
+	scale = in_scale;
 	Invalidate();
 }
 
-// Gets the matrix representing this transform (outMatrix is assumed to be identity!)
-void TransformComponent::GetMatrix(Mat4& outMatrix)
+// Gets the matrix representing this transform (out_matrix is assumed to be identity!)
+void TransformComponent::GetMatrix(Mat4& out_matrix)
 {
 	// If this transform isn't dirty (it hasn't moved), just move on
-	if (!isDirty)
+	if (!is_dirty)
 	{
-		outMatrix = cachedMatrix;
+		out_matrix = cached_matrix;
 		return;
 	}
 
-	outMatrix = Mat4::TranslateRotateScale(position, rotation, scale);
+	out_matrix = Mat4::TranslateRotateScale(position, rotation, scale);
 
 	// If we have a parent, apply that as well
 	if (parent != nullptr)
@@ -72,11 +72,11 @@ void TransformComponent::GetMatrix(Mat4& outMatrix)
 		Mat4 parent_matrix;
 		parent->GetMatrix( parent_matrix );
 
-		outMatrix = parent_matrix * outMatrix;
+		out_matrix = parent_matrix * out_matrix;
 	}
 
-	cachedMatrix = outMatrix;
-	isDirty = false;
+	cached_matrix = out_matrix;
+	is_dirty = false;
 }
 
 // Marks this transform as changed, so matrices and such will be updated
@@ -84,8 +84,8 @@ void TransformComponent::Invalidate()
 {
 	// Already invalid
 	// Should we broadcast anyways?
-	onInvalidated.Broadcast(this);
-	isDirty = true;
+	on_invalidated.Broadcast(this);
+	is_dirty = true;
 }
 
 // Attaches this transform to another transform, making all values relative
@@ -102,5 +102,5 @@ void TransformComponent::SetParent(TransformComponent* in_parent)
 	if (parent == nullptr)
 		return;
 
-	parent->onInvalidated.AddObject(this, &TransformComponent::HandleParentInvalidated);
+	parent->on_invalidated.AddObject(this, &TransformComponent::HandleParentInvalidated);
 }

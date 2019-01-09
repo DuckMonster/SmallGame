@@ -24,8 +24,8 @@ FollowCamera FollowCamera::Create(Scene* scene, Entity* target)
 	AddCapability<FollowCameraCapability>(result.entity);
 
 	// Tell the entity that we're following them
-	auto playerComp = target->GetOrAddComponent<PlayerComponent>();
-	playerComp->followerCamera = result.camera;
+	auto player_comp = target->GetOrAddComponent<PlayerComponent>();
+	player_comp->follower_camera = result.camera;
 
 	return result;
 }
@@ -54,14 +54,14 @@ void FollowCameraCapability::Tick()
 	// Rotation
 	if (input.GetKey(Key::E))
 	{
-		rotateAngle -= Time::Delta() * 1.6f;
+		rotate_angle -= Time::Delta() * 1.6f;
 	}
 	if (input.GetKey(Key::Q))
 	{
-		rotateAngle += Time::Delta() * 1.6f;
+		rotate_angle += Time::Delta() * 1.6f;
 	}
 
-	Quat rotation = Quat::AngleAxis(rotateAngle, Vec3::Up);
+	Quat rotation = Quat::AngleAxis(rotate_angle, Vec3::Up);
 
 	// Translation
 	if (input.GetKey(Key::Z))
@@ -73,10 +73,10 @@ void FollowCameraCapability::Tick()
 		zoom += 0.4f * Time::Delta();
 	}
 
-	Vec3 targetPosition = follow->target->GetPosition();
-	root = Vec::Lerp(root, targetPosition, 5.f * Time::Delta());
+	Vec3 target_position = follow->target->GetPosition();
+	root = Vec::Lerp(root, target_position, 5.f * Time::Delta());
 
-	Vec3 rotatedOffset = rotation * offset;
-	camera->position = root + rotatedOffset * offsetDistance * zoom;
-	camera->forward = -rotatedOffset;
+	Vec3 rotated_offset = rotation * offset;
+	camera->position = root + rotated_offset * offset_distance * zoom;
+	camera->forward = -rotated_offset;
 }

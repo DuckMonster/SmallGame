@@ -11,10 +11,10 @@ public:
 	void UnloadInternal() override;
 
 	MaterialResource* parent = nullptr;
-	ShaderResource* vertexResource = nullptr;
-	ShaderResource* fragmentResource = nullptr;
-	TextureResource* textureResource = nullptr;
+	ShaderResource* vertex_resource = nullptr;
+	ShaderResource* fragment_resource = nullptr;
+	TextureResource* texture_resource = nullptr;
 
 	Material material;
-	bool isValid = false;
+	bool is_valid = false;
 };

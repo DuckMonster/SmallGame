@@ -11,8 +11,8 @@ class CameraComponent;
 class PlayerComponent : public Component
 {
 public:
-	Vec3 aimWorldPosition;
-	CameraComponent* followerCamera = nullptr;
+	Vec3 aim_world_position;
+	CameraComponent* follower_camera = nullptr;
 	Entity* mesh_entity = nullptr;
 };
 

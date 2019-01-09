@@ -13,7 +13,7 @@ void PlayerMovementCapability::Setup()
 void PlayerMovementCapability::Tick()
 {
 	InputState& input = gContext->input;
-	float hInput = 0.f, vInput = 0.f;
+	float input_h = 0.f, input_v = 0.f;
 
 	Vec2 dir;
 
@@ -42,12 +42,12 @@ void PlayerMovementCapability::Tick()
 	Vec3 forward(0.f, 0.f, -1.f);
 	Vec3 right(1.f, 0.f, 0.f);
 
-	if (player->followerCamera != nullptr)
+	if (player->follower_camera != nullptr)
 	{
-		forward = player->followerCamera->forward;
+		forward = player->follower_camera->forward;
 		forward = Vec::ConstrainToPlane(forward, Vec3::Up);
 		right = Vec::Cross(forward, Vec3::Up);
 	}
 
-	transform->Translate(( right * dir.x + forward * dir.y ) * movementSpeed * Time::Delta());
+	transform->Translate(( right * dir.x + forward * dir.y ) * movement_speed * Time::Delta());
 }

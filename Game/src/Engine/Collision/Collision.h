@@ -36,8 +36,8 @@ struct SphereCollider
 		// Get the scaled radius by only transforming a vector of radius length,
 		// 		we ignore translation by setting w to 0, so we only get scale and rotation.
 		//		Then we get the length of that vector to find out how much it's scaled.
-		float scaledRadius = Vec::Length(transform * Vec4(radius, 0.f, 0.f, 0.f));
-		result.radius = scaledRadius;
+		float scaled_radius = Vec::Length(transform * Vec4(radius, 0.f, 0.f, 0.f));
+		result.radius = scaled_radius;
 
 		return result;
 	}
@@ -58,8 +58,8 @@ struct ColliderObject
 	Array<SphereCollider> spheres;
 
 	// Called when this collider overlaps with anything else
-	OnOverlapEvent onOverlap;
-	bool overlappedThisFrame = false;
+	OnOverlapEvent on_overlap;
+	bool overlapped_this_frame = false;
 };
 
 class CollisionScene
@@ -69,7 +69,7 @@ public:
 	void DestroyObject(ColliderObject* obj);
 
 	void UpdateOverlaps();
-	void UpdateOverlapsFor(ColliderObject* obj, uint32 indexOffset = 0);
+	void UpdateOverlapsFor(ColliderObject* obj, uint32 index_offset = 0);
 	void UpdateOverlapsForPair(ColliderObject* a, ColliderObject* b);
 
 	Array<ColliderObject*> objects;

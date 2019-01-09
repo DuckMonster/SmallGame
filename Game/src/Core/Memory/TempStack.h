@@ -18,15 +18,15 @@ public:
 	}
 
 	void Reset();
-	void Resize(uint32 newSize);
+	void Resize(uint32 new_size);
 
 	uint8* data = nullptr;
-	Array<uint8*> staleMemory;
+	Array<uint8*> stale_memory;
 	uint32 offset = 0;
-	uint32 dataSize = 0;
+	uint32 data_size = 0;
 
 	// Data used for profiling
-	uint32 prevOffset;
+	uint32 prev_offset;
 };
 
 extern TempStack* gTempStack;

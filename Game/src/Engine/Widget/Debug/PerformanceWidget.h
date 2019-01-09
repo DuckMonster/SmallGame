@@ -13,14 +13,14 @@ private:
 	// FPS monitoring stuff
 	void Reset()
 	{
-		minMs = -1.f;
-		maxMs = 0.f;
-		resetTime += 2.f;
+		min_ms = -1.f;
+		max_ms = 0.f;
+		reset_time += 2.f;
 	}
 
-	float minMs = -1.f;
-	float maxMs = 0.f;
-	float resetTime = 0.f;
+	float min_ms = -1.f;
+	float max_ms = 0.f;
+	float reset_time = 0.f;
 
 	TextWidget* fps;
 

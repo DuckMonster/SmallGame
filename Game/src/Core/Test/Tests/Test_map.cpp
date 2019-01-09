@@ -4,9 +4,9 @@
 
 namespace
 {
-	uint32 totalConstructed = 0;
-	uint32 numConstructedObjects = 0;
-	bool valFail = false;
+	uint32 total_constructed = 0;
+	uint32 num_constructed_objects = 0;
+	bool val_fail = false;
 
 	struct ConstructedObject
 	{
@@ -14,20 +14,20 @@ namespace
 		ConstructedObject()
 		{
 			if (val != 0)
-				valFail = true;
+				val_fail = true;
 
-			numConstructedObjects++;
-			totalConstructed++;
+			num_constructed_objects++;
+			total_constructed++;
 		}
 		ConstructedObject(const ConstructedObject& other) : ConstructedObject() {}
 		ConstructedObject(uint32 val) : val(val)
 		{
-			numConstructedObjects++;
-			totalConstructed++;
+			num_constructed_objects++;
+			total_constructed++;
 		}
 		~ConstructedObject()
 		{
-			numConstructedObjects--;
+			num_constructed_objects--;
 		}
 
 		bool operator==(const ConstructedObject& other) const
@@ -44,9 +44,9 @@ namespace
 	template<typename AllocType>
 	bool MapTest()
 	{
-		numConstructedObjects = 0;
-		totalConstructed = 0;
-		valFail = false;
+		num_constructed_objects = 0;
+		total_constructed = 0;
+		val_fail = false;
 
 		{
 			MapBase<int, String, AllocType> map;
@@ -92,7 +92,7 @@ namespace
 			TEST_EXPR(map.Contains(TString("Dude")));
 			TEST_ERROR(map.Add(TString("Dude"), ConstructedObject(10)));
 
-			TEST_EXPR(numConstructedObjects == 2);
+			TEST_EXPR(num_constructed_objects == 2);
 
 			TEST_EXPR(map["Dude"].val == 5);
 
@@ -101,7 +101,7 @@ namespace
 			TEST_EXPR(!map.Contains("Dude"));
 
 			TEST_EXPR(map.Remove("Hello"));
-			TEST_EXPR(numConstructedObjects == 0);
+			TEST_EXPR(num_constructed_objects == 0);
 		}
 
 		{
@@ -118,7 +118,7 @@ namespace
 			map[first] = map[second];
 			TEST_EXPR(map[first] == map[second]);
 
-			TEST_EXPR(numConstructedObjects == 4);
+			TEST_EXPR(num_constructed_objects == 4);
 
 			TEST_EXPR(map.Remove(second));
 			TEST_EXPR(!map.Contains(second));
@@ -130,7 +130,7 @@ namespace
 			TEST_EXPR(map.Remove(second));
 			TEST_EXPR(!map.Contains(first));
 
-			TEST_EXPR(numConstructedObjects == 2);
+			TEST_EXPR(num_constructed_objects == 2);
 		}
 
 		{
@@ -167,7 +167,7 @@ namespace
 			TEST_EXPR(map2[5] == "5");
 		}
 
-		TEST_EXPR(!valFail);
+		TEST_EXPR(!val_fail);
 
 		return true;
 	}

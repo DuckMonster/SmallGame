@@ -14,7 +14,7 @@ void VerticalBoxWidget::Update()
 void VerticalBoxWidget::Draw(const WidgetDrawData& data)
 {
 	Widget::Draw(data);
-	WidgetDrawData curData = data;
+	WidgetDrawData data_cur = data;
 
 	for (Slot& slot : slots)
 	{
@@ -25,16 +25,16 @@ void VerticalBoxWidget::Draw(const WidgetDrawData& data)
 			continue;
 
 		// Add upper-left padding
-		curData.point.x += slot.padding.left;
-		curData.point.y += slot.padding.up;
+		data_cur.point.x += slot.padding.left;
+		data_cur.point.y += slot.padding.up;
 
-		slot.widget->Draw(curData);
+		slot.widget->Draw(data_cur);
 
-		curData.point.y += slot.widget->GetSize().height;
+		data_cur.point.y += slot.widget->GetSize().height;
 
 		// Add lower and remove left padding
-		curData.point.x -= slot.padding.left;
-		curData.point.y += slot.padding.down;
+		data_cur.point.x -= slot.padding.left;
+		data_cur.point.y += slot.padding.down;
 	}
 }
 
@@ -59,11 +59,11 @@ WidgetSize VerticalBoxWidget::GetSize()
 		if (slot.widget->visibility == WidgetVisibility::Hidden)
 			continue;
 
-		WidgetSize wSize = slot.widget->GetSize();
+		WidgetSize widget_size = slot.widget->GetSize();
 
-		if (wSize.width > size.width)
-			size.width = wSize.width;
-		size.height += wSize.height;
+		if (widget_size.width > size.width)
+			size.width = widget_size.width;
+		size.height += widget_size.height;
 	}
 
 	return size;

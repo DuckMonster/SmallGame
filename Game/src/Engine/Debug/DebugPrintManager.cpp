@@ -6,19 +6,19 @@ DebugPrintManager* gPrintManager = nullptr;
 
 void DebugPrintManager::Print(const char* message, float duration /*= -1.f*/)
 {
-	Message& msg = messageList.AddRef();
+	Message& msg = messages.AddRef();
 	msg.text = message;
-	msg.expireTime = Time::Duration() + duration;
+	msg.expire_time = Time::Duration() + duration;
 }
 
 void DebugPrintManager::RemoveExpired()
 {
 	float time = Time::Duration();
-	for (uint32 i = 0; i < messageList.Size(); ++i)
+	for (uint32 i = 0; i < messages.Size(); ++i)
 	{
-		if (messageList[i].expireTime <= time)
+		if (messages[i].expire_time <= time)
 		{
-			messageList.RemoveAt(i);
+			messages.RemoveAt(i);
 			i--;
 		}
 	}

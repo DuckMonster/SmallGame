@@ -4,5 +4,5 @@
 class Camera
 {
 public:
-	static Ray Deproject(const Vec2& mouse, const Mat4& cameraInv);
+	static Ray Deproject(const Vec2& mouse, const Mat4& camera_inv);
 };

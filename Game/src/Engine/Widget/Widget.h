@@ -24,9 +24,9 @@ public:
 	virtual WidgetSize GetSize() { return WidgetSize(); }
 	virtual bool ShouldDraw() { return visibility == WidgetVisibility::Visible; }
 
-	Widget& Visibility(WidgetVisibility inVisibility)
+	Widget& Visibility(WidgetVisibility in_visibility)
 	{
-		visibility = inVisibility;
+		visibility = in_visibility;
 		return *this;
 	}
 	WidgetVisibility visibility = WidgetVisibility::Visible;

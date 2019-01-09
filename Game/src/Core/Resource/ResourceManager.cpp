@@ -2,24 +2,24 @@
 #include "ResourceManager.h"
 #include "Resource.h"
 
-int ResourceScope::NumLoading = 0;
+int ResourceScope::num_loading = 0;
 ResourceManager* gResourceManager = nullptr;
 
-ResourceManager::ResourceManager(const char* root) : rootPath(Path::Clean(root))
+ResourceManager::ResourceManager(const char* root) : root_path(Path::Clean(root))
 {
 
 }
 
 ResourceManager::~ResourceManager()
 {
-	for(uint32 i=0; i<loadedResources.Size(); ++i)
-		loadedResources[i]->UnloadInternal();
+	for(uint32 i=0; i<loaded_resources.Size(); ++i)
+		loaded_resources[i]->UnloadInternal();
 }
 
 void ResourceManager::UpdateHotReloading()
 {
-	TArray<Resource*> resourceCopy = loadedResources;
-	for(Resource* resource : resourceCopy)
+	TArray<Resource*> resource_copy = loaded_resources;
+	for(Resource* resource : resource_copy)
 	{
 		if (HasNewerFile(resource))
 		{
@@ -33,7 +33,7 @@ bool ResourceManager::HasNewerFile(Resource* res)
 	const char* path = *res->path;
 	time_t modified = File::GetModifiedTime(path);
 
-	return modified > res->lastModifiedTime;
+	return modified > res->last_modified_time;
 }
 
 void ResourceManager::Reload(Resource* res)
@@ -45,11 +45,11 @@ void ResourceManager::Reload(Resource* res)
 
 	res->UnloadInternal();
 	res->LoadInternal(path);
-	res->lastModifiedTime = modified;
+	res->last_modified_time = modified;
 
 	// Reload all dependent resources
-	for(Resource* dependentResource : res->dependent)
+	for(Resource* dependent_resource : res->dependent)
 	{
-		Reload(dependentResource);
+		Reload(dependent_resource);
 	}
 }

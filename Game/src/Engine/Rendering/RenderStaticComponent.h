@@ -5,5 +5,5 @@ class CameraComponent;
 class RenderStaticComponent : public Component
 {
 public:
-	CameraComponent* activeCamera;
+	CameraComponent* active_camera;
 };

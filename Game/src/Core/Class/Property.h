@@ -41,8 +41,8 @@ public:
 
 	TString ValueString(const TypedObject* object) const override
 	{
-		const InType& typedObject = *(InType*)object;
-		return StringHelpers::ToString(typedObject.*ptr);
+		const InType& typed_object = *(InType*)object;
+		return StringHelpers::ToString(typed_object.*ptr);
 	}
 
 private:

@@ -9,9 +9,9 @@ public:
 		return size;
 	}
 
-	SpacerWidget& Size(const WidgetSize& inSize)
+	SpacerWidget& Size(const WidgetSize& in_size)
 	{
-		size = inSize;
+		size = in_size;
 		return *this;
 	}
 	SpacerWidget& Size(int width, int height)

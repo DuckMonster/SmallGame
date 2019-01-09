@@ -6,13 +6,13 @@ void VertexBuffer::Clear()
 	glBindVertexArray(0);
 }
 
-void VertexBuffer::Create(int numBuffers /*= 0*/)
+void VertexBuffer::Create(int num_buffers /*= 0*/)
 {
 	Assert(!IsValid());
 
 	glGenVertexArrays(1, &vao);
-	glGenBuffers(numBuffers, buffers);
-	this->numBuffers = numBuffers;
+	glGenBuffers(num_buffers, buffers);
+	this->num_buffers = num_buffers;
 }
 
 void VertexBuffer::Destroy()
@@ -20,31 +20,31 @@ void VertexBuffer::Destroy()
 	Assert(IsValid());
 
 	glDeleteVertexArrays(1, &vao);
-	glDeleteBuffers(numBuffers, buffers);
+	glDeleteBuffers(num_buffers, buffers);
 
 	vao = GL_INVALID_INDEX;
-	numBuffers = 0;
+	num_buffers = 0;
 }
 
-void VertexBuffer::AddBuffer(uint8& outBuffer)
+void VertexBuffer::AddBuffer(uint8& out_buffer)
 {
-	Assert(numBuffers < VB_MAX_BUFFERS);
+	Assert(num_buffers < VB_MAX_BUFFERS);
 
-	outBuffer = numBuffers;
-	glGenBuffers(1, buffers + numBuffers);
+	out_buffer = num_buffers;
+	glGenBuffers(1, buffers + num_buffers);
 }
 
-void VertexBuffer::AddBuffers(uint8 num, uint8* outBuffers)
+void VertexBuffer::AddBuffers(uint8 num, uint8* out_buffers)
 {
-	Assert(numBuffers + num <= VB_MAX_BUFFERS);
+	Assert(num_buffers + num <= VB_MAX_BUFFERS);
 
-	glGenBuffers(num, buffers + numBuffers);
-	numBuffers += num;
+	glGenBuffers(num, buffers + num_buffers);
+	num_buffers += num;
 }
 
 void VertexBuffer::BufferData(uint8 index, void* data, uint32 size)
 {
-	Assert(index < numBuffers);
+	Assert(index < num_buffers);
 
 	glBindBuffer(GL_ARRAY_BUFFER, buffers[index]);
 	glBufferData(GL_ARRAY_BUFFER, size, data, GL_STATIC_DRAW);
@@ -52,7 +52,7 @@ void VertexBuffer::BufferData(uint8 index, void* data, uint32 size)
 
 void VertexBuffer::BufferElementData(uint8 index, void* data, uint32 size)
 {
-	Assert(index < numBuffers);
+	Assert(index < num_buffers);
 
 	// Bind vertex array so the element buffer is remembered
 	glBindVertexArray(vao);
@@ -61,14 +61,14 @@ void VertexBuffer::BufferElementData(uint8 index, void* data, uint32 size)
 	glBindVertexArray(0);
 }
 
-void VertexBuffer::BindBuffer(uint8 bufferIndex, uint32 attribIndex, uint32 size, uint32 stride, uint32 offset)
+void VertexBuffer::BindBuffer(uint8 buffer_index, uint32 attrib_index, uint32 size, uint32 stride, uint32 offset)
 {
-	Assert(bufferIndex < numBuffers);
+	Assert(buffer_index < num_buffers);
 
 	glBindVertexArray(vao);
-	glBindBuffer(GL_ARRAY_BUFFER, buffers[bufferIndex]);
-	glEnableVertexAttribArray(attribIndex);
-	glVertexAttribPointer(attribIndex, size, GL_FLOAT, false, sizeof(float) * stride, (void*)(sizeof(float) * offset));
+	glBindBuffer(GL_ARRAY_BUFFER, buffers[buffer_index]);
+	glEnableVertexAttribArray(attrib_index);
+	glVertexAttribPointer(attrib_index, size, GL_FLOAT, false, sizeof(float) * stride, (void*)(sizeof(float) * offset));
 	glBindVertexArray(0);
 }
 

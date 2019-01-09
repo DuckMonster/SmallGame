@@ -16,7 +16,7 @@ struct RenderObject
 	Mesh mesh;
 	Material material;
 
-	uint32 passFlags = RP_Geometry | RP_Shadow;
+	uint32 pass_flag = RP_Geometry | RP_Shadow;
 	Mat4 matrix;
 };
 
@@ -33,7 +33,7 @@ struct RenderDirectionalLight
 struct RenderScene
 {
 	RenderObject objects[MAX_OBJECTS];
-	uint32 numObjects = 0;
+	uint32 object_num = 0;
 
 	RenderCamera camera;
 };

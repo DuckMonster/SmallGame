@@ -10,7 +10,7 @@ struct Style
 class StylePalette
 {
 public:
-	Style defaultStyle;
+	Style default_style;
 	Map<String, Style> tags;
 
 	const Style& Get(const char* tag) const
@@ -18,7 +18,7 @@ public:
 		// Does the tag exist?
 		const Style* style = tags.Find(tag);
 		if (style == nullptr)
-			return defaultStyle;
+			return default_style;
 
 		return *style;
 	}

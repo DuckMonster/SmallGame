@@ -55,23 +55,23 @@ namespace
 	void InitOpenGLExtensions()
 	{
 		// Only load once
-		static bool wasExtensionsLoaded = false;
-		if (wasExtensionsLoaded)
+		static bool was_extension_loaded = false;
+		if (was_extension_loaded)
 			return;
 
 		/* To initialize openGL properly, we have to first open up a dummy window and context
 			The reason is that you can only set the pixel format for a window once */
-		WNDCLASS dummyClass = { 0 };
-		dummyClass.style = CS_OWNDC | CS_VREDRAW | CS_HREDRAW;
-		dummyClass.lpfnWndProc = DefWindowProc;
-		dummyClass.hInstance = GetModuleHandle(0);
-		dummyClass.lpszClassName = "Dummy_OpenGL";
+		WNDCLASS dummy_class = { 0 };
+		dummy_class.style = CS_OWNDC | CS_VREDRAW | CS_HREDRAW;
+		dummy_class.lpfnWndProc = DefWindowProc;
+		dummy_class.hInstance = GetModuleHandle(0);
+		dummy_class.lpszClassName = "Dummy_OpenGL";
 
-		Assert(RegisterClass(&dummyClass));
+		Assert(RegisterClass(&dummy_class));
 
-		HWND dummyWindow = CreateWindowEx(
+		HWND dummy_window = CreateWindowEx(
 			0,
-			dummyClass.lpszClassName,
+			dummy_class.lpszClassName,
 			"Dummy OpenGL Window",
 			0,
 			CW_USEDEFAULT,
@@ -80,11 +80,11 @@ namespace
 			CW_USEDEFAULT,
 			0,
 			0,
-			dummyClass.hInstance,
+			dummy_class.hInstance,
 			0
 		);
 
-		HDC dummyDC = GetDC(dummyWindow);
+		HDC dummy_dc = GetDC(dummy_window);
 
 		PIXELFORMATDESCRIPTOR pfd = { 0 };
 		pfd.nSize = sizeof(PIXELFORMATDESCRIPTOR);
@@ -92,32 +92,32 @@ namespace
 		pfd.iPixelType = PFD_TYPE_RGBA;
 		pfd.dwFlags = PFD_DRAW_TO_WINDOW | PFD_SUPPORT_OPENGL | PFD_DOUBLEBUFFER;
 
-		int pixelFormat = ChoosePixelFormat(dummyDC, &pfd);
-		Assert(pixelFormat);
-		Assert(SetPixelFormat(dummyDC, pixelFormat, &pfd));
+		int pixel_format = ChoosePixelFormat(dummy_dc, &pfd);
+		Assert(pixel_format);
+		Assert(SetPixelFormat(dummy_dc, pixel_format, &pfd));
 
-		HGLRC dummyContext = wglCreateContext(dummyDC);
-		wglMakeCurrent(dummyDC, dummyContext);
+		HGLRC dummy_context = wglCreateContext(dummy_dc);
+		wglMakeCurrent(dummy_dc, dummy_context);
 
 		// Init GLEW now!
 		glewInit();
 
 		// Clean up
-		wglMakeCurrent(dummyDC, 0);
-		wglDeleteContext(dummyContext);
-		ReleaseDC(dummyWindow, dummyDC);
-		DestroyWindow(dummyWindow);
+		wglMakeCurrent(dummy_dc, 0);
+		wglDeleteContext(dummy_context);
+		ReleaseDC(dummy_window, dummy_dc);
+		DestroyWindow(dummy_window);
 
-		wasExtensionsLoaded = true;
+		was_extension_loaded = true;
 	}
 
-	HGLRC CreateOpenGLContext(HDC deviceContext)
+	HGLRC CreateOpenGLContext(HDC device_context)
 	{
 		// Init extensions first for 3.3 goodness
 		InitOpenGLExtensions();
 
 		// Fetch pixel format
-		int pixelFormatAttribs[] = {
+		int pixel_formatAttribs[] = {
 			WGL_DRAW_TO_WINDOW_ARB,		GL_TRUE,
 			WGL_SUPPORT_OPENGL_ARB,		GL_TRUE,
 			WGL_DOUBLE_BUFFER_ARB,		GL_TRUE,
@@ -129,30 +129,30 @@ namespace
 			0
 		};
 
-		int pixelFormat;
-		UINT numFormats;
+		int pixel_format;
+		UINT num_formats;
 
-		wglChoosePixelFormatARB(deviceContext, pixelFormatAttribs, 0, 1, &pixelFormat, &numFormats);
-		Assert(numFormats);
+		wglChoosePixelFormatARB(device_context, pixel_formatAttribs, 0, 1, &pixel_format, &num_formats);
+		Assert(num_formats);
 
 		// Set it
 		PIXELFORMATDESCRIPTOR pfd;
-		DescribePixelFormat(deviceContext, pixelFormat, sizeof(pfd), &pfd);
-		Assert(SetPixelFormat(deviceContext, pixelFormat, &pfd));
+		DescribePixelFormat(device_context, pixel_format, sizeof(pfd), &pfd);
+		Assert(SetPixelFormat(device_context, pixel_format, &pfd));
 
 		// Initialize 3.3 context
-		int contextAttribs[] = {
+		int context_attribs[] = {
 			WGL_CONTEXT_MAJOR_VERSION_ARB,	3,
 			WGL_CONTEXT_MINOR_VERSION_ARB,	3,
 			WGL_CONTEXT_PROFILE_MASK_ARB,	WGL_CONTEXT_CORE_PROFILE_BIT_ARB,
 			0
 		};
 
-		HGLRC glContext = wglCreateContextAttribsARB(deviceContext, 0, contextAttribs);
-		Assert(glContext);
+		HGLRC gl_context = wglCreateContextAttribsARB(device_context, 0, context_attribs);
+		Assert(gl_context);
 
-		wglMakeCurrent(deviceContext, glContext);
-		return glContext;
+		wglMakeCurrent(device_context, gl_context);
+		return gl_context;
 	}
 }
 
@@ -164,30 +164,30 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT Message, WPARAM wParam, LPARAM lParam)
 	case WM_CREATE:
 	{
 		// Create GL context
-		HDC deviceContext = GetDC(hWnd);
-		HGLRC glContext = CreateOpenGLContext(deviceContext);
+		HDC device_context = GetDC(hWnd);
+		HGLRC gl_context = CreateOpenGLContext(device_context);
 
 		// VSYNC off bro
 		wglSwapIntervalEXT(0);
 
 		// Set context data now that we have it
 		gContext->data->hWnd = hWnd;
-		gContext->data->hDc = deviceContext;
-		gContext->data->hGlContext = glContext;
+		gContext->data->hDc = device_context;
+		gContext->data->hGlContext = gl_context;
 		break;
 	}
 
 	// -- ACTIVATE (focus) --
 	case WM_ACTIVATE:
 	{
-		gContext->isFocused = wParam > 0;
+		gContext->is_focused = wParam > 0;
 		break;
 	}
 
 	// -- KEY DOWN --
 	case WM_KEYDOWN:
 	{
-		if (!gContext->isFocused)
+		if (!gContext->is_focused)
 			break;
 
 		WinKeyParams* key = (WinKeyParams*)&lParam;
@@ -209,7 +209,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT Message, WPARAM wParam, LPARAM lParam)
 	// -- KEY UP --
 	case WM_KEYUP:
 	{
-		if (!gContext->isFocused)
+		if (!gContext->is_focused)
 			break;
 
 		WinKeyParams* key = (WinKeyParams*)&lParam;
@@ -227,19 +227,19 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT Message, WPARAM wParam, LPARAM lParam)
 	// -- MOUSE MOVE --
 	case WM_MOUSEMOVE:
 	{
-		if (!gContext->isFocused)
+		if (!gContext->is_focused)
 			break;
 
 		WinMouseParams* mouse = (WinMouseParams*)&lParam;
-		gContext->input.mouseState.x = mouse->x;
-		gContext->input.mouseState.y = mouse->y;
+		gContext->input.mouse_state.x = mouse->x;
+		gContext->input.mouse_state.y = mouse->y;
 		break;
 	}
 
 	// -- MOUSE INPUTS --
 	case WM_LBUTTONDOWN:
 	{
-		if (!gContext->isFocused)
+		if (!gContext->is_focused)
 			break;
 
 		gContext->input.SetMouseButton(MouseButton::Left, true);
@@ -247,7 +247,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT Message, WPARAM wParam, LPARAM lParam)
 	}
 	case WM_LBUTTONUP:
 	{
-		if (!gContext->isFocused)
+		if (!gContext->is_focused)
 			break;
 
 		gContext->input.SetMouseButton(MouseButton::Left, false);
@@ -255,7 +255,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT Message, WPARAM wParam, LPARAM lParam)
 	}
 	case WM_RBUTTONDOWN:
 	{
-		if (!gContext->isFocused)
+		if (!gContext->is_focused)
 			break;
 
 		gContext->input.SetMouseButton(MouseButton::Right, true);
@@ -263,7 +263,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT Message, WPARAM wParam, LPARAM lParam)
 	}
 	case WM_RBUTTONUP:
 	{
-		if (!gContext->isFocused)
+		if (!gContext->is_focused)
 			break;
 
 		gContext->input.SetMouseButton(MouseButton::Right, false);
@@ -271,7 +271,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT Message, WPARAM wParam, LPARAM lParam)
 	}
 	case WM_MBUTTONDOWN:
 	{
-		if (!gContext->isFocused)
+		if (!gContext->is_focused)
 			break;
 
 		gContext->input.SetMouseButton(MouseButton::Middle, true);
@@ -279,7 +279,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT Message, WPARAM wParam, LPARAM lParam)
 	}
 	case WM_MBUTTONUP:
 	{
-		if (!gContext->isFocused)
+		if (!gContext->is_focused)
 			break;
 
 		gContext->input.SetMouseButton(MouseButton::Middle, false);
@@ -287,35 +287,35 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT Message, WPARAM wParam, LPARAM lParam)
 	}
 	case WM_XBUTTONDOWN:
 	{
-		if (!gContext->isFocused)
+		if (!gContext->is_focused)
 			break;
 
 		// Find out which XButton by looking at the high-order of wParam
-		uint16 highByte = ((uint16*)&wParam)[1];
-		if ((highByte & 3) == 0)
+		uint16 high_word = ((uint16*)&wParam)[1];
+		if ((high_word & 3) == 0)
 		{
 			Error("Unknown XButton was pressed");
 			break;
 		}
 
-		MouseButton btn = highByte == 1 ? MouseButton::X1 : MouseButton::X2;
+		MouseButton btn = high_word == 1 ? MouseButton::X1 : MouseButton::X2;
 		gContext->input.SetMouseButton(btn, true);
 		break;
 	}
 	case WM_XBUTTONUP:
 	{
-		if (!gContext->isFocused)
+		if (!gContext->is_focused)
 			break;
 
 		// Find out which XButton by looking at the high-order of wParam
-		uint16 highByte = ((uint16*)&wParam)[1];
-		if ((highByte & 3) == 0)
+		uint16 high_word = ((uint16*)&wParam)[1];
+		if ((high_word & 3) == 0)
 		{
 			Error("Unknown XButton was pressed");
 			break;
 		}
 
-		MouseButton btn = highByte == 1 ? MouseButton::X1 : MouseButton::X2;
+		MouseButton btn = high_word == 1 ? MouseButton::X1 : MouseButton::X2;
 		gContext->input.SetMouseButton(btn, false);
 		break;
 	}
@@ -327,7 +327,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT Message, WPARAM wParam, LPARAM lParam)
 
 		// The delta is in order of this WHEEL_DELTA constant
 		delta /= WHEEL_DELTA;
-		gContext->input.mouseState.wheel += delta;
+		gContext->input.mouse_state.wheel += delta;
 		break;
 	}
 
@@ -349,7 +349,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT Message, WPARAM wParam, LPARAM lParam)
 		wglDeleteContext(gContext->data->hGlContext);
 		delete gContext->data;
 		gContext->data = nullptr;
-		gContext->isOpen = false;
+		gContext->is_open = false;
 
 		break;
 	}
@@ -360,40 +360,40 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT Message, WPARAM wParam, LPARAM lParam)
 
 bool CreateContext()
 {
-	static bool classWasRegistered = false;
-	static LPCSTR className = "WindowClass";
+	static bool class_was_registered = false;
+	static LPCSTR class_name = "WindowClass";
 
 	Assert(gContext == nullptr);
 
 	HINSTANCE hInstance = GetModuleHandle(NULL);
 
 	// Create and register window class
-	if (!classWasRegistered)
+	if (!class_was_registered)
 	{
 		WNDCLASS wc = { 0 };
 		wc.lpfnWndProc = WndProc;
 		wc.hInstance = hInstance;
 		wc.hbrBackground = (HBRUSH)(COLOR_BACKGROUND);
-		wc.lpszClassName = className;
+		wc.lpszClassName = class_name;
 		wc.hCursor = LoadCursor(NULL, IDC_ARROW);
 		wc.style = CS_OWNDC;
 
 		if (!RegisterClass(&wc))
 			return false;
 
-		classWasRegistered = true;
+		class_was_registered = true;
 	}
 
 	// Create the global context data
 	gContext = new Context();
 	gContext->width = 640;
 	gContext->height = 480;
-	gContext->isOpen = true;
+	gContext->is_open = true;
 	gContext->data = new ContextData;
 	gContext->data->hInstance = hInstance;
 
 	// Open window
-	CreateWindow(className, "Hello World!", WS_OVERLAPPEDWINDOW | WS_VISIBLE, 0, 0, 1600, 1024, 0, 0, hInstance, 0);
+	CreateWindow(class_name, "Hello World!", WS_OVERLAPPEDWINDOW | WS_VISIBLE, 0, 0, 1600, 1024, 0, 0, hInstance, 0);
 
 	PerformanceClock::Init();
 	Time::Init();
@@ -403,8 +403,8 @@ bool CreateContext()
 void ContextUpdateFrame()
 {
 	// Reset mouse wheel for this frame
-	gContext->input.mouseState.prevWheel = gContext->input.mouseState.wheel;
-	gContext->input.inputFrame++;
+	gContext->input.mouse_state.prev_wheel = gContext->input.mouse_state.wheel;
+	gContext->input.input_frame++;
 	Sleep(1);
 
 	MSG msg = { 0 };

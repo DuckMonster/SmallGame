@@ -42,7 +42,7 @@ namespace
 			Math::NearlyEquals(0.f, 1.f);
 
 			TEST_EXPR(Vec::NearlyZero(Vec::Normalize(Vec3::Zero)));
-			Vec3 zeroVec = Vec3::Zero;
+			Vec3 zero_vec = Vec3::Zero;
 
 			Vec3 vec2 = Vec::Normalize(vec);
 			TEST_EXPR(Math::NearlyEquals(Vec::Length(vec), len));

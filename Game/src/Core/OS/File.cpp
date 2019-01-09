@@ -20,8 +20,8 @@ bool File::ReadAllStatic(const char* path, char* buffer, uint32 size)
 	Assert(length < size);
 
 	// Read it all
-	size_t bytesRead = fread(buffer, 1, Math::Max(length, size), file);
-	buffer[bytesRead] = '\0';
+	size_t bytes_read = fread(buffer, 1, Math::Max(length, size), file);
+	buffer[bytes_read] = '\0';
 	return true;
 }
 
@@ -45,8 +45,8 @@ bool File::ReadAllDynamic(const char* path, char*& buffer)
 	buffer = new char[length + 1];
 
 	// Read it all
-	size_t bytesRead = fread(buffer, 1, length, file);
-	buffer[bytesRead] = '\0';
+	size_t bytes_read = fread(buffer, 1, length, file);
+	buffer[bytes_read] = '\0';
 	return true;
 }
 
@@ -70,8 +70,8 @@ bool File::ReadAllTemporary(const char* path, char*& buffer)
 	buffer = talloc(length + 1);
 
 	// Read it all
-	size_t bytesRead = fread(buffer, 1, length, file);
-	buffer[bytesRead] = '\0';
+	size_t bytes_read = fread(buffer, 1, length, file);
+	buffer[bytes_read] = '\0';
 	return true;
 }
 

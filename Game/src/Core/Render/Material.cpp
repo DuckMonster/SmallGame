@@ -26,16 +26,16 @@ bool Material::LoadSource(Material& material, const char* vert, const char* frag
 	GLuint program = glCreateProgram();
 	material.program = program;
 
-	GLuint vertShader = CreateAndCompileShader(GL_VERTEX_SHADER, vert);
-	GLuint fragShader = CreateAndCompileShader(GL_FRAGMENT_SHADER, frag);
-	glAttachShader(program, vertShader);
-	glAttachShader(program, fragShader);
+	GLuint shader_vert = CreateAndCompileShader(GL_VERTEX_SHADER, vert);
+	GLuint shader_frag = CreateAndCompileShader(GL_FRAGMENT_SHADER, frag);
+	glAttachShader(program, shader_vert);
+	glAttachShader(program, shader_frag);
 	glLinkProgram(program);
 
-	glDetachShader(program, vertShader);
-	glDetachShader(program, fragShader);
-	glDeleteShader(vertShader);
-	glDeleteShader(fragShader);
+	glDetachShader(program, shader_vert);
+	glDetachShader(program, shader_frag);
+	glDeleteShader(shader_vert);
+	glDeleteShader(shader_frag);
 
 	GLint success;
 	glGetProgramiv(program, GL_LINK_STATUS, &success);

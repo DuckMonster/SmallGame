@@ -32,38 +32,38 @@ namespace
 	bool TypeTest()
 	{
 		{
-			Type* typeA = Type::Get<TestTypeA>();
-			TEST_EXPR(typeA != nullptr);
+			Type* type_a = Type::Get<TestTypeA>();
+			TEST_EXPR(type_a != nullptr);
 
-			TestTypeA* objA = NewObject<TestTypeA>(typeA);
-			TEST_EXPR(objA != nullptr);
+			TestTypeA* obj_a = NewObject<TestTypeA>(type_a);
+			TEST_EXPR(obj_a != nullptr);
 
-			Type* otherType = objA->GetType();
-			TEST_EXPR(typeA == otherType);
+			Type* other_type = obj_a->GetType();
+			TEST_EXPR(type_a == other_type);
 
-			TestTypeB* objB = NewObject<TestTypeB>();
-			TEST_EXPR(objB != nullptr);
+			TestTypeB* obj_b = NewObject<TestTypeB>();
+			TEST_EXPR(obj_b != nullptr);
 
-			otherType = Type::Get("TestTypeA");
-			TEST_EXPR(typeA == otherType);
+			other_type = Type::Get("TestTypeA");
+			TEST_EXPR(type_a == other_type);
 
-			Type* cType = Type::Get<TestTypeC>();
-			TEST_EXPR(cType == nullptr);
+			Type* c_type = Type::Get<TestTypeC>();
+			TEST_EXPR(c_type == nullptr);
 			TEST_ERROR(NewObject<TestTypeC>());
 		}
 
 		{
-			TestTypeA* objA = NewObject<TestTypeA>();
+			TestTypeA* obj_a = NewObject<TestTypeA>();
 
-			Type* aType = objA->GetType();
-			TEST_EXPR(aType->properties.Size() == 1);
+			Type* a_type = obj_a->GetType();
+			TEST_EXPR(a_type->properties.Size() == 1);
 
-			PropertyBase* aProp = aType->properties[0];
-			TEST_EXPR(aProp->name == "a");
-			TEST_EXPR(aProp->ValueString(objA) == "10");
+			PropertyBase* a_prop = a_type->properties[0];
+			TEST_EXPR(a_prop->name == "a");
+			TEST_EXPR(a_prop->ValueString(obj_a) == "10");
 
-			objA->a = 200;
-			TEST_EXPR(aProp->ValueString(objA) == "200");
+			obj_a->a = 200;
+			TEST_EXPR(a_prop->ValueString(obj_a) == "200");
 		}
 
 		return true;

@@ -11,30 +11,30 @@ public:
 	~Scene();
 	void Tick();
 
-	Array<Entity*> entityList;
+	Array<Entity*> entity_list;
 	Entity* CreateEntity(const char* name);
 	void DestroyEntity(Entity* entity);
 
 	template<typename TComp>
 	TComp* GetStaticComponent();
 
-	CollisionScene* GetCollisionScene() const { return collisionScene; }
+	CollisionScene* GetCollisionScene() const { return collision_scene; }
 
 private:
-	Array<SystemBase*> systemList;
+	Array<SystemBase*> system_list;
 	template<typename TSystem>
 	void AddSystem();
 
-	Entity* staticEntity;
-	CollisionScene* collisionScene;
+	Entity* static_entity;
+	CollisionScene* collision_scene;
 };
 
 template<typename TComp>
 TComp* Scene::GetStaticComponent()
 {
-	if (staticEntity == nullptr)
-		staticEntity = CreateEntity("[Static]");
-	return staticEntity->GetOrAddComponent<TComp>();
+	if (static_entity == nullptr)
+		static_entity = CreateEntity("[Static]");
+	return static_entity->GetOrAddComponent<TComp>();
 }
 
 template<typename TSystem>
@@ -44,7 +44,7 @@ void Scene::AddSystem()
 
 	system->SetOwningScene(this);
 	system->Setup();
-	systemList.Add(system);
+	system_list.Add(system);
 }
 
 extern Scene* gScene;

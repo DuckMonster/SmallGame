@@ -44,7 +44,7 @@ bool ShaderResource::LoadInternal(const char* path)
 	}
 	else
 	{
-		isValid = true;
+		is_valid = true;
 	}
 
 	return handle;
@@ -54,6 +54,6 @@ void ShaderResource::UnloadInternal()
 {
 	glDeleteShader(handle);
 	handle = GL_INVALID_INDEX;
-	isValid = false;
+	is_valid = false;
 }
 

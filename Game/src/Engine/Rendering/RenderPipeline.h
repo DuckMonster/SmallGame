@@ -8,5 +8,5 @@ public:
 	void Create();
 	void Execute(RenderScene& scene);
 
-	FrameBuffer upscaleBuffer;
+	FrameBuffer upscale_buffer;
 };

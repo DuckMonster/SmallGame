@@ -3,8 +3,8 @@
 
 void Test::Run()
 {
-	int totalTests = 0;
-	int failedTests = 0;
+	int total_tests = 0;
+	int failed_tests = 0;
 
 	for (uint32 i = 0; i < GetDefinitions().Size(); ++i)
 	{
@@ -14,16 +14,16 @@ void Test::Run()
 		bool result = def.callback();
 		Debug_Log("### %s ###\n", result ? "SUCCESS" : "FAIL");
 
-		totalTests++;
+		total_tests++;
 		if (!result)
 		{
-			failedTests++;
+			failed_tests++;
 			break;
 		}
 	}
 
 	Debug_Log("### TESTING COMPLETE ###");
-	Debug_Log("%s (%d / %d)", failedTests == 0 ? "SUCCESS" : "FAIL", totalTests - failedTests, totalTests);
+	Debug_Log("%s (%d / %d)", failed_tests == 0 ? "SUCCESS" : "FAIL", total_tests - failed_tests, total_tests);
 	system("pause");
 }
 

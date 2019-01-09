@@ -18,10 +18,10 @@ InspectorWidget::PropertyWidget::PropertyWidget()
 	text->SetStyle(INSPECTOR_STYLE_PATH);
 }
 
-void InspectorWidget::PropertyWidget::SetProperty(const PropertyBase* inProperty, const Component* inComponent)
+void InspectorWidget::PropertyWidget::SetProperty(const PropertyBase* in_property, const Component* in_component)
 {
-	property = inProperty;
-	component = inComponent;
+	property = in_property;
+	component = in_component;
 }
 
 void InspectorWidget::PropertyWidget::Update()
@@ -41,12 +41,12 @@ InspectorWidget::ComponentWidget::ComponentWidget()
 	text = box->AddSlot().AddWidget<TextWidget>();
 	text->SetStyle(INSPECTOR_STYLE_PATH);
 
-	propertyBox = box->AddSlot().Padding(20, 0, 0, 0).AddWidget<VerticalBoxWidget>();
+	property_box = box->AddSlot().Padding(20, 0, 0, 0).AddWidget<VerticalBoxWidget>();
 }
 
-void InspectorWidget::ComponentWidget::SetComponent(const Component* inComponent)
+void InspectorWidget::ComponentWidget::SetComponent(const Component* in_component)
 {
-	component = inComponent;
+	component = in_component;
 	Type* type = component->GetType();
 
 	text->text = TString::Printf("{component}%s", *type->name);
@@ -54,7 +54,7 @@ void InspectorWidget::ComponentWidget::SetComponent(const Component* inComponent
 	const Array<PropertyBase*> properties = type->properties;
 	for (PropertyBase* prop : properties)
 	{
-		propertyBox->AddSlot().AddWidget<PropertyWidget>()->SetProperty(prop, inComponent);
+		property_box->AddSlot().AddWidget<PropertyWidget>()->SetProperty(prop, in_component);
 	}
 }
 
@@ -65,33 +65,33 @@ InspectorWidget::EntityWidget::EntityWidget()
 	text = box->AddSlot().AddWidget<TextWidget>();
 	text->SetStyle(INSPECTOR_STYLE_PATH);
 
-	componentBox = box->AddSlot().Padding(20, 0, 0, 0).AddWidget<VerticalBoxWidget>();
+	component_box = box->AddSlot().Padding(20, 0, 0, 0).AddWidget<VerticalBoxWidget>();
 	SetExpanded(false);
 }
 
-void InspectorWidget::EntityWidget::SetEntity(const Scene* inScene, uint32 inId)
+void InspectorWidget::EntityWidget::SetEntity(const Scene* in_scene, uint32 in_id)
 {
-	scene = inScene;
-	entityId = inId;
+	scene = in_scene;
+	entity_id = in_id;
 }
 
 void InspectorWidget::EntityWidget::Update()
 {
 	Entity* entity = GetEntity();
-	if (entity != lastEntity)
+	if (entity != entity_last)
 		RebuildComponents();
 
 	if (entity == nullptr)
 	{
 		text->text = TString::Printf(
 			"{entity_empty%s}[%d] Empty",
-			isSelected ? "_selected" : "", entityId);
+			is_selected ? "_selected" : "", entity_id);
 	}
 	else
 	{
 		text->text = TString::Printf("{%s}[%d] %s",
-			isSelected ? "entity_selected" : "entity",
-			entityId, *entity->GetName());
+			is_selected ? "entity_selected" : "entity",
+			entity_id, *entity->GetName());
 	}
 
 	SlottedWidget::Update();
@@ -99,13 +99,13 @@ void InspectorWidget::EntityWidget::Update()
 
 void InspectorWidget::EntityWidget::SetExpanded(bool expanded)
 {
-	componentBox->visibility = expanded ? WidgetVisibility::Visible : WidgetVisibility::Hidden;
-	isExpanded = expanded;
+	component_box->visibility = expanded ? WidgetVisibility::Visible : WidgetVisibility::Hidden;
+	is_expanded = expanded;
 }
 
 void InspectorWidget::EntityWidget::RebuildComponents()
 {
-	componentBox->ClearChildren();
+	component_box->ClearChildren();
 
 	Entity* entity = GetEntity();
 	if (entity == nullptr)
@@ -114,26 +114,26 @@ void InspectorWidget::EntityWidget::RebuildComponents()
 	const Array<Component*>& components = entity->GetAllComponents();
 	for (const Component* comp : components)
 	{
-		auto& compSlot = componentBox->AddSlot();
-		ComponentWidget* compWidget = compSlot.AddWidget<ComponentWidget>();
-		compWidget->SetComponent(comp);
+		auto& comp_slot = component_box->AddSlot();
+		ComponentWidget* comp_widget = comp_slot.AddWidget<ComponentWidget>();
+		comp_widget->SetComponent(comp);
 	}
 
-	lastEntity = entity;
+	entity_last = entity;
 }
 
 Entity* InspectorWidget::EntityWidget::GetEntity()
 {
-	return scene->entityList[entityId];
+	return scene->entity_list[entity_id];
 }
 
 /* INSPECTOR WIDGET */
-void InspectorWidget::SetScene(Scene* inScene)
+void InspectorWidget::SetScene(Scene* in_scene)
 {
 	slot.Clear();
-	entityBox = slot.AddWidget<VerticalBoxWidget>();
+	entity_box = slot.AddWidget<VerticalBoxWidget>();
 
-	scene = inScene;
+	scene = in_scene;
 }
 
 void InspectorWidget::Update()
@@ -143,7 +143,7 @@ void InspectorWidget::Update()
 		return;
 
 	// See if any new entities have spawned
-	if (entityWidgets.Size() != scene->entityList.Size())
+	if (entity_widgets.Size() != scene->entity_list.Size())
 	{
 		RebuildEntities();
 	}
@@ -152,18 +152,18 @@ void InspectorWidget::Update()
 	InputState& input = gContext->input;
 	if (input.GetKeyPressed(Key::DownArrow))
 	{
-		SelectEntity(selectedEntity + 1);
+		SelectEntity(selected_entity + 1);
 	}
 	if (input.GetKeyPressed(Key::UpArrow))
 	{
-		SelectEntity(selectedEntity - 1);
+		SelectEntity(selected_entity - 1);
 	}
 
 	// Expand with enter!
 	if (input.GetKeyPressed(Key::Enter))
 	{
-		EntityWidget* entity = entityWidgets[selectedEntity];
-		entity->SetExpanded(!entity->isExpanded);
+		EntityWidget* entity = entity_widgets[selected_entity];
+		entity->SetExpanded(!entity->is_expanded);
 	}
 
 	SlottedWidget::Update();
@@ -171,21 +171,21 @@ void InspectorWidget::Update()
 
 void InspectorWidget::SelectEntity(int index)
 {
-	index = Math::Wrap<int>(index, 0, entityWidgets.Size());
-	entityWidgets[selectedEntity]->isSelected = false;
-	entityWidgets[index]->isSelected = true;
+	index = Math::Wrap<int>(index, 0, entity_widgets.Size());
+	entity_widgets[selected_entity]->is_selected = false;
+	entity_widgets[index]->is_selected = true;
 
-	selectedEntity = index;
+	selected_entity = index;
 }
 
 void InspectorWidget::RebuildEntities()
 {
-	for (uint32 i = entityWidgets.Size(); i < scene->entityList.Size(); ++i)
+	for (uint32 i = entity_widgets.Size(); i < scene->entity_list.Size(); ++i)
 	{
-		VerticalBoxWidget::Slot& boxSlot = entityBox->AddSlot();
-		EntityWidget* widget = boxSlot.AddWidget<EntityWidget>();
+		VerticalBoxWidget::Slot& box_slot = entity_box->AddSlot();
+		EntityWidget* widget = box_slot.AddWidget<EntityWidget>();
 		widget->SetEntity(scene, i);
 
-		entityWidgets.Add(widget);
+		entity_widgets.Add(widget);
 	}
 }

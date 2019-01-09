@@ -8,21 +8,21 @@
 void TextMesh::Create()
 {
 	// Create the glyph mesh
-	glyphMesh.vertexBuffer.Create(1);
-	glyphMesh.vertexBuffer.BindBuffer(0, 0, 2, 8, 0);
-	glyphMesh.vertexBuffer.BindBuffer(0, 1, 2, 8, 2);
-	glyphMesh.vertexBuffer.BindBuffer(0, 2, 4, 8, 4);
-	glyphMesh.drawMode = GL_TRIANGLES;
-	glyphMesh.drawOffset = 0;
-	glyphMesh.useElements = false;
+	mesh_glyph.vertex_buffer.Create(1);
+	mesh_glyph.vertex_buffer.BindBuffer(0, 0, 2, 8, 0);
+	mesh_glyph.vertex_buffer.BindBuffer(0, 1, 2, 8, 2);
+	mesh_glyph.vertex_buffer.BindBuffer(0, 2, 4, 8, 4);
+	mesh_glyph.draw_mode = GL_TRIANGLES;
+	mesh_glyph.draw_offset = 0;
+	mesh_glyph.use_elements = false;
 
 	// Create the background mesh
-	backgroundMesh.vertexBuffer.Create(1);
-	backgroundMesh.vertexBuffer.BindBuffer(0, 0, 2, 6, 0);
-	backgroundMesh.vertexBuffer.BindBuffer(0, 1, 4, 6, 2);
-	backgroundMesh.drawMode = GL_TRIANGLES;
-	backgroundMesh.drawOffset = 0;
-	backgroundMesh.useElements = false;
+	mesh_background.vertex_buffer.Create(1);
+	mesh_background.vertex_buffer.BindBuffer(0, 0, 2, 6, 0);
+	mesh_background.vertex_buffer.BindBuffer(0, 1, 4, 6, 2);
+	mesh_background.draw_mode = GL_TRIANGLES;
+	mesh_background.draw_offset = 0;
+	mesh_background.use_elements = false;
 }
 
 void TextMesh::BuildString(const char* str)
@@ -47,15 +47,15 @@ void TextMesh::BuildString(const char* str)
 
 	// Parse the string
 	auto blocks = StyledStringParser::Parse(str, palette);
-	glyphBuffer.Reserve(strlen(str));
-	backBuffer.Reserve(blocks.Size());
+	glyph_buffer.Reserve(strlen(str));
+	back_buffer.Reserve(blocks.Size());
 
 	for (const StyledStringParser::Block& block : blocks)
 	{
 		int blockx = ox;
 		int blocky = oy;
 
-		bool newLine = false;
+		bool new_line = false;
 
 		const char* str = block.ptr;
 		for (uint32 i = 0; i < block.length; ++i)
@@ -64,13 +64,13 @@ void TextMesh::BuildString(const char* str)
 			if (c == '\n')
 			{
 				// Defer newline onto later, because we wanna build the background first
-				newLine = true;
+				new_line = true;
 				continue;
 			}
 
 			// Build glyph
 			font.BuildGlyphForChar(glyph, c);
-			GlyphQuad& quad = glyphBuffer.AddRef();
+			GlyphQuad& quad = glyph_buffer.AddRef();
 			quad.Build(glyph, ox, oy, block.style.foreground);
 
 			// Add offset to next character
@@ -78,7 +78,7 @@ void TextMesh::BuildString(const char* str)
 		}
 
 		// Create a background quad for this block
-		BackgroundQuad& back = backBuffer.AddRef();
+		BackgroundQuad& back = back_buffer.AddRef();
 		back.Build(blockx, blocky, ox, blocky + font.pixel_size.y, 1, block.style.background);
 
 		// Width is based on longest line, so update it
@@ -86,7 +86,7 @@ void TextMesh::BuildString(const char* str)
 			width = ox;
 		height = blocky + font.pixel_size.y + 1;
 
-		if (newLine)
+		if (new_line)
 		{
 			// Now that we've built the background, we can apply the new-line
 			oy += font.pixel_size.y + 2;
@@ -95,15 +95,15 @@ void TextMesh::BuildString(const char* str)
 	}
 
 	// Upload glyph mesh data
-	glyphMesh.vertexBuffer.BufferData(0, *glyphBuffer, sizeof(GlyphQuad) * glyphBuffer.Size());
-	glyphMesh.drawCount = 6 * glyphBuffer.Size();
+	mesh_glyph.vertex_buffer.BufferData(0, *glyph_buffer, sizeof(GlyphQuad) * glyph_buffer.Size());
+	mesh_glyph.draw_count = 6 * glyph_buffer.Size();
 
 	// Upload background mesh data
-	backgroundMesh.vertexBuffer.BufferData(0, *backBuffer, sizeof(BackgroundQuad) * backBuffer.Size());
-	backgroundMesh.drawCount = 6 * backBuffer.Size();
+	mesh_background.vertex_buffer.BufferData(0, *back_buffer, sizeof(BackgroundQuad) * back_buffer.Size());
+	mesh_background.draw_count = 6 * back_buffer.Size();
 
-	glyphBuffer.Clear();
-	backBuffer.Clear();
+	glyph_buffer.Clear();
+	back_buffer.Clear();
 }
 
 void TextMesh::Draw(int x, int y, const Mat4& screen)
@@ -121,20 +121,20 @@ void TextMesh::Draw(int x, int y, const Mat4& screen)
 	glBindTexture(GL_TEXTURE_2D, texture.handle);
 
 	// Draw background
-	Material& mBackground = font->backgroundMaterial->material;
-	glUseProgram(mBackground.program);
-	mBackground.Set("u_Offset", Vec2(x, y));
-	mBackground.Set("u_Screen", screen);
+	Material& mat_background = font->background_material->material;
+	glUseProgram(mat_background.program);
+	mat_background.Set("u_Offset", Vec2(x, y));
+	mat_background.Set("u_Screen", screen);
 
-	backgroundMesh.Draw();
+	mesh_background.Draw();
 
 	// Draw foreground
-	Material& mForeground = font->foregroundMaterial->material;
-	glUseProgram(mForeground.program);
-	mBackground.Set("u_Offset", Vec2(x, y));
-	mForeground.Set("u_Screen", screen);
+	Material& mat_foreground = font->foreground_material->material;
+	glUseProgram(mat_foreground.program);
+	mat_background.Set("u_Offset", Vec2(x, y));
+	mat_foreground.Set("u_Screen", screen);
 
-	glyphMesh.Draw();
+	mesh_glyph.Draw();
 
 	glDisable(GL_BLEND);
 }

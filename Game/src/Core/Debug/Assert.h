@@ -18,11 +18,11 @@ public:
 		active = nullptr;
 	}
 
-	void Catch() { caughtErrors++; }
-	uint32 Count() const { return caughtErrors; }
+	void Catch() { cought_errors++; }
+	uint32 Count() const { return cought_errors; }
 
 private:
-	uint32 caughtErrors = 0;
+	uint32 cought_errors = 0;
 };
 
 namespace AssertHelpers

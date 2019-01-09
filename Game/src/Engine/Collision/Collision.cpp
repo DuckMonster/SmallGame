@@ -6,11 +6,11 @@ namespace
 	// Sphere-sphere overlap
 	bool Overlap_SphereSphere(const SphereCollider& a, const SphereCollider& b)
 	{
-		float distSqrd = Vec::DistanceSqrd(a.origin, b.origin);
-		float radSqrd = a.radius + b.radius;
-		radSqrd = radSqrd * radSqrd;
+		float dist_sqrd = Vec::DistanceSqrd(a.origin, b.origin);
+		float rad_sqrd = a.radius + b.radius;
+		rad_sqrd = rad_sqrd * rad_sqrd;
 
-		return distSqrd <= radSqrd;
+		return dist_sqrd <= rad_sqrd;
 	}
 
 	// Box-sphere overlap
@@ -188,7 +188,7 @@ void CollisionScene::UpdateOverlaps()
 {
 	for(ColliderObject* obj : objects)
 	{
-		obj->overlappedThisFrame = false;
+		obj->overlapped_this_frame = false;
 	}
 
 	for(uint32 i=0; i<objects.Size(); ++i)
@@ -198,9 +198,9 @@ void CollisionScene::UpdateOverlaps()
 	}
 }
 
-void CollisionScene::UpdateOverlapsFor(ColliderObject* obj, uint32 indexOffset/* = 0*/)
+void CollisionScene::UpdateOverlapsFor(ColliderObject* obj, uint32 index_offset/* = 0*/)
 {
-	for(uint32 i=indexOffset; i<objects.Size(); ++i)
+	for(uint32 i=index_offset; i<objects.Size(); ++i)
 	{
 		ColliderObject* other = objects[i];
 		UpdateOverlapsForPair(obj, other);
@@ -222,10 +222,10 @@ void CollisionScene::UpdateOverlapsForPair(ColliderObject* obj_a, ColliderObject
 
 			if (Overlap_SphereSphere(a_t, b_t))
 			{
-				obj_a->overlappedThisFrame = true;
-				obj_a->onOverlap.Broadcast(obj_b);
-				obj_b->overlappedThisFrame = true;
-				obj_b->onOverlap.Broadcast(obj_a);
+				obj_a->overlapped_this_frame = true;
+				obj_a->on_overlap.Broadcast(obj_b);
+				obj_b->overlapped_this_frame = true;
+				obj_b->on_overlap.Broadcast(obj_a);
 				return;
 			}
 		}
@@ -238,10 +238,10 @@ void CollisionScene::UpdateOverlapsForPair(ColliderObject* obj_a, ColliderObject
 
 			if (Overlap_BoxSphere(b_t, a_t))
 			{
-				obj_a->overlappedThisFrame = true;
-				obj_a->onOverlap.Broadcast(obj_b);
-				obj_b->overlappedThisFrame = true;
-				obj_b->onOverlap.Broadcast(obj_a);
+				obj_a->overlapped_this_frame = true;
+				obj_a->on_overlap.Broadcast(obj_b);
+				obj_b->overlapped_this_frame = true;
+				obj_b->on_overlap.Broadcast(obj_a);
 				return;
 			}
 		}
@@ -261,10 +261,10 @@ void CollisionScene::UpdateOverlapsForPair(ColliderObject* obj_a, ColliderObject
 
 			if (Overlap_BoxSphere(a_t, b_t))
 			{
-				obj_a->overlappedThisFrame = true;
-				obj_a->onOverlap.Broadcast(obj_b);
-				obj_b->overlappedThisFrame = true;
-				obj_b->onOverlap.Broadcast(obj_a);
+				obj_a->overlapped_this_frame = true;
+				obj_a->on_overlap.Broadcast(obj_b);
+				obj_b->overlapped_this_frame = true;
+				obj_b->on_overlap.Broadcast(obj_a);
 				return;
 			}
 		}
@@ -277,10 +277,10 @@ void CollisionScene::UpdateOverlapsForPair(ColliderObject* obj_a, ColliderObject
 
 			if (Overlap_BoxBox(a_t, b_t))
 			{
-				obj_a->overlappedThisFrame = true;
-				obj_a->onOverlap.Broadcast(obj_b);
-				obj_b->overlappedThisFrame = true;
-				obj_b->onOverlap.Broadcast(obj_a);
+				obj_a->overlapped_this_frame = true;
+				obj_a->on_overlap.Broadcast(obj_b);
+				obj_b->overlapped_this_frame = true;
+				obj_b->on_overlap.Broadcast(obj_a);
 				return;
 			}
 		}

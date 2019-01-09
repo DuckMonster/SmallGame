@@ -14,57 +14,57 @@ struct Font
 	// Builds font data
 	static Font Build(
 		Texture* texture,
-		int glyphWidth, int glyphHeight,
-		int spacingX, int spacingY)
+		int glyph_width, int glyph_height,
+		int spacing_x, int spacing_y)
 	{
 		Font font;
 
-		font.pixel_size = Vec2(glyphWidth, glyphHeight);
-		font.pixel_spacing = Vec2(spacingX, spacingY);
+		font.pixel_size = Vec2(glyph_width, glyph_height);
+		font.pixel_spacing = Vec2(spacing_x, spacing_y);
 
 		font.uv_size = Vec2(
-			(float)glyphWidth / texture->width,
-			(float)glyphHeight / texture->height
+			(float)glyph_width / texture->width,
+			(float)glyph_height / texture->height
 		);
 		font.uv_size.y *= -1.f;
 		font.uv_spacing = Vec2(
-			(float)spacingX / texture->width,
-			(float)spacingY / texture->height
+			(float)spacing_x / texture->width,
+			(float)spacing_y / texture->height
 		);
 		font.uv_spacing.y *= -1.f;
 
-		font.glyphsPerRow = (texture->width / (glyphWidth + spacingX));
+		font.glyphs_per_row = (texture->width / (glyph_width + spacing_x));
 
 		return font;
 	}
 
 	// Gets a glyph on the specified x and y coordinate
-	void BuildGlyphAt(Glyph& outGlyph, int x, int y) const
+	void BuildGlyphAt(Glyph& out_glyph, int x, int y) const
 	{
-		outGlyph.pixel_size = pixel_size;
-		outGlyph.uv_size = uv_size;
-		outGlyph.uv_offset = Vec2(
+		out_glyph.pixel_size = pixel_size;
+		out_glyph.uv_size = uv_size;
+		out_glyph.uv_offset = Vec2(
 			(uv_size.x + uv_spacing.x) * x,
 			1.f + (uv_size.y + uv_spacing.y) * y
 		);
 	}
 
 	// Calculate and find the glyph for at specific character
-	void BuildGlyphForChar(Glyph& outGlyph, char c) const
+	void BuildGlyphForChar(Glyph& out_glyph, char c) const
 	{
-		int x = (int)c % glyphsPerRow;
-		int y = (int)(c / glyphsPerRow);
+		int x = (int)c % glyphs_per_row;
+		int y = (int)(c / glyphs_per_row);
 
-		BuildGlyphAt(outGlyph, x, y);
+		BuildGlyphAt(out_glyph, x, y);
 	}
 
 	// Build glyphs for a string
-	uint32 BuildGlyphsForString(const char* str, Glyph* glyphArray, uint32 arrayNum) const
+	uint32 BuildGlyphsForString(const char* str, Glyph* glyph_array, uint32 array_num) const
 	{
-		uint32 num = Math::Min<uint32>(strlen(str), arrayNum);
+		uint32 num = Math::Min<uint32>(strlen(str), array_num);
 		for (uint32 i = 0; i < num; ++i)
 		{
-			BuildGlyphForChar(glyphArray[i], str[i]);
+			BuildGlyphForChar(glyph_array[i], str[i]);
 		}
 
 		return num;
@@ -76,5 +76,5 @@ struct Font
 	Vec2 pixel_spacing;
 	Vec2 uv_size;
 	Vec2 uv_spacing;
-	int glyphsPerRow;
+	int glyphs_per_row;
 };

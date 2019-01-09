@@ -12,11 +12,11 @@ TextWidget::TextWidget() : Widget()
 void TextWidget::Update()
 {
 	// Update not needed
-	if (text == prevText)
+	if (text == text_prev)
 		return;
 
 	mesh.BuildString(*text);
-	prevText = text;
+	text_prev = text;
 }
 
 void TextWidget::Draw(const WidgetDrawData& data)
@@ -31,6 +31,6 @@ WidgetSize TextWidget::GetSize()
 
 void TextWidget::SetStyle(const char* path)
 {
-	stylePath = path;
+	style_path = path;
 	mesh.style = gResourceManager->Load<StyleResource>(path);
 }

@@ -7,15 +7,15 @@
 #include "Engine/Rendering/RenderableComponent.h"
 #include "Engine/Transform/TransformComponent.h"
 
-ShapePrefab ShapePrefab::Create(Scene* scene, const char* name, const char* meshPath, const char* materialPath)
+ShapePrefab ShapePrefab::Create(Scene* scene, const char* name, const char* mesh_path, const char* material_path)
 {
 	ShapePrefab result;
 	result.entity = scene->CreateEntity(name);
 	result.transform	= result.entity->AddComponent<TransformComponent>();
 	result.renderable	= result.entity->AddComponent<RenderableComponent>();
 
-	auto mesh		= gResourceManager->Load<MeshResource>(meshPath);
-	auto material	= gResourceManager->Load<MaterialResource>(materialPath);
+	auto mesh		= gResourceManager->Load<MeshResource>(mesh_path);
+	auto material	= gResourceManager->Load<MaterialResource>(material_path);
 
 	result.renderable->mesh = &mesh->mesh;
 	result.renderable->material = &material->material;

@@ -10,18 +10,18 @@ bool FontResource::LoadInternal(const char* path)
 	document.LoadFile(path);
 
 	JsonValue object = document.GetRootObject();
-	const char* foregroundPath = nullptr;
-	const char* backgroundPath = nullptr;
-	const char* texturePath = nullptr;
+	const char* foreground_path = nullptr;
+	const char* background_path = nullptr;
+	const char* texture_path = nullptr;
 	uint32 glyph_width = 0;
 	uint32 glyph_height = 0;
 	uint32 spacing_x = 0;
 	uint32 spacing_y = 0;
 	uint32 kerning;
 
-	object.Serialize("material.foreground", foregroundPath);
-	object.Serialize("material.background", backgroundPath);
-	object.Serialize("texture", texturePath);
+	object.Serialize("material.foreground", foreground_path);
+	object.Serialize("material.background", background_path);
+	object.Serialize("texture", texture_path);
 	object.Serialize("glyph.width", glyph_width);
 	object.Serialize("glyph.height", glyph_height);
 	object.Serialize("spacing.x", spacing_x);
@@ -29,16 +29,16 @@ bool FontResource::LoadInternal(const char* path)
 	object.Serialize("kerning", kerning);
 
 	/* LOAD DEPENDENT RESOURCES */
-	if (foregroundPath != nullptr)
-		foregroundMaterial = gResourceManager->Load<MaterialResource>(foregroundPath);
-	if (backgroundPath != nullptr)
-		backgroundMaterial = gResourceManager->Load<MaterialResource>(backgroundPath);
-	if (texturePath != nullptr)
-		texture = gResourceManager->Load<TextureResource>(texturePath);
+	if (foreground_path != nullptr)
+		foreground_material = gResourceManager->Load<MaterialResource>(foreground_path);
+	if (background_path != nullptr)
+		background_material = gResourceManager->Load<MaterialResource>(background_path);
+	if (texture_path != nullptr)
+		texture = gResourceManager->Load<TextureResource>(texture_path);
 
 	bool success = true;
-	success |= Assert(foregroundMaterial != nullptr);
-	success |= Assert(backgroundMaterial != nullptr);
+	success |= Assert(foreground_material != nullptr);
+	success |= Assert(background_material != nullptr);
 	success |= Assert(texture != nullptr);
 
 	if (!success)
@@ -46,8 +46,8 @@ bool FontResource::LoadInternal(const char* path)
 		return true;
 	}
 
-	AddDependency(foregroundMaterial);
-	AddDependency(backgroundMaterial);
+	AddDependency(foreground_material);
+	AddDependency(background_material);
 	AddDependency(texture);
 
 	/* BUILD FONT */

@@ -21,7 +21,7 @@ struct FrameBuffer
 
 	GLuint handle = GL_INVALID_INDEX;
 	Texture textures[FRAMEBUFFER_MAX_TEXTURES];
-	uint32 numTextures;
+	uint32 num_textures;
 
 	int width;
 	int height;

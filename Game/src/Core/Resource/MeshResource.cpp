@@ -18,64 +18,64 @@ bool MeshResource::LoadInternal(const char* path)
 	}
 
 	/* **** LOAD MESHES **** */
-	for (uint32 meshIndex = 0; meshIndex < scene->mNumMeshes; ++meshIndex)
+	for (uint32 mesh_index = 0; mesh_index < scene->mNumMeshes; ++mesh_index)
 	{
-		aiMesh* sceneMesh = scene->mMeshes[meshIndex];
+		aiMesh* scene_mesh = scene->mMeshes[mesh_index];
 
-		uint32 meshVerts = sceneMesh->mNumVertices;
-		uint32 meshIndices = sceneMesh->mNumFaces * 3;
+		uint32 mesh_verts = scene_mesh->mNumVertices;
+		uint32 mesh_indices = scene_mesh->mNumFaces * 3;
 
-		Vec3* positionData = new Vec3[meshVerts];
-		Vec3* normalData = new Vec3[meshVerts];
-		Vec3* uvData = new Vec3[meshVerts];  // The uv data has 3 components, for cubemapped meshes?
-		uint32* indexData = new uint32[meshIndices];
+		Vec3* position_data = new Vec3[mesh_verts];
+		Vec3* normal_data = new Vec3[mesh_verts];
+		Vec3* uv_data = new Vec3[mesh_verts];  // The uv data has 3 components, for cubemapped meshes?
+		uint32* index_data = new uint32[mesh_indices];
 
 		defer
 		{
-			delete[] positionData;
-			delete[] normalData;
-			delete[] uvData;
-			delete[] indexData;
+			delete[] position_data;
+			delete[] normal_data;
+			delete[] uv_data;
+			delete[] index_data;
 		};
 
-		memcpy(positionData, sceneMesh->mVertices, sizeof(Vec3) * meshVerts);
+		memcpy(position_data, scene_mesh->mVertices, sizeof(Vec3) * mesh_verts);
 
-		if (sceneMesh->HasNormals())
-			memcpy(normalData, sceneMesh->mNormals, sizeof(Vec3) * meshVerts);
+		if (scene_mesh->HasNormals())
+			memcpy(normal_data, scene_mesh->mNormals, sizeof(Vec3) * mesh_verts);
 
-		if (sceneMesh->HasTextureCoords(0))
-			memcpy(uvData, sceneMesh->mTextureCoords[0], sizeof(Vec3) * meshVerts);
+		if (scene_mesh->HasTextureCoords(0))
+			memcpy(uv_data, scene_mesh->mTextureCoords[0], sizeof(Vec3) * mesh_verts);
 
 		// Fetch indexes
-		for (uint32 faceIndex = 0; faceIndex < sceneMesh->mNumFaces; ++faceIndex)
+		for (uint32 face_index = 0; face_index < scene_mesh->mNumFaces; ++face_index)
 		{
-			const aiFace& face = sceneMesh->mFaces[faceIndex];
+			const aiFace& face = scene_mesh->mFaces[face_index];
 			Assert(face.mNumIndices == 3);  // Right now we only support triangles
 
-			memcpy(indexData + 3 * faceIndex, face.mIndices, sizeof(uint32) * 3);
+			memcpy(index_data + 3 * face_index, face.mIndices, sizeof(uint32) * 3);
 		}
 
-		VertexBuffer& buffer = mesh.vertexBuffer;
+		VertexBuffer& buffer = mesh.vertex_buffer;
 		buffer.Create(4);
 
 		// Upload and bind all the buffers
 		{
-			buffer.BufferData(0, positionData, sizeof(Vec3) * meshVerts);
+			buffer.BufferData(0, position_data, sizeof(Vec3) * mesh_verts);
 			buffer.BindBuffer(0, 0, 3, 0, 0);
 
-			buffer.BufferData(1, normalData, sizeof(Vec3) * meshVerts);
+			buffer.BufferData(1, normal_data, sizeof(Vec3) * mesh_verts);
 			buffer.BindBuffer(1, 1, 3, 0, 0);
 
-			buffer.BufferData(2, uvData, sizeof(Vec3) * meshVerts);
+			buffer.BufferData(2, uv_data, sizeof(Vec3) * mesh_verts);
 			buffer.BindBuffer(2, 2, 2, 3, 0);
 
-			buffer.BufferElementData(3, indexData, sizeof(GLuint) * meshIndices);
+			buffer.BufferElementData(3, index_data, sizeof(GLuint) * mesh_indices);
 		}
 
-		mesh.drawCount = meshIndices;
-		mesh.drawOffset = 0;
-		mesh.drawMode = GL_TRIANGLES;
-		mesh.useElements = true;
+		mesh.draw_count = mesh_indices;
+		mesh.draw_offset = 0;
+		mesh.draw_mode = GL_TRIANGLES;
+		mesh.use_elements = true;
 
 		break;
 	}
@@ -85,5 +85,5 @@ bool MeshResource::LoadInternal(const char* path)
 
 void MeshResource::UnloadInternal()
 {
-	mesh.vertexBuffer.Destroy();
+	mesh.vertex_buffer.Destroy();
 }

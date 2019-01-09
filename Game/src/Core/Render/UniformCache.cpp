@@ -2,7 +2,7 @@
 #include "UniformCache.h"
 
 Map<GLuint, UniformCache::UniformMap> UniformCache::map;
-UniformCache::UniformMap* UniformCache::hotMap = nullptr;
+UniformCache::UniformMap* UniformCache::hot_map = nullptr;
 
 GLuint UniformCache::UniformMap::Get(const char* name)
 {
@@ -19,18 +19,18 @@ GLuint UniformCache::UniformMap::Get(const char* name)
 GLuint UniformCache::Get(GLuint program, const char* name)
 {
 	// Is this program hot right now? (Skip one map-lookup)
-	if (hotMap != nullptr && hotMap->program == program)
+	if (hot_map != nullptr && hot_map->program == program)
 	{
-		return hotMap->Get(name);
+		return hot_map->Get(name);
 	}
 
 	// Otherwise, just look it up
-	UniformMap& programMap = map[program];
-	programMap.program = program;
-	GLuint result = programMap.Get(name);
+	UniformMap& program_map = map[program];
+	program_map.program = program;
+	GLuint result = program_map.Get(name);
 
 	// Make this program hot
-	hotMap = &programMap;
+	hot_map = &program_map;
 
 	return result;
 }
@@ -38,10 +38,10 @@ GLuint UniformCache::Get(GLuint program, const char* name)
 void UniformCache::InvalidateCacheFor(GLuint program)
 {
 	// If this program was hot, make sure it isnt
-	if (hotMap != nullptr)
+	if (hot_map != nullptr)
 	{
-		if (hotMap->program == program)
-			hotMap = nullptr;
+		if (hot_map->program == program)
+			hot_map = nullptr;
 	}
 
 	map.Remove(program);

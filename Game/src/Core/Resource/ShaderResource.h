@@ -9,5 +9,5 @@ public:
 	void UnloadInternal() override;
 
 	GLuint handle;
-	bool isValid = false;
+	bool is_valid = false;
 };

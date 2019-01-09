@@ -18,7 +18,7 @@ class InspectorWidget : public SlottedWidget
 	{
 	public:
 		PropertyWidget();
-		void SetProperty(const PropertyBase* inProperty, const Component* inComponent);
+		void SetProperty(const PropertyBase* in_property, const Component* in_component);
 		void Update() override;
 
 		const PropertyBase* property;
@@ -31,11 +31,11 @@ class InspectorWidget : public SlottedWidget
 	{
 	public:
 		ComponentWidget();
-		void SetComponent(const Component* inComponent);
+		void SetComponent(const Component* in_component);
 
 		const Component* component;
 		TextWidget* text;
-		VerticalBoxWidget* propertyBox;
+		VerticalBoxWidget* property_box;
 	};
 
 	/* Widget showing an entities name, and a list of components */
@@ -43,7 +43,7 @@ class InspectorWidget : public SlottedWidget
 	{
 	public:
 		EntityWidget();
-		void SetEntity(const Scene* inScene, uint32 inId);
+		void SetEntity(const Scene* in_scene, uint32 in_id);
 		void Update() override;
 
 		void SetExpanded(bool expanded);
@@ -51,17 +51,17 @@ class InspectorWidget : public SlottedWidget
 
 		Entity* GetEntity();
 
-		Entity* lastEntity;
+		Entity* entity_last;
 		const Scene* scene;
-		uint32 entityId;
+		uint32 entity_id;
 		TextWidget* text;
-		VerticalBoxWidget* componentBox;
-		bool isExpanded = true;
-		bool isSelected = false;
+		VerticalBoxWidget* component_box;
+		bool is_expanded = true;
+		bool is_selected = false;
 	};
 
 public:
-	void SetScene(Scene* inScene);
+	void SetScene(Scene* in_scene);
 	void Update() override;
 	void SelectEntity(int index);
 
@@ -69,7 +69,7 @@ private:
 	void RebuildEntities();
 
 	Scene* scene;
-	Array<EntityWidget*> entityWidgets;
-	VerticalBoxWidget* entityBox;
-	int selectedEntity;
+	Array<EntityWidget*> entity_widgets;
+	VerticalBoxWidget* entity_box;
+	int selected_entity;
 };

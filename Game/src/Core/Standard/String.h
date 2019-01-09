@@ -55,41 +55,41 @@ public:
 	}
 
 	// Copy string into this object, but only copy length bytes
-	void Set(const char* str, uint32 inLength)
+	void Set(const char* str, uint32 in_length)
 	{
-		if (inLength > strlen(str))
+		if (in_length > strlen(str))
 		{
 			Error("Setting string with length longer than the string");
-			inLength = strlen(str);
+			in_length = strlen(str);
 		}
 
-		Reserve(inLength);
-		memcpy(data, str, inLength);
+		Reserve(in_length);
+		memcpy(data, str, in_length);
 
 		// Manually include null terminator
-		data[inLength] = '\0';
-		length = inLength;
+		data[in_length] = '\0';
+		length = in_length;
 	}
 
 	// Returns the length (amount of characters) of the string
 	uint32 Length() const { return length; }
 
-	// Will reserve memory for (at least) a string of newLength length
-	void Reserve(uint32 newLength)
+	// Will reserve memory for (at least) a string of new_length length
+	void Reserve(uint32 new_length)
 	{
-		if (newLength + 1 > size)
+		if (new_length + 1 > size)
 		{
-			char* oldData = data;
+			char* old_data = data;
 
-			data = (char*)InAllocator::Malloc(newLength + 1);
+			data = (char*)InAllocator::Malloc(new_length + 1);
 
-			if (oldData)
+			if (old_data)
 			{
-				memcpy(data, oldData, size);
-				InAllocator::Free(oldData);
+				memcpy(data, old_data, size);
+				InAllocator::Free(old_data);
 			}
 
-			size = newLength + 1;
+			size = new_length + 1;
 		}
 	}
 

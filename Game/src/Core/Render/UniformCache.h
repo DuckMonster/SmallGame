@@ -17,5 +17,5 @@ public:
 private:
 
 	static Map<GLuint, UniformMap> map;
-	static UniformMap* hotMap;
+	static UniformMap* hot_map;
 };

@@ -13,19 +13,19 @@ void PrintWidget::Update()
 
 	text->text = "{print}";
 
-	uint32 numMessages = Math::Min(MAX_MESSAGES, messages.Size());
+	uint32 num_messages = Math::Min(MAX_MESSAGES, messages.Size());
 
 	// Write out messages in reverse chronological order
-	for (int i = numMessages - 1; i >= 0; --i)
+	for (int i = num_messages - 1; i >= 0; --i)
 	{
 		text->text += messages[i].text + "\n";
 	}
 
-	if (numMessages == MAX_MESSAGES)
+	if (num_messages == MAX_MESSAGES)
 	{
 		text->text += TString::Printf(
 			"{red}[MAX NUMBER OF MESSAGES REACHED (showing (%d/%d))]{/}",
-			numMessages,
+			num_messages,
 			messages.Size()
 		);
 	}

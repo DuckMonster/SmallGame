@@ -24,9 +24,9 @@ public:
 
 private:
 	Vec3 offset = Vec3(0.f, 1.f, 1.f);
-	float offsetDistance = 10.f;
+	float offset_distance = 10.f;
 	Vec3 root;
-	float rotateAngle = 0.f;
+	float rotate_angle = 0.f;
 
 	float zoom = 1.f;
 

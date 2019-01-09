@@ -20,7 +20,7 @@ void ProjectileCapability::Setup()
 	auto collider = GetOwner()->GetComponent<ColliderComponent>();
 	if (collider != nullptr)
 	{
-		collider->onOverlap.AddObject(this, &ProjectileCapability::HandleOverlap);
+		collider->on_overlap.AddObject(this, &ProjectileCapability::HandleOverlap);
 	}
 }
 

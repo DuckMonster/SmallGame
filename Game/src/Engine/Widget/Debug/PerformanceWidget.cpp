@@ -6,10 +6,8 @@ PerformanceWidget::PerformanceWidget()
 {
 	VerticalBoxWidget* box = slot.AddWidget<VerticalBoxWidget>();
 
-	fps =
-		box->AddSlot().AddWidget<TextWidget>();
-	storage =
-		box->AddSlot().AddWidget<TextWidget>();
+	fps 	= box->AddSlot().AddWidget<TextWidget>();
+	storage = box->AddSlot().AddWidget<TextWidget>();
 }
 
 void PerformanceWidget::Update()
@@ -37,24 +35,24 @@ void PerformanceWidget::Update()
 
 		// Update ms
 		float ms = Time::InternalFrameTime() * 1000.f;
-		float realMs = Time::Delta() * 1000.f;
+		float real_ms = Time::Delta() * 1000.f;
 
 		// Has time window finished?
-		if (Time::Duration() > resetTime)
+		if (Time::Duration() > reset_time)
 			Reset();
 
 		// Update max and min
-		if (ms > maxMs)
-			maxMs = ms;
-		if (ms < minMs || minMs == -1.f)
-			minMs = ms;
+		if (ms > max_ms)
+			max_ms = ms;
+		if (ms < min_ms || min_ms == -1.f)
+			min_ms = ms;
 
 		TString str;
 		str += TString::Printf("MS: %s (%s) (%s - %s)",
 			*TagHelper(ms),
-			*TagHelper(realMs),
-			*TagHelper(minMs),
-			*TagHelper(maxMs)
+			*TagHelper(real_ms),
+			*TagHelper(min_ms),
+			*TagHelper(max_ms)
 		);
 
 		fps->text = str;
@@ -62,6 +60,6 @@ void PerformanceWidget::Update()
 
 	/*-- UPDATE STORAGE --*/
 	{
-		storage->text = TString::Printf("{cyan}TEMP STACK %d/%d B{}", gTempStack->prevOffset, gTempStack->dataSize);
+		storage->text = TString::Printf("{cyan}TEMP STACK %d/%d B{}", gTempStack->prev_offset, gTempStack->data_size);
 	}
 }

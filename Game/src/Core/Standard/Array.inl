@@ -66,11 +66,11 @@ bool ArrayBase<InType, InAllocator>::RemoveAt(uint32 index)
 	// Run destructor on object being removed
 	data[index].~InType();
 
-	uint32 lastIndex = size - 1;
-	if (index < lastIndex)
+	uint32 last_index = size - 1;
+	if (index < last_index)
 	{
 		// If the removed index is not at the end, move everything after index down one step
-		memmove(data + index, data + index + 1, sizeof(InType) * (lastIndex - index));
+		memmove(data + index, data + index + 1, sizeof(InType) * (last_index - index));
 	}
 
 	size--;
@@ -78,13 +78,13 @@ bool ArrayBase<InType, InAllocator>::RemoveAt(uint32 index)
 }
 
 template<typename InType, typename InAllocator>
-bool ArrayBase<InType, InAllocator>::Find(const InType& value, uint32& outIndex)
+bool ArrayBase<InType, InAllocator>::Find(const InType& value, uint32& out_index)
 {
 	for (uint32 i = 0; i < size; ++i)
 	{
 		if (data[i] == value)
 		{
-			outIndex = i;
+			out_index = i;
 			return true;
 		}
 	}

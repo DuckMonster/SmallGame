@@ -2,9 +2,9 @@
 #include "CapabilitySystem.h"
 #include "Capability.h"
 
-void CapabilitySystem::ProcessEntity(Entity* entity, CapabilityComponent* capabilityComponent)
+void CapabilitySystem::ProcessEntity(Entity* entity, CapabilityComponent* capability_comp)
 {
-	for (Capability* capability : capabilityComponent->capabilityList)
+	for (Capability* capability : capability_comp->capability_list)
 	{
 		capability->Tick();
 	}

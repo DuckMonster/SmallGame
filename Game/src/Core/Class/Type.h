@@ -24,7 +24,7 @@ public:
 	static Type* Create(uint32 id, const char* name)
 	{
 		Type* type = new Type(id, name);
-		type->createFunc = ObjectCreate<T>;
+		type->create_func = ObjectCreate<T>;
 
 		return type;
 	}
@@ -43,7 +43,7 @@ public:
 	Array<PropertyBase*> properties;
 
 private:
-	ObjectCreateFunc createFunc;
+	ObjectCreateFunc create_func;
 };
 
 TypedObject* NewObject(Type* type);

@@ -15,7 +15,7 @@ Texture& FrameBuffer::AddTexture()
 {
 	Assert(IsValid());
 
-	Texture& texture = textures[numTextures];
+	Texture& texture = textures[num_textures];
 	texture.Create();
 	texture.width = width;
 	texture.height = height;
@@ -27,7 +27,7 @@ Texture& FrameBuffer::AddTexture()
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture.handle, 0);
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
-	numTextures++;
+	num_textures++;
 	return texture;
 }
 
@@ -35,7 +35,7 @@ Texture& FrameBuffer::AddDepthTexture()
 {
 	Assert(IsValid());
 
-	Texture& texture = textures[numTextures];
+	Texture& texture = textures[num_textures];
 	texture.Create();
 	texture.width = width;
 	texture.height = height;
@@ -47,7 +47,7 @@ Texture& FrameBuffer::AddDepthTexture()
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, texture.handle, 0);
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
-	numTextures++;
+	num_textures++;
 	return texture;
 }
 
@@ -55,7 +55,7 @@ Texture& FrameBuffer::AddDepthStencilTexture()
 {
 	Assert(IsValid());
 
-	Texture& texture = textures[numTextures];
+	Texture& texture = textures[num_textures];
 	texture.Create();
 	texture.width = width;
 	texture.height = height;
@@ -67,7 +67,7 @@ Texture& FrameBuffer::AddDepthStencilTexture()
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_TEXTURE_2D, texture.handle, 0);
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
-	numTextures++;
+	num_textures++;
 	return texture;
 }
 
@@ -76,7 +76,7 @@ void FrameBuffer::Destroy()
 	Assert(IsValid());
 
 	glDeleteFramebuffers(1, &handle);
-	glDeleteTextures(numTextures, (GLuint*)textures);
+	glDeleteTextures(num_textures, (GLuint*)textures);
 }
 
 bool FrameBuffer::IsComplete()

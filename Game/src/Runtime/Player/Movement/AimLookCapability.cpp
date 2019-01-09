@@ -12,11 +12,11 @@ void AimLookCapability::Setup()
 
 void AimLookCapability::Tick()
 {
-	Vec3 direction = player->aimWorldPosition - transform->GetWorldPosition();
-	float targetAngle = Math::Atan2(direction.z, direction.x);
-	float deltaAngle = Math::GetDeltaAngleRadians(angle, targetAngle);
+	Vec3 direction = player->aim_world_position - transform->GetWorldPosition();
+	float angle_target = Math::Atan2(direction.z, direction.x);
+	float angle_delta = Math::GetDeltaAngleRadians(angle, angle_target);
 
-	angle += deltaAngle * 20.f * Time::Delta();
+	angle += angle_delta * 20.f * Time::Delta();
 	angle = Math::UnwindRadians(angle);
 
 	Quat quat = Quat::AngleAxis(-angle, Vec3::Up);

@@ -44,12 +44,12 @@ public:
 		Scene* scene = GetScene();
 
 		RunBegin();
-		for (uint32 i = 0; i < scene->entityList.Size(); ++i)
+		for (uint32 i = 0; i < scene->entity_list.Size(); ++i)
 		{
-			if (scene->entityList[i] == nullptr)
+			if (scene->entity_list[i] == nullptr)
 				continue;
 
-			RunFor<TComponents...>(scene->entityList[i]);
+			RunFor<TComponents...>(scene->entity_list[i]);
 		}
 		RunEnd();
 	}
@@ -61,18 +61,18 @@ protected:
 
 private:
 	template<typename... TRead>
-	bool RunFor(Entity* entity, TRead*... readComponents)
+	bool RunFor(Entity* entity, TRead*... read_components)
 	{
-		ProcessEntity(entity, readComponents...);
+		ProcessEntity(entity, read_components...);
 		return true;
 	}
 	template<typename TToRead, typename... TLeft, typename... TRead>
-	bool RunFor(Entity* entity, TRead*... readComponents)
+	bool RunFor(Entity* entity, TRead*... read_components)
 	{
 		TToRead* comp = entity->GetComponent<TToRead>();
 		if (comp == nullptr)
 			return false;
 
-		return RunFor<TLeft...>(entity, readComponents..., comp);
+		return RunFor<TLeft...>(entity, read_components..., comp);
 	}
 };

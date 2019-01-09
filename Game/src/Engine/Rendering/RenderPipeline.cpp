@@ -12,7 +12,7 @@ namespace
 		glClearColor(0.1f, 0.1f, 0.1f, 1.f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
-		for (uint32 i = 0; i < scene.numObjects; ++i)
+		for (uint32 i = 0; i < scene.object_num; ++i)
 		{
 			RenderObject& object = scene.objects[i];
 			glUseProgram(object.material.program);
@@ -39,20 +39,20 @@ void RenderPipeline::Create()
 	int width = gContext->width / 4;
 	int height = gContext->height / 4;
 
-	upscaleBuffer.Create(width, height);
-	upscaleBuffer.AddTexture();
-	upscaleBuffer.AddDepthTexture();
+	upscale_buffer.Create(width, height);
+	upscale_buffer.AddTexture();
+	upscale_buffer.AddDepthTexture();
 
-	Assert(upscaleBuffer.IsValid() && upscaleBuffer.IsComplete());
+	Assert(upscale_buffer.IsValid() && upscale_buffer.IsComplete());
 }
 
 void RenderPipeline::Execute(RenderScene& scene)
 {
-	upscaleBuffer.Bind();
+	upscale_buffer.Bind();
 	ExecuteGeometryPass(scene);
 	ExecuteDebugPass(scene);
 	FrameBuffer::Clear();
 
 	// Draw to screen, baby!
-	FullscreenQuad::RenderTexture(upscaleBuffer.textures[0]);
+	FullscreenQuad::RenderTexture(upscale_buffer.textures[0]);
 }

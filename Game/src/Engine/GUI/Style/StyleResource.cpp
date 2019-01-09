@@ -37,35 +37,35 @@ bool StyleResource::LoadInternal(const char* path)
 	document.LoadFile(path);
 
 	JsonValue object = document.GetRootObject();
-	const char* parentPath = nullptr;
-	const char* fontPath = nullptr;
-	Style defaultStyle;
+	const char* parent_path = nullptr;
+	const char* font_path = nullptr;
+	Style default_style;
 	TArray<StyleTag> tags;
 
-	object.Serialize("parent", parentPath);
-	object.Serialize("font", fontPath);
-	bool hasDefault = object.Serialize("default", defaultStyle);
+	object.Serialize("parent", parent_path);
+	object.Serialize("font", font_path);
+	bool has_default = object.Serialize("default", default_style);
 
 	object.SerializeArray("tags", tags);
 
 	// Load parent
 	StyleResource* parent = nullptr;
-	if (parentPath != nullptr)
+	if (parent_path != nullptr)
 	{
-		parent = gResourceManager->Load<StyleResource>(parentPath);
+		parent = gResourceManager->Load<StyleResource>(parent_path);
 		if (parent != nullptr)
 		{
 			// Copy over palette from parent, before we write our own stuff
-			palette.defaultStyle = parent->palette.defaultStyle;
+			palette.default_style = parent->palette.default_style;
 			palette.tags = parent->palette.tags;
 			font = parent->font;
 		}
 	}
 
 	// Load font
-	if (fontPath != nullptr)
+	if (font_path != nullptr)
 	{
-		font = gResourceManager->Load<FontResource>(fontPath);
+		font = gResourceManager->Load<FontResource>(font_path);
 	}
 
 	if (font == nullptr)
@@ -79,8 +79,8 @@ bool StyleResource::LoadInternal(const char* path)
 		AddDependency(parent);
 
 	// Fill out the palette
-	if (hasDefault)
-		palette.defaultStyle = defaultStyle;
+	if (has_default)
+		palette.default_style = default_style;
 
 	for (StyleTag& tag : tags)
 	{

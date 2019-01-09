@@ -14,8 +14,8 @@ class Reflection
 	};
 
 public:
-	static Array<Type*> registeredTypes;
-	static Map<String, Type*> nameLookup;
+	static Array<Type*> registered_types;
+	static Map<String, Type*> name_lookup;
 
 	template<typename T>
 	static Type* Get()
@@ -29,17 +29,17 @@ public:
 	static Type* RegisterType(const char* name)
 	{
 		Assert(TypeLookup<T>::type == nullptr);
-		Type* type = Type::Create<T>(lastId, name);
+		Type* type = Type::Create<T>(last_id, name);
 
-		registeredTypes.Add(type);
-		nameLookup[name] = type;
+		registered_types.Add(type);
+		name_lookup[name] = type;
 		TypeLookup<T>::type = type;
 
 		return type;
 	}
 
 private:
-	static uint32 lastId;
+	static uint32 last_id;
 };
 
 template<typename T>

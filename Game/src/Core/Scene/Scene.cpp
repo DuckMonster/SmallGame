@@ -21,7 +21,7 @@ Scene::Scene()
 	gScene = this;
 
 	// Create collision
-	collisionScene = new CollisionScene();
+	collision_scene = new CollisionScene();
 
 	AddSystem<CapabilitySystem>();
 	AddSystem<CollisionSystem>();
@@ -44,7 +44,7 @@ Scene::Scene()
 		// Other test collider
 		auto entity = CreateEntity("TestCollider");
 		auto collider = entity->AddComponent<ColliderComponent>();
-		collider->onOverlap.AddLambda([](Entity* other) { Debug::PrintOneFrame("Did I hit something?"); });
+		collider->on_overlap.AddLambda([](Entity* other) { Debug::PrintOneFrame("Did I hit something?"); });
 		collider->AddSphere(Vec3(7.f, 0.f, 0.f), 4.f);
 		// collider->AddBox(
 		// 	Vec3(-7.f, 2.f, 1.f),
@@ -55,7 +55,7 @@ Scene::Scene()
 	}
 	{
 		FollowCamera camera = FollowCamera::Create(this, player.entity);
-		GetStaticComponent<RenderStaticComponent>()->activeCamera = camera.camera;
+		GetStaticComponent<RenderStaticComponent>()->active_camera = camera.camera;
 	}
 }
 
@@ -65,7 +65,7 @@ Scene::~Scene()
 
 void Scene::Tick()
 {
-	for (SystemBase* system : systemList)
+	for (SystemBase* system : system_list)
 	{
 		system->RunSystem();
 	}
@@ -75,9 +75,9 @@ Entity* Scene::CreateEntity(const char* name)
 {
 	// Find an empty id
 	uint32 id = -1;
-	for (uint32 i = 0; i < entityList.Size(); ++i)
+	for (uint32 i = 0; i < entity_list.Size(); ++i)
 	{
-		if (entityList[i] == nullptr)
+		if (entity_list[i] == nullptr)
 		{
 			id = i;
 			break;
@@ -87,12 +87,12 @@ Entity* Scene::CreateEntity(const char* name)
 	// No empty slot found, just add a new element and set ID to that
 	if (id == -1)
 	{
-		id = entityList.Size();
-		entityList.AddRef();
+		id = entity_list.Size();
+		entity_list.AddRef();
 	}
 
 	Entity* entity = new Entity(name, id, this);
-	entityList[id] = entity;
+	entity_list[id] = entity;
 
 	return entity;
 }
@@ -101,6 +101,6 @@ void Scene::DestroyEntity(Entity* entity)
 {
 	Assert(entity != nullptr);
 
-	entityList[entity->GetId()] = nullptr;
+	entity_list[entity->GetId()] = nullptr;
 	delete entity;
 }

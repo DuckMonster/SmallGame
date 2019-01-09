@@ -10,22 +10,22 @@ bool MaterialResource::LoadInternal(const char* path)
 
 	JsonValue object = document.GetRootObject();
 
-	const char* parentPath = nullptr;
-	const char* vertPath = nullptr;
-	const char* fragPath = nullptr;
-	const char* texturePath = nullptr;
-	object.Serialize("parent", parentPath);
-	object.Serialize("vertex", vertPath);
-	object.Serialize("fragment", fragPath);
-	object.Serialize("texture", texturePath);
+	const char* parent_path = nullptr;
+	const char* vert_path = nullptr;
+	const char* frag_path = nullptr;
+	const char* texture_path = nullptr;
+	object.Serialize("parent", parent_path);
+	object.Serialize("vertex", vert_path);
+	object.Serialize("fragment", frag_path);
+	object.Serialize("texture", texture_path);
 
 	// Load parent material
-	if (parentPath != nullptr)
+	if (parent_path != nullptr)
 	{
-		parent = gResourceManager->Load<MaterialResource>(parentPath);
+		parent = gResourceManager->Load<MaterialResource>(parent_path);
 		if (parent == nullptr)
 		{
-			Error("Failed to load parent '%s' when loading material '%s'", parentPath, path);
+			Error("Failed to load parent '%s' when loading material '%s'", parent_path, path);
 		}
 		else
 		{
@@ -34,68 +34,68 @@ bool MaterialResource::LoadInternal(const char* path)
 	}
 
 	// Load vertex shader
-	if (vertPath != nullptr)
+	if (vert_path != nullptr)
 	{
-		vertexResource = gResourceManager->Load<ShaderResource>(vertPath);
+		vertex_resource = gResourceManager->Load<ShaderResource>(vert_path);
 	}
 	else if (parent != nullptr)
 	{
-		vertexResource = parent->vertexResource;
+		vertex_resource = parent->vertex_resource;
 	}
 
 	// Load fragment shader
-	if (fragPath != nullptr)
+	if (frag_path != nullptr)
 	{
-		fragmentResource = gResourceManager->Load<ShaderResource>(fragPath);
+		fragment_resource = gResourceManager->Load<ShaderResource>(frag_path);
 	}
 	else if (parent != nullptr)
 	{
-		fragmentResource = parent->fragmentResource;
+		fragment_resource = parent->fragment_resource;
 	}
 
 	// Check to make sure we have all shaders specified
-	if (vertexResource == nullptr)
+	if (vertex_resource == nullptr)
 	{
 		Error("No vertex shader specified for material '%s'", path);
-		vertexResource = fragmentResource = nullptr;
+		vertex_resource = fragment_resource = nullptr;
 		parent = nullptr;
 		return true;
 	}
-	if (fragmentResource == nullptr)
+	if (fragment_resource == nullptr)
 	{
 		Error("No fragment shader specified for material '%s'", path);
-		vertexResource = fragmentResource = nullptr;
+		vertex_resource = fragment_resource = nullptr;
 		parent = nullptr;
 		return true;
 	}
 
-	AddDependency(vertexResource);
-	AddDependency(fragmentResource);
+	AddDependency(vertex_resource);
+	AddDependency(fragment_resource);
 
 	// Load texture
-	if (texturePath != nullptr)
+	if (texture_path != nullptr)
 	{
-		textureResource = gResourceManager->Load<TextureResource>(texturePath);
-		if (textureResource == nullptr)
+		texture_resource = gResourceManager->Load<TextureResource>(texture_path);
+		if (texture_resource == nullptr)
 		{
-			Error("Failed to load texture '%s' when loading material '%s'", texturePath, path);
+			Error("Failed to load texture '%s' when loading material '%s'", texture_path, path);
 		}
 	}
 	else if (parent != nullptr)
 	{
-		textureResource = parent->textureResource;
+		texture_resource = parent->texture_resource;
 	}
 
 	// If a texture was aquired somehow, depend on it!
-	if (textureResource != nullptr)
-		AddDependency(textureResource);
+	if (texture_resource != nullptr)
+		AddDependency(texture_resource);
 
-	if (vertexResource->isValid && fragmentResource->isValid)
+	if (vertex_resource->is_valid && fragment_resource->is_valid)
 	{
 		// Create and link program, only if both shaders loaded properly
 		material.program = glCreateProgram();
-		glAttachShader(material.program, vertexResource->handle);
-		glAttachShader(material.program, fragmentResource->handle);
+		glAttachShader(material.program, vertex_resource->handle);
+		glAttachShader(material.program, fragment_resource->handle);
 		glLinkProgram(material.program);
 
 		// Get link status
@@ -109,16 +109,16 @@ bool MaterialResource::LoadInternal(const char* path)
 			Debug_Log("Program link failed\n%s", buffer);
 		}
 
-		if (textureResource != nullptr)
+		if (texture_resource != nullptr)
 		{
-			material.texture = textureResource->texture;
+			material.texture = texture_resource->texture;
 		}
 		else
 		{
 			material.texture = Texture();
 		}
 
-		isValid = true;
+		is_valid = true;
 	}
 
 	// Uh oh, invalid shaders, bad news
@@ -133,7 +133,7 @@ bool MaterialResource::LoadInternal(const char* path)
 void MaterialResource::UnloadInternal()
 {
 	// Invalidate uniform cache, since recompilation most probably will make new uniform indicies
-	if (isValid)
+	if (is_valid)
 	{
 		UniformCache::InvalidateCacheFor(material.program);
 		glDeleteProgram(material.program);
@@ -141,9 +141,9 @@ void MaterialResource::UnloadInternal()
 
 	ClearDependencies();
 
-	vertexResource = fragmentResource = nullptr;
-	textureResource = nullptr;
+	vertex_resource = fragment_resource = nullptr;
+	texture_resource = nullptr;
 	parent = nullptr;
 
-	isValid = false;
+	is_valid = false;
 }

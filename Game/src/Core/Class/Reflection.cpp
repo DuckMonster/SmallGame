@@ -2,13 +2,13 @@
 #include "Reflection.h"
 #include "Type.h"
 
-uint32 Reflection::lastId = 0;
-Array<Type*> Reflection::registeredTypes;
-Map<String, Type*> Reflection::nameLookup;
+uint32 Reflection::last_id = 0;
+Array<Type*> Reflection::registered_types;
+Map<String, Type*> Reflection::name_lookup;
 
 Type* Reflection::Get(const char* name)
 {
-	Type* type = nameLookup[name];
+	Type* type = name_lookup[name];
 
 	if (type == nullptr)
 		Error("Failed to find type '%s'", name);

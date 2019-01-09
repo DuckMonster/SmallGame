@@ -18,7 +18,7 @@ public:
 	BoxCollider* AddBox() { return AddBox(Vec3(0.f), Vec3(1.f)); }
 	BoxCollider* AddBox(const Vec3& position, const Vec3& size, const Quat& rotation = Quat::identity);
 
-	OnOverlapEvent onOverlap;
+	OnOverlapEvent on_overlap;
 
 private:
 	// We want to poll if the transform is changed, because then we need

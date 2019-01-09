@@ -16,8 +16,8 @@
 #include "Combat/PlayerFireCapability.h"
 
 REGISTER_TYPE(PlayerComponent);
-REGISTER_PROP(PlayerComponent, aimWorldPosition);
-REGISTER_PROP(PlayerComponent, followerCamera);
+REGISTER_PROP(PlayerComponent, aim_world_position);
+REGISTER_PROP(PlayerComponent, follower_camera);
 
 PlayerPrefab PlayerPrefab::Create(Scene* scene)
 {

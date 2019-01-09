@@ -186,7 +186,7 @@ public:
 	// Removes the element at a specific index (realigns everything afterwards)
 	bool RemoveAt(uint32 index);
 	// Finds the index of a specific value (and returns if it found anything)
-	bool Find(const InType& value, uint32& outIndex);
+	bool Find(const InType& value, uint32& out_index);
 	// Returns if this array contains a specific value
 	bool Contains(const InType& value);
 
@@ -208,56 +208,56 @@ public:
 	}
 
 	// Resizes the array and adds/removed objects to fit
-	void Resize(uint32 inSize, const InType& value = InType())
+	void Resize(uint32 in_size, const InType& value = InType())
 	{
-		ResizeEmplace(inSize, value);
+		ResizeEmplace(in_size, value);
 	}
 	// Resizes the array and adds/removed objects to fit (calls the constructor with args when adding)
 	template<typename... TArgs>
-	void ResizeEmplace(uint32 inSize, const TArgs&... args)
+	void ResizeEmplace(uint32 in_size, const TArgs&... args)
 	{
 		// Same size, we dont care
-		if (inSize == size)
+		if (in_size == size)
 			return;
 
 		// Make sure our buffer is big enough
-		Reserve(inSize);
+		Reserve(in_size);
 
 		// If we want the array to be bigger, make sure to construct objects
-		if (inSize > size)
+		if (in_size > size)
 		{
-			for (uint32 i = size; i < inSize; ++i)
+			for (uint32 i = size; i < in_size; ++i)
 				new(data + i) InType(args...);
 		}
 		// Otherwise, destruct objects that will get deleted
 		else
 		{
-			for (uint32 i = inSize; i < size; ++i)
+			for (uint32 i = in_size; i < size; ++i)
 			{
 				data[i].~InType();
 			}
 		}
 
-		size = inSize;
+		size = in_size;
 	}
 
-	// Will resize the internal buffer to fit inCapacity number of elements, but wont actually grow the array
-	void Reserve(uint32 inCapacity)
+	// Will resize the internal buffer to fit in_capacity number of elements, but wont actually grow the array
+	void Reserve(uint32 in_capacity)
 	{
 		// Only grow if bigger
-		if (capacity < inCapacity)
+		if (capacity < in_capacity)
 		{
-			InType* oldData = data;
-			data = (InType*)InAllocator::Malloc(sizeof(InType) * inCapacity);
+			InType* old_data = data;
+			data = (InType*)InAllocator::Malloc(sizeof(InType) * in_capacity);
 
-			if (oldData != nullptr)
+			if (old_data != nullptr)
 			{
 				// Copy data from old buffer to new
-				memcpy(data, oldData, sizeof(InType) * capacity);
-				InAllocator::Free(oldData);
+				memcpy(data, old_data, sizeof(InType) * capacity);
+				InAllocator::Free(old_data);
 			}
 
-			capacity = inCapacity;
+			capacity = in_capacity;
 		}
 	}
 

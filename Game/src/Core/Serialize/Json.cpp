@@ -8,16 +8,16 @@
 
 JsonDocument::~JsonDocument()
 {
-	if (fileStr != nullptr)
-		delete[] fileStr;
+	if (file_str != nullptr)
+		delete[] file_str;
 }
 
 void JsonDocument::LoadFile(const char* path)
 {
 	using namespace rapidjson;
-	File::ReadAllDynamic(path, fileStr);
+	File::ReadAllDynamic(path, file_str);
 
-	ParseResult pr = jsonDoc.Parse(fileStr);
+	ParseResult pr = json_doc.Parse(file_str);
 	if (pr.IsError())
 	{
 		Error("%s (%d)", GetParseError_En(pr.Code()), pr.Offset());
@@ -26,13 +26,13 @@ void JsonDocument::LoadFile(const char* path)
 
 void JsonDocument::Destroy()
 {
-	jsonDoc.Clear();
+	json_doc.Clear();
 }
 
 JsonValue JsonDocument::GetRootObject()
 {
-	rapidjson::Value* rootValue = &jsonDoc;
-	return JsonValue(rootValue);
+	rapidjson::Value* root_value = &json_doc;
+	return JsonValue(root_value);
 }
 
 TString JsonPath::Parse(const char* path)
@@ -63,9 +63,9 @@ JsonValue JsonValue::GetChild(const char* name)
 		return JsonValue(nullptr);
 
 	TString path = JsonPath::Parse(name);
-	rapidjson::Value* childValue = rapidjson::Pointer(*path).Get(*value);
+	rapidjson::Value* child_value = rapidjson::Pointer(*path).Get(*value);
 
-	return JsonValue(childValue);
+	return JsonValue(child_value);
 }
 
 JsonValue JsonValue::GetArrayIndex(uint32 index)
@@ -74,9 +74,9 @@ JsonValue JsonValue::GetArrayIndex(uint32 index)
 		return JsonValue(nullptr);
 
 	TString path = TString::Printf("/%d", index);
-	rapidjson::Value* childValue = rapidjson::Pointer(*path).Get(*value);
+	rapidjson::Value* child_value = rapidjson::Pointer(*path).Get(*value);
 
-	return JsonValue(childValue);
+	return JsonValue(child_value);
 }
 
 bool JsonValue::IsArray() const

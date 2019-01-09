@@ -19,7 +19,7 @@ void PlayerFireCapability::Tick()
 	if (input.GetMouseButtonPressed(MouseButton::Left))
 	{
 		Vec3 origin = transform->GetPosition() + Vec3(0.f, 1.f, 0.f);
-		Vec3 direction = player->aimWorldPosition - origin;
+		Vec3 direction = player->aim_world_position - origin;
 		ProjectilePrefab::Create(gScene, origin, direction);
 	}
 }

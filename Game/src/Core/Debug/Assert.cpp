@@ -8,8 +8,8 @@ ErrorScope* ErrorScope::active = nullptr;
 
 bool AssertHelpers::AssertLogReturnFalse(const char* expr, const char* file, int line)
 {
-	TString fileStr = Path::GetFile(file);
-	file = *fileStr;
+	TString file_str = Path::GetFile(file);
+	file = *file_str;
 
 	char* buffer = talloc(1024);
 	sprintf_s(buffer, 1024, "ASSERT FAILED (%s:%d)\n%s", file, line, expr);
@@ -21,8 +21,8 @@ bool AssertHelpers::AssertLogReturnFalse(const char* expr, const char* file, int
 
 bool AssertHelpers::ErrorMessage(const char* file, int line, const char* msg, ...)
 {
-	TString fileStr = Path::GetFile(file);
-	file = *fileStr;
+	TString file_str = Path::GetFile(file);
+	file = *file_str;
 
 	// Get the message
 	va_list list;
@@ -32,16 +32,16 @@ bool AssertHelpers::ErrorMessage(const char* file, int line, const char* msg, ..
 	int len = vsnprintf(nullptr, 0, msg, list);
 
 	// Then get it
-	char* msgBuffer = talloc(len + 1);
-	vsprintf_s(msgBuffer, len + 1, msg, list);
+	char* msg_buffer = talloc(len + 1);
+	vsprintf_s(msg_buffer, len + 1, msg, list);
 
 	va_end(list);
 
 	// Write the prompt message
-	String promptMsg = String::Printf("Error (%s (%d))\n%s", file, line, msgBuffer);
+	String prompt_msg = String::Printf("Error (%s (%d))\n%s", file, line, msg_buffer);
 
-	Debug_Log("Error (%s (%d))\n%s", file, line, msgBuffer);
-	MessageBox(NULL, *promptMsg, "Error", MB_OK);
+	Debug_Log("Error (%s (%d))\n%s", file, line, msg_buffer);
+	MessageBox(NULL, *prompt_msg, "Error", MB_OK);
 	return false;
 }
 

@@ -41,21 +41,21 @@ namespace
 void FullscreenQuad::RenderTexture(const Texture& texture)
 {
 	static GLuint vao;
-	static Material quadMaterial;
-	static bool materialLoaded = false;
+	static Material quad_material;
+	static bool material_loaded = false;
 
-	if (!materialLoaded)
+	if (!material_loaded)
 	{
 		// We need a dummy VAO
 		glGenVertexArrays(1, &vao);
-		Material::LoadSource(quadMaterial, QUAD_VERT, QUAD_FRAG);
-		materialLoaded = true;
+		Material::LoadSource(quad_material, QUAD_VERT, QUAD_FRAG);
+		material_loaded = true;
 	}
 
 	glBindVertexArray(vao);
 	glDisable(GL_DEPTH_TEST);
 
-	glUseProgram(quadMaterial.program);
+	glUseProgram(quad_material.program);
 	glBindTexture(GL_TEXTURE_2D, texture.handle);
 	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
 

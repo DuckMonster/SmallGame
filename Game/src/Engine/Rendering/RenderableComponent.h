@@ -9,5 +9,5 @@ class RenderableComponent : public Component
 public:
 	Mesh* mesh;
 	Material* material;
-	uint32 passFlags = RP_Geometry | RP_Shadow;
+	uint32 pass_flag = RP_Geometry | RP_Shadow;
 };

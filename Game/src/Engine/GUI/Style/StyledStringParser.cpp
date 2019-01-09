@@ -4,8 +4,8 @@
 TArray<StyledStringParser::Block> StyledStringParser::Parse(const char* str, const StylePalette& palette)
 {
 	TArray<StyledStringParser::Block> result;
-	Block currentBlock;
-	currentBlock.style = palette.defaultStyle;
+	Block current_block;
+	current_block.style = palette.default_style;
 
 	// Main loop
 	while (*str)
@@ -31,12 +31,12 @@ TArray<StyledStringParser::Block> StyledStringParser::Parse(const char* str, con
 			if (!tag.IsEmpty())
 			{
 				// Get the style from the tag
-				currentBlock.style = palette.Get(*tag);
+				current_block.style = palette.Get(*tag);
 			}
 			else
 			{
 				// Empty tag means reverting to default style
-				currentBlock.style = palette.defaultStyle;
+				current_block.style = palette.default_style;
 			}
 
 			// Check again, because the string could be ended after a tag
@@ -47,28 +47,28 @@ TArray<StyledStringParser::Block> StyledStringParser::Parse(const char* str, con
 		}
 
 		uint32 len = strlen(str);
-		uint32 blockLength = 0;
-		for (; blockLength < len; ++blockLength)
+		uint32 block_length = 0;
+		for (; block_length < len; ++block_length)
 		{
 			// Endline characters counts as the end of a block (but include it in the block)
-			if (str[blockLength] == '\n')
+			if (str[block_length] == '\n')
 			{
-				blockLength++;
+				block_length++;
 				break;
 			}
 
 			// Beginning of a tag specifier, end here
-			if (str[blockLength] == '{')
+			if (str[block_length] == '{')
 			{
 				break;
 			}
 		}
 
-		currentBlock.ptr = str;
-		currentBlock.length = blockLength;
-		result.Add(currentBlock);
+		current_block.ptr = str;
+		current_block.length = block_length;
+		result.Add(current_block);
 
-		str += blockLength;
+		str += block_length;
 	}
 
 	return result;

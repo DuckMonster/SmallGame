@@ -3,14 +3,14 @@
 
 void Mesh::Draw() const
 {
-	glBindVertexArray(vertexBuffer.vao);
-	if (useElements)
+	glBindVertexArray(vertex_buffer.vao);
+	if (use_elements)
 	{
-		glDrawElements(drawMode, drawCount, GL_UNSIGNED_INT, (void*)((size_t)drawOffset));
+		glDrawElements(draw_mode, draw_count, GL_UNSIGNED_INT, (void*)((size_t)draw_offset));
 	}
 	else
 	{
-		glDrawArrays(drawMode, drawOffset, drawCount);
+		glDrawArrays(draw_mode, draw_offset, draw_count);
 	}
 	glBindVertexArray(0);
 }

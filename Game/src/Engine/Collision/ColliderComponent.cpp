@@ -12,7 +12,7 @@ void ColliderComponent::Setup()
 	auto collision = GetOwner()->GetScene()->GetCollisionScene();
 	object = collision->CreateObject();
 	object->owner = GetOwner();
-	object->onOverlap.AddObject(this, &ColliderComponent::HandleOverlap);
+	object->on_overlap.AddObject(this, &ColliderComponent::HandleOverlap);
 
 	// Bind event on the transform component to check when it's changed
 	auto transform = GetOwner()->GetComponent<TransformComponent>();
@@ -22,7 +22,7 @@ void ColliderComponent::Setup()
 	}
 	else
 	{
-		transform->onInvalidated.AddObject(
+		transform->on_invalidated.AddObject(
 			this,
 			&ColliderComponent::HandleTransformInvalidated
 		);
@@ -73,5 +73,5 @@ void ColliderComponent::HandleTransformInvalidated(TransformComponent* transform
 // Called when our collider-object overlaps with some other collider
 void ColliderComponent::HandleOverlap(ColliderObject* other)
 {
-	onOverlap.Broadcast(other->owner);
+	on_overlap.Broadcast(other->owner);
 }

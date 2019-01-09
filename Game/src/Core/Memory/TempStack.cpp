@@ -7,10 +7,10 @@ TempStack* gTempStack = nullptr;
 void* TempStack::Malloc(uint32 size)
 {
 	// Resize needed
-	if (offset + size > dataSize)
+	if (offset + size > data_size)
 	{
-		uint32 newSize = Math::FindClosestLargerPo2(offset + size);
-		Resize(newSize);
+		uint32 new_size = Math::FindClosestLargerPo2(offset + size);
+		Resize(new_size);
 	}
 
 	void* alloc = data + offset;
@@ -19,30 +19,30 @@ void* TempStack::Malloc(uint32 size)
 	return alloc;
 }
 
-void TempStack::Resize(uint32 newSize)
+void TempStack::Resize(uint32 new_size)
 {
 	// Save current memory as stale, since other allocations may still be in use
 	if (data != nullptr)
 	{
-		staleMemory.Add(data);
+		stale_memory.Add(data);
 	}
 
-	data = (uint8*)malloc(newSize);
-	dataSize = newSize;
+	data = (uint8*)malloc(new_size);
+	data_size = new_size;
 	offset = 0;
 
-	Debug_Log("TempBuffer size: %d", dataSize);
+	Debug_Log("TempBuffer size: %d", data_size);
 }
 
 void TempStack::Reset()
 {
-	prevOffset = offset;
+	prev_offset = offset;
 	offset = 0;
 
 	// Finally free all the stale memory saved from resizing the buffer */
-	for(uint32 i = 0; i<staleMemory.Size(); ++i)
+	for(uint32 i = 0; i<stale_memory.Size(); ++i)
 	{
-		free(staleMemory[i]);
+		free(stale_memory[i]);
 	}
-	staleMemory.Clear();
+	stale_memory.Clear();
 }

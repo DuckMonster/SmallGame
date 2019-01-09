@@ -7,14 +7,14 @@ class Capability;
 class CapabilityComponent : public Component
 {
 public:
-	std::vector<Capability*> capabilityList;
+	std::vector<Capability*> capability_list;
 
 	template<typename TCapability>
 	void AddCapability()
 	{
 		Capability* capability = new TCapability();
 		capability->component = this;
-		capabilityList.push_back(capability);
+		capability_list.push_back(capability);
 
 		capability->Setup();
 	}

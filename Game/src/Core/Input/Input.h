@@ -5,7 +5,7 @@
 struct ActionState
 {
 	bool pressed = false;
-	int frameNum = -1;
+	int frame_num = -1;
 };
 
 struct KeyboardState
@@ -25,7 +25,7 @@ struct MouseState
 {
 	int x;
 	int y;
-	float prevWheel;
+	float prev_wheel;
 	float wheel;
 
 	ActionState buttons[(uint8)MouseButton::MAX];
@@ -41,54 +41,54 @@ struct MouseState
 
 struct InputState
 {
-	int inputFrame = 0;
+	int input_frame = 0;
 
-	KeyboardState keyboardState;
-	MouseState mouseState;
+	KeyboardState keyboard_state;
+	MouseState mouse_state;
 
 	bool GetKey(Key key) const
 	{
-		return keyboardState[key].pressed;
+		return keyboard_state[key].pressed;
 	}
 	bool GetKeyPressed(Key key) const
 	{
-		return keyboardState[key].pressed && keyboardState[key].frameNum == inputFrame;
+		return keyboard_state[key].pressed && keyboard_state[key].frame_num == input_frame;
 	}
 	bool GetKeyReleased(Key key) const
 	{
-		return !keyboardState[key].pressed && keyboardState[key].frameNum == inputFrame;
+		return !keyboard_state[key].pressed && keyboard_state[key].frame_num == input_frame;
 	}
 
 	bool GetMouseButton(MouseButton btn) const
 	{
-		return mouseState[btn].pressed;
+		return mouse_state[btn].pressed;
 	}
 	bool GetMouseButtonPressed(MouseButton btn) const
 	{
-		return mouseState[btn].pressed && mouseState[btn].frameNum == inputFrame;
+		return mouse_state[btn].pressed && mouse_state[btn].frame_num == input_frame;
 	}
 	bool GetMouseButtonReleased(MouseButton btn) const
 	{
-		return !mouseState[btn].pressed && mouseState[btn].frameNum == inputFrame;
+		return !mouse_state[btn].pressed && mouse_state[btn].frame_num == input_frame;
 	}
 
 	void SetKey(Key key, bool pressed)
 	{
-		keyboardState[key].pressed = pressed;
-		keyboardState[key].frameNum = inputFrame;
+		keyboard_state[key].pressed = pressed;
+		keyboard_state[key].frame_num = input_frame;
 	}
 	void SetMouseButton(MouseButton btn, bool pressed)
 	{
-		mouseState[btn].pressed = pressed;
-		mouseState[btn].frameNum = inputFrame;
+		mouse_state[btn].pressed = pressed;
+		mouse_state[btn].frame_num = input_frame;
 	}
 
 	float GetWheel()
 	{
-		return mouseState.wheel;
+		return mouse_state.wheel;
 	}
 	float GetWheelDelta()
 	{
-		return mouseState.wheel - mouseState.prevWheel;
+		return mouse_state.wheel - mouse_state.prev_wheel;
 	}
 };

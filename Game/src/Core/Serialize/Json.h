@@ -20,8 +20,8 @@ public:
 	JsonValue GetRootObject();
 
 private:
-	char* fileStr = nullptr;
-	rapidjson::Document jsonDoc;
+	char* file_str = nullptr;
+	rapidjson::Document json_doc;
 };
 
 class JsonValue
@@ -46,11 +46,11 @@ public:
 	template<typename InAlloc>
 	bool Serialize(StringBase<InAlloc>& var)
 	{
-		const char* cStr = nullptr;
-		if (!Serialize(cStr))
+		const char* c_str = nullptr;
+		if (!Serialize(c_str))
 			return false;
 
-		var = cStr;
+		var = c_str;
 		return true;
 	}
 

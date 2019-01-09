@@ -14,7 +14,7 @@ public:
 
 private:
 	String path;
-	time_t lastModifiedTime;
+	time_t last_modified_time;
 
 	Array<Resource*> dependecies;
 	Array<Resource*> dependent;

@@ -48,12 +48,12 @@ namespace
 		lines[10] = Line::Make(x, y, x, -y, -z);
 		lines[11] = Line::Make(-x, y, -x, -y, -z);
 
-		mesh.vertexBuffer.Create(1);
-		mesh.vertexBuffer.BindBuffer(0, 0, 3, 0, 0);
-		mesh.vertexBuffer.BufferData(0, lines, sizeof(lines));
-		mesh.drawMode = GL_LINES;
-		mesh.drawCount = 2 * 12;
-		mesh.useElements = false;
+		mesh.vertex_buffer.Create(1);
+		mesh.vertex_buffer.BindBuffer(0, 0, 3, 0, 0);
+		mesh.vertex_buffer.BufferData(0, lines, sizeof(lines));
+		mesh.draw_mode = GL_LINES;
+		mesh.draw_count = 2 * 12;
+		mesh.use_elements = false;
 	}
 
 	void LoadSphereLines(Mesh& mesh)
@@ -100,35 +100,35 @@ namespace
 			lines.Add(z);
 		}
 
-		mesh.vertexBuffer.Create(1);
-		mesh.vertexBuffer.BindBuffer(0, 0, 3, 0, 0);
-		mesh.vertexBuffer.BufferData(0, lines.Ptr(), sizeof(Line) * lines.Size());
-		mesh.drawMode = GL_LINES;
-		mesh.drawCount = resolution * 2 * 3 + 3;
-		mesh.drawOffset = 0;
-		mesh.useElements = false;
+		mesh.vertex_buffer.Create(1);
+		mesh.vertex_buffer.BindBuffer(0, 0, 3, 0, 0);
+		mesh.vertex_buffer.BufferData(0, lines.Ptr(), sizeof(Line) * lines.Size());
+		mesh.draw_mode = GL_LINES;
+		mesh.draw_count = resolution * 2 * 3 + 3;
+		mesh.draw_offset = 0;
+		mesh.use_elements = false;
 	}
 }
 
 DebugDrawManager::DebugDrawManager()
 {
-	cubeMaterial = &gResourceManager->Load<MaterialResource>("Material/Debug/cube.json")->material;
-	sphereMaterial = &gResourceManager->Load<MaterialResource>("Material/Debug/sphere.json")->material;
-	lineMaterial = &gResourceManager->Load<MaterialResource>("Material/Debug/line.json")->material;
+	mat_cube = &gResourceManager->Load<MaterialResource>("Material/Debug/cube.json")->material;
+	mat_sphere = &gResourceManager->Load<MaterialResource>("Material/Debug/sphere.json")->material;
+	mat_line = &gResourceManager->Load<MaterialResource>("Material/Debug/line.json")->material;
 
-	cubeMesh = &gResourceManager->Load<MeshResource>("Mesh/Debug/cube.fbx")->mesh;
-	LoadCubeLines(cubeLineMesh);
+	mesh_cube = &gResourceManager->Load<MeshResource>("Mesh/Debug/cube.fbx")->mesh;
+	LoadCubeLines(mesh_cube_lines);
 
-	sphereMesh = &gResourceManager->Load<MeshResource>("Mesh/Debug/sphere.fbx")->mesh;
-	LoadSphereLines(sphereLineMesh);
+	mesh_sphere = &gResourceManager->Load<MeshResource>("Mesh/Debug/sphere.fbx")->mesh;
+	LoadSphereLines(mesh_sphere_lines);
 
 	// Create line (will be filled in later)
-	lineMesh.vertexBuffer.Create(1);
-	lineMesh.vertexBuffer.BindBuffer(0, 0, 3, 6, 0);
-	lineMesh.vertexBuffer.BindBuffer(0, 1, 3, 6, 3);
-	lineMesh.drawMode = GL_LINES;
-	lineMesh.drawOffset = 0;
-	lineMesh.useElements = false;
+	mesh_line.vertex_buffer.Create(1);
+	mesh_line.vertex_buffer.BindBuffer(0, 0, 3, 6, 0);
+	mesh_line.vertex_buffer.BindBuffer(0, 1, 3, 6, 3);
+	mesh_line.draw_mode = GL_LINES;
+	mesh_line.draw_offset = 0;
+	mesh_line.use_elements = false;
 }
 
 void DebugDrawManager::AddCube(const Mat4& mat, const Color& color)
@@ -159,45 +159,45 @@ void DebugDrawManager::DrawAndClear(const Mat4& camera)
 {
 	// -- CUBES --
 	{
-		glUseProgram(cubeMaterial->program);
-		cubeMaterial->Set("u_Camera", camera);
+		glUseProgram(mat_cube->program);
+		mat_cube->Set("u_Camera", camera);
 
 		for (uint32 i = 0; i < cubes.Size(); ++i)
 		{
-			cubeMaterial->Set("u_Model", cubes[i].mat);
-			cubeMaterial->Set("u_Color", cubes[i].color * Color(0.6f, 0.6f, 0.6f, 1.f));
-			cubeMesh->Draw();
+			mat_cube->Set("u_Model", cubes[i].mat);
+			mat_cube->Set("u_Color", cubes[i].color * Color(0.6f, 0.6f, 0.6f, 1.f));
+			mesh_cube->Draw();
 
 			glDepthFunc(GL_LEQUAL);
-			cubeMaterial->Set("u_Color", cubes[i].color);
-			cubeLineMesh.Draw();
+			mat_cube->Set("u_Color", cubes[i].color);
+			mesh_cube_lines.Draw();
 			glDepthFunc(GL_LESS);
 		}
 	}
 
 	// -- SPHERES --
 	{
-		glUseProgram(sphereMaterial->program);
-		sphereMaterial->Set("u_Camera", camera);
+		glUseProgram(mat_sphere->program);
+		mat_sphere->Set("u_Camera", camera);
 
 		for (uint32 i = 0; i < spheres.Size(); ++i)
 		{
-			sphereMaterial->Set("u_Origin", spheres[i].origin);
-			sphereMaterial->Set("u_Radius", spheres[i].radius);
-			sphereMaterial->Set("u_Color", spheres[i].color * Color(0.6f, 0.6f, 0.6f, 1.f));
-			sphereMesh->Draw();
+			mat_sphere->Set("u_Origin", spheres[i].origin);
+			mat_sphere->Set("u_Radius", spheres[i].radius);
+			mat_sphere->Set("u_Color", spheres[i].color * Color(0.6f, 0.6f, 0.6f, 1.f));
+			mesh_sphere->Draw();
 
 			glDepthFunc(GL_LEQUAL);
-			sphereMaterial->Set("u_Color", spheres[i].color);
-			sphereLineMesh.Draw();
+			mat_sphere->Set("u_Color", spheres[i].color);
+			mesh_sphere_lines.Draw();
 			glDepthFunc(GL_LESS);
 		}
 	}
 
 	// -- LINES --
 	{
-		lineMesh.vertexBuffer.BufferData(0, lines.Ptr(), sizeof(Line) * lines.Size());
-		lineMesh.Draw();
+		mesh_line.vertex_buffer.BufferData(0, lines.Ptr(), sizeof(Line) * lines.Size());
+		mesh_line.Draw();
 	}
 
 	cubes.ClearNoDestruct();

@@ -127,10 +127,10 @@ Mat4 Mat4::TranslateRotateScale(const Vec3& translation, const Quat& rotation, c
 Mat4 Mat4::Perspective(float fov, float aspect, float near, float far)
 {
 	// Look this up :(
-	const float tanHalfFov = Math::Tan(fov / 2.f);
+	const float tan_half_fov = Math::Tan(fov / 2.f);
 	return Mat4(
-		1.f / (aspect * tanHalfFov),			0.f, 0.f, 0.f,
-		0.f, 1.f / tanHalfFov,						 0.f, 0.f,
+		1.f / (aspect * tan_half_fov),			0.f, 0.f, 0.f,
+		0.f, 1.f / tan_half_fov,						 0.f, 0.f,
 		0.f, 0.f, -((far + near) / (far - near)),		 -1.f,
 		0.f, 0.f, -((2.f * far * near) / (far - near)),	  0.f
 	);

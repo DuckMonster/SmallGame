@@ -62,12 +62,12 @@ public:
 	static Vec3 Clamp(const Vec3& v, const Vec3& min, const Vec3& max);
 	static Vec4 Clamp(const Vec4& v, const Vec4& min, const Vec4& max);
 
-	// Contrains a vector to another vector (assumes that constainVec is normalized)
-	static Vec2 ContrainToVector(const Vec2& v, const Vec2& constrainVec);
-	static Vec3 ContrainToVector(const Vec3& v, const Vec3& constrainVec);
-	static Vec4 ContrainToVector(const Vec4& v, const Vec4& constrainVec);
+	// Contrains a vector to another vector (assumes that constain_vec is normalized)
+	static Vec2 ContrainToVector(const Vec2& v, const Vec2& constrain_vec);
+	static Vec3 ContrainToVector(const Vec3& v, const Vec3& constrain_vec);
+	static Vec4 ContrainToVector(const Vec4& v, const Vec4& constrain_vec);
 
-	// Contrains a vector to a plane (assumes that planeNormal is normalized)
+	// Contrains a vector to a plane (assumes that normal is normalized)
 	static Vec2 ConstrainToPlane(const Vec2& v, const Vec2& normal);
 	static Vec3 ConstrainToPlane(const Vec3& v, const Vec3& normal);
 	static Vec4 ConstrainToPlane(const Vec4& v, const Vec4& normal);

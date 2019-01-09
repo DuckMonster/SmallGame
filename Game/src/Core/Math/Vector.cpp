@@ -206,21 +206,21 @@ Vec4 Vec::Clamp(const Vec4& v, const Vec4& min, const Vec4& max)
 	);
 }
 
-// Contrains a vector to another vector (assumes that constainVec is normalized)
-Vec2 Vec::ContrainToVector(const Vec2& v, const Vec2& constrainVec)
+// Contrains a vector to another vector (assumes that constain_vec is normalized)
+Vec2 Vec::ContrainToVector(const Vec2& v, const Vec2& constrain_vec)
 {
-	return constrainVec * Vec::Dot(v, constrainVec);
+	return constrain_vec * Vec::Dot(v, constrain_vec);
 }
-Vec3 Vec::ContrainToVector(const Vec3& v, const Vec3& constrainVec)
+Vec3 Vec::ContrainToVector(const Vec3& v, const Vec3& constrain_vec)
 {
-	return constrainVec * Vec::Dot(v, constrainVec);
+	return constrain_vec * Vec::Dot(v, constrain_vec);
 }
-Vec4 Vec::ContrainToVector(const Vec4& v, const Vec4& constrainVec)
+Vec4 Vec::ContrainToVector(const Vec4& v, const Vec4& constrain_vec)
 {
-	return constrainVec * Vec::Dot(v, constrainVec);
+	return constrain_vec * Vec::Dot(v, constrain_vec);
 }
 
-// Contrains a vector to a plane (assumes that planeNormal is normalized)
+// Contrains a vector to a plane (assumes that normal is normalized)
 Vec2 Vec::ConstrainToPlane(const Vec2& v, const Vec2& normal)
 {
 	return v - (normal * Vec::Dot(v, normal));

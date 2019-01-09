@@ -22,11 +22,11 @@ struct GlyphQuad
 		struct
 		{
 			// Helps build a single vertex
-			static void BuildVertex(Vertex& v, const Glyph& glyph, const Vec2& offset, const Vec2& vPos, const Color& color)
+			static void BuildVertex(Vertex& v, const Glyph& glyph, const Vec2& offset, const Vec2& vert_pos, const Color& color)
 			{
-				// vPos describes its position on the quad (from [0, 1] in x and y)
-				v.position	= offset + glyph.pixel_size * vPos;
-				v.uv		= glyph.uv_offset + glyph.uv_size * vPos;
+				// vert_pos describes its position on the quad (from [0, 1] in x and y)
+				v.position	= offset + glyph.pixel_size * vert_pos;
+				v.uv		= glyph.uv_offset + glyph.uv_size * vert_pos;
 				v.color		= color;
 			}
 		} helper;
@@ -73,10 +73,10 @@ struct BackgroundQuad
 		struct
 		{
 			// Helps build a single vertex
-			static void BuildVertex(Vertex& v, const Vec2& offset, const Vec2& size, const Vec2& vPos, const Color& color)
+			static void BuildVertex(Vertex& v, const Vec2& offset, const Vec2& size, const Vec2& vert_pos, const Color& color)
 			{
-				// vPos describes its position on the quad (from [0, 1] in x and y)
-				v.position	= offset + size * vPos;
+				// vert_pos describes its position on the quad (from [0, 1] in x and y)
+				v.position	= offset + size * vert_pos;
 				v.color = color;
 			}
 		} helper;
@@ -122,9 +122,9 @@ public:
 
 	StyleResource* style = nullptr;
 
-	Mesh glyphMesh;
-	Mesh backgroundMesh;
+	Mesh mesh_glyph;
+	Mesh mesh_background;
 
-	Array<GlyphQuad> glyphBuffer;
-	Array<BackgroundQuad> backBuffer;
+	Array<GlyphQuad> glyph_buffer;
+	Array<BackgroundQuad> back_buffer;
 };

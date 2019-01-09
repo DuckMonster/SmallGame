@@ -23,7 +23,7 @@ public:
 
 	const Array<Component*>& GetAllComponents() const { return components; }
 
-	void SetName(const char* inName) { name = inName; }
+	void SetName(const char* in_name) { name = in_name; }
 	const String& GetName() const { return name; }
 	uint32 GetId() const { return id; }
 	Scene* GetScene() { return scene; }
@@ -41,9 +41,9 @@ TComp* Entity::GetComponent()
 {
 	for(uint32 i = 0; i<components.Size(); ++i)
 	{
-		TComp* castedComp = Cast<TComp>(components[i]);
-		if (castedComp != nullptr)
-			return castedComp;
+		TComp* casted_comp = Cast<TComp>(components[i]);
+		if (casted_comp != nullptr)
+			return casted_comp;
 	}
 
 	return nullptr;

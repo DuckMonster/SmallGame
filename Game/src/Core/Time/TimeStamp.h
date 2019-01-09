@@ -8,5 +8,5 @@ public:
 	float Duration();
 
 private:
-	ptime initTime;
+	ptime init_time;
 };

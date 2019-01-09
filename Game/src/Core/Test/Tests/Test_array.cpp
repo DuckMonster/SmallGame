@@ -3,9 +3,9 @@
 
 namespace
 {
-	uint32 totalConstructed = 0;
-	uint32 numConstructedObjects = 0;
-	bool valFail = false;
+	uint32 total_constructed = 0;
+	uint32 num_constructed_objects = 0;
+	bool val_fail = false;
 
 	struct ConstructedObject
 	{
@@ -13,20 +13,20 @@ namespace
 		ConstructedObject()
 		{
 			if (val != 0)
-				valFail = true;
+				val_fail = true;
 
-			numConstructedObjects++;
-			totalConstructed++;
+			num_constructed_objects++;
+			total_constructed++;
 		}
 		ConstructedObject(const ConstructedObject& other) : ConstructedObject() {}
 		ConstructedObject(uint32 val) : val(val)
 		{
-			numConstructedObjects++;
-			totalConstructed++;
+			num_constructed_objects++;
+			total_constructed++;
 		}
 		~ConstructedObject()
 		{
-			numConstructedObjects--;
+			num_constructed_objects--;
 		}
 
 		bool operator==(const ConstructedObject& other) const
@@ -43,9 +43,9 @@ namespace
 	template<typename T>
 	bool ArrayTest()
 	{
-		numConstructedObjects = 0;
-		totalConstructed = 0;
-		valFail = false;
+		num_constructed_objects = 0;
+		total_constructed = 0;
+		val_fail = false;
 
 		{
 			ArrayBase<int, T> arr;
@@ -111,55 +111,55 @@ namespace
 					bool valid = false;
 				};
 
-				ArrayBase<TestStr, T> strArr;
-				strArr.ResizeEmplace(7, "SomeStr");
+				ArrayBase<TestStr, T> str_arr;
+				str_arr.ResizeEmplace(7, "SomeStr");
 
-				bool bValid = true;
-				for (uint32 i = 0; i < strArr.Size(); ++i)
-					bValid |= strArr[i].valid;
+				bool valid = true;
+				for (uint32 i = 0; i < str_arr.Size(); ++i)
+					valid |= str_arr[i].valid;
 
-				TEST_EXPR(bValid);
+				TEST_EXPR(valid);
 			}
 		}
 
 		{
 			ArrayBase<ConstructedObject, T> arr;
-			TEST_EXPR(numConstructedObjects == 0);
+			TEST_EXPR(num_constructed_objects == 0);
 
 			arr.Add(ConstructedObject());
-			TEST_EXPR(numConstructedObjects == 1);
+			TEST_EXPR(num_constructed_objects == 1);
 			arr.Remove(ConstructedObject());
-			TEST_EXPR(numConstructedObjects == 0);
+			TEST_EXPR(num_constructed_objects == 0);
 
 			for (int i = 0; i < 5; ++i)
 			{
 				arr.Add(ConstructedObject());
 			}
 
-			TEST_EXPR(numConstructedObjects == arr.Size());
+			TEST_EXPR(num_constructed_objects == arr.Size());
 			arr.RemoveAt(0);
-			TEST_EXPR(numConstructedObjects == arr.Size());
+			TEST_EXPR(num_constructed_objects == arr.Size());
 			arr.Remove(ConstructedObject());
-			TEST_EXPR(numConstructedObjects == arr.Size());
+			TEST_EXPR(num_constructed_objects == arr.Size());
 			arr.Clear();
-			TEST_EXPR(numConstructedObjects == 0);
+			TEST_EXPR(num_constructed_objects == 0);
 
 			// Reset total
-			totalConstructed = 0;
+			total_constructed = 0;
 			arr.Emplace();
-			TEST_EXPR(numConstructedObjects == 1);
+			TEST_EXPR(num_constructed_objects == 1);
 			TEST_EXPR(arr.Size() == 1);
-			TEST_EXPR(totalConstructed == 1);
+			TEST_EXPR(total_constructed == 1);
 
 			arr.Add(ConstructedObject());
-			TEST_EXPR(numConstructedObjects == 2);
+			TEST_EXPR(num_constructed_objects == 2);
 			TEST_EXPR(arr.Size() == 2);
-			TEST_EXPR(totalConstructed == 3);
+			TEST_EXPR(total_constructed == 3);
 
 			arr.Emplace(10);
-			TEST_EXPR(numConstructedObjects == 3);
+			TEST_EXPR(num_constructed_objects == 3);
 			TEST_EXPR(arr.Size() == 3);
-			TEST_EXPR(totalConstructed == 4);
+			TEST_EXPR(total_constructed == 4);
 
 			uint32 index;
 			TEST_EXPR(arr.Find(ConstructedObject(10), index));
@@ -171,21 +171,21 @@ namespace
 
 			arr.Resize(0);
 			TEST_EXPR(arr.Size() == 0);
-			TEST_EXPR(numConstructedObjects == 0);
+			TEST_EXPR(num_constructed_objects == 0);
 
 			// Add a bunch of them
 			arr.Resize(10);
-			TEST_EXPR(numConstructedObjects == 10);
+			TEST_EXPR(num_constructed_objects == 10);
 			TEST_EXPR(arr.Size() == 10);
 			for (int i = 0; i < 10; ++i)
 			{
 				arr.Emplace(i);
 			}
-			TEST_EXPR(numConstructedObjects == 20);
+			TEST_EXPR(num_constructed_objects == 20);
 			TEST_EXPR(arr.Size() == 20);
 
 			arr.Resize(10);
-			TEST_EXPR(numConstructedObjects == 10);
+			TEST_EXPR(num_constructed_objects == 10);
 			TEST_EXPR(arr.Size() == 10);
 		}
 
@@ -206,15 +206,15 @@ namespace
 			arr.Add(2);
 			arr.Add(3);
 
-			ArrayBase<int, T> otherArr = arr;
-			TEST_EXPR(otherArr.Size() == 3);
-			TEST_EXPR(otherArr[0] == 1);
-			TEST_EXPR(otherArr[1] == 2);
-			TEST_EXPR(otherArr[2] == 3);
+			ArrayBase<int, T> other_arr = arr;
+			TEST_EXPR(other_arr.Size() == 3);
+			TEST_EXPR(other_arr[0] == 1);
+			TEST_EXPR(other_arr[1] == 2);
+			TEST_EXPR(other_arr[2] == 3);
 
 			arr[0] = 100;
 			TEST_EXPR(arr[0] == 100);
-			TEST_EXPR(otherArr[0] == 1);
+			TEST_EXPR(other_arr[0] == 1);
 		}
 
 		{
@@ -253,7 +253,7 @@ namespace
 			TEST_ERROR(arr.Insert(200, 10));
 		}
 
-		TEST_EXPR(!valFail);
+		TEST_EXPR(!val_fail);
 
 		return true;
 	}

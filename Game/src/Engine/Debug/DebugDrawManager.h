@@ -42,15 +42,15 @@ private:
 	Array<Sphere> spheres;
 	Array<Line> lines;
 
-	Material* cubeMaterial;
-	Material* sphereMaterial;
-	Material* lineMaterial;
+	Material* mat_cube;
+	Material* mat_sphere;
+	Material* mat_line;
 
-	Mesh* cubeMesh;
-	Mesh* sphereMesh;
-	Mesh cubeLineMesh;
-	Mesh sphereLineMesh;
-	Mesh lineMesh;
+	Mesh* mesh_cube;
+	Mesh* mesh_sphere;
+	Mesh mesh_cube_lines;
+	Mesh mesh_sphere_lines;
+	Mesh mesh_line;
 };
 
 extern DebugDrawManager* gDebugDrawManager;

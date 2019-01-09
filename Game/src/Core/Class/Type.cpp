@@ -15,7 +15,7 @@ TypedObject* NewObject(Type* type)
 		return nullptr;
 	}
 
-	TypedObject* obj = type->createFunc();
+	TypedObject* obj = type->create_func();
 	obj->type = type;
 
 	return obj;

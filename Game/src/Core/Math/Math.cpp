@@ -144,24 +144,24 @@ int32 Math::Sign(int32 v)
 uint32 Math::FindClosestPo2(uint32 value)
 {
 	float log = Math::Log2(value);
-	int roundedLog = Math::RoundToInt(log);
-	return Math::Pow(2, roundedLog);
+	int rounded_log = Math::RoundToInt(log);
+	return Math::Pow(2, rounded_log);
 }
 
 // Return the power of two thats closest, but larger than value
 uint32 Math::FindClosestLargerPo2(uint32 value)
 {
 	float log = Math::Log2(value);
-	int ceilLog = Math::CeilToInt(log);
-	return Math::Pow(2, ceilLog);
+	int ceil_log = Math::CeilToInt(log);
+	return Math::Pow(2, ceil_log);
 }
 
 // Return the power of two thats closest, but smaller than value
 uint32 Math::FindClosestSmallerPo2(uint32 value)
 {
 	float log = Math::Log2(value);
-	int floorLog = Math::FloorToInt(log);
-	return Math::Pow(2, floorLog);
+	int floor_log = Math::FloorToInt(log);
+	return Math::Pow(2, floor_log);
 }
 
 // Checks if two floats almost equal each other

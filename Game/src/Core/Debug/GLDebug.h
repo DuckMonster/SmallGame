@@ -3,7 +3,7 @@
 #include <stdio.h>
 
 inline void __stdcall OpenGLDebugCallback(GLenum source, GLenum type, GLuint id, GLuint severity,
-	GLsizei length, const GLchar* message, const void* userParam)
+	GLsizei length, const GLchar* message, const void* user_param)
 {
 	printf("OPENGL ERROR (source: %X, type: %X, id: %X)\n%s\n", source, type, id, message);
 }

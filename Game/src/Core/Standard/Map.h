@@ -56,29 +56,29 @@ public:
 				return;
 
 			NodeType* node = nullptr;
-			NodeType* otherNode = other.root;
+			NodeType* other_node = other.root;
 
 			// Create list
-			while (otherNode != nullptr)
+			while (other_node != nullptr)
 			{
 				// Create the new node
-				NodeType* newNode = InAllocator::template Malloc<NodeType>();
-				new(newNode) NodeType(*otherNode);
+				NodeType* new_node = InAllocator::template Malloc<NodeType>();
+				new(new_node) NodeType(*other_node);
 
 				if (node != nullptr)
 				{
 					// If there was a previous node, link them
-					node->next = newNode;
-					newNode->prev = node;
+					node->next = new_node;
+					new_node->prev = node;
 				}
 				else
 				{
 					// Otherwise, this is the first node, so set as root
-					root = newNode;
+					root = new_node;
 				}
 
-				node = newNode;
-				otherNode = otherNode->next;
+				node = new_node;
+				other_node = other_node->next;
 			}
 
 			// After we're done, 'node' should be the last in the list
@@ -220,12 +220,12 @@ public:
 	class Iterator
 	{
 	public:
-		Iterator(MapBase* map, uint32 bucketIndex) :
-			map(map), bucketIndex(bucketIndex)
+		Iterator(MapBase* map, uint32 bucket_index) :
+			map(map), bucket_index(bucket_index)
 		{
 		}
 		Iterator(const Iterator& other) :
-			map(other.map), node(other.node), bucketIndex(other.bucketIndex)
+			map(other.map), node(other.node), bucket_index(other.bucket_index)
 		{
 		}
 
@@ -237,12 +237,12 @@ public:
 			// If this is the last node in the bucket, advance the bucket
 			while (node == nullptr && !IsDone())
 			{
-				Bucket& bucket = map->buckets[bucketIndex];
+				Bucket& bucket = map->buckets[bucket_index];
 
 				if (node == bucket.last)
 				{
 					// If the node is the last in the bucket (or nullptr if the bucket is empty) go to the next bucket
-					bucketIndex++;
+					bucket_index++;
 				}
 				else if (node == nullptr)
 				{
@@ -266,7 +266,7 @@ public:
 
 		bool operator==(const Iterator& other)
 		{
-			return map == other.map && node == other.node && bucketIndex == other.bucketIndex;
+			return map == other.map && node == other.node && bucket_index == other.bucket_index;
 		}
 		bool operator!=(const Iterator& other)
 		{
@@ -275,13 +275,13 @@ public:
 
 		bool IsDone()
 		{
-			return bucketIndex >= InNumBuckets;
+			return bucket_index >= InNumBuckets;
 		}
 
 	public:
 		MapBase* map;
 		NodeType* node = nullptr;
-		uint32 bucketIndex = 0;
+		uint32 bucket_index = 0;
 	};
 
 public:
@@ -305,11 +305,11 @@ public:
 	InValue& Add(const InKey& key, const InValue& value)
 	{
 		// Make sure the key doesnt already exist
-		InValue* foundValue = Find(key);
-		if (foundValue != nullptr)
+		InValue* found_value = Find(key);
+		if (found_value != nullptr)
 		{
 			Error("Trying to add key that already exists");
-			return *foundValue;
+			return *found_value;
 		}
 
 		Bucket& bucket = GetBucketFor(key);

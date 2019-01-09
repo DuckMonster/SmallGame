@@ -35,10 +35,10 @@ public:
 
 	Entity* GetOwner() { return owner; }
 	const Entity* GetOwner() const { return owner; }
-	void SetOwner(Entity* newOwner)
+	void SetOwner(Entity* new_owner)
 	{
 		Assert(owner == nullptr);
-		owner = newOwner;
+		owner = new_owner;
 	}
 
 private:

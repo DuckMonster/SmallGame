@@ -13,7 +13,7 @@ public:
 	Vec3 GetWorldPosition() const;
 
 	// Sets the position of this transform
-	void SetPosition(const Vec3& inPosition);
+	void SetPosition(const Vec3& in_position);
 	// Translates this transform by some delta location
 	void Translate(const Vec3& delta);
 
@@ -21,7 +21,7 @@ public:
 	const Quat& GetRotation() const { return rotation; }
 
 	// Sets the rotation of this transform
-	void SetRotation(const Quat& inRotation);
+	void SetRotation(const Quat& in_rotation);
 	// Rotates this transform by some delta
 	void Rotate(const Quat& delta);
 
@@ -29,10 +29,10 @@ public:
 	const Vec3& GetScale() const { return scale; }
 
 	// Sets the scale of this transform
-	void SetScale(const Vec3& inScale);
+	void SetScale(const Vec3& in_scale);
 
-	// Gets the matrix representing this transform (outMatrix is assumed to be identity!)
-	void GetMatrix(Mat4& outMatrix);
+	// Gets the matrix representing this transform (out_matrix is assumed to be identity!)
+	void GetMatrix(Mat4& out_matrix);
 
 	// Marks this transform as changed, so matrices and such will be updated
 	void Invalidate();
@@ -42,7 +42,7 @@ public:
 
 	// Event for when this transform is invalidated, so that
 	// 		dependent systems can update accordingly
-	OnInvalidatedEvent onInvalidated;
+	OnInvalidatedEvent on_invalidated;
 
 private:
 	void HandleParentInvalidated(TransformComponent* parent) { Invalidate(); }
@@ -51,8 +51,8 @@ private:
 	Quat rotation = Quat(0.f, 0.f, 0.f, 1.f);
 	Vec3 scale = Vec3(1.f);
 
-	Mat4 cachedMatrix;
-	bool isDirty = true;
+	Mat4 cached_matrix;
+	bool is_dirty = true;
 
 	TransformComponent* parent = nullptr;
 };

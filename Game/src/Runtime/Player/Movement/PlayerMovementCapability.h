@@ -14,5 +14,5 @@ private:
 	TransformComponent* transform = nullptr;
 	PlayerComponent* player = nullptr;
 
-	float movementSpeed = 5.f;
+	float movement_speed = 5.f;
 };

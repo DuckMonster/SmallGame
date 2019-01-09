@@ -8,9 +8,9 @@ public:
 	class Slot : public WidgetSlot
 	{
 	public:
-		Slot& Padding(const WidgetPadding& inPadding)
+		Slot& Padding(const WidgetPadding& in_padding)
 		{
-			padding = inPadding;
+			padding = in_padding;
 			return *this;
 		}
 		Slot& Padding(int uniform)

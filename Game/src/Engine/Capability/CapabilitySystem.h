@@ -5,5 +5,5 @@
 class CapabilitySystem : public ComponentSystem<CapabilityComponent>
 {
 public:
-	void ProcessEntity(Entity* entity, CapabilityComponent* capabilityComponent);
+	void ProcessEntity(Entity* entity, CapabilityComponent* capability_comp);
 };

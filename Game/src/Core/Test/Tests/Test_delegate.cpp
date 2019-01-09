@@ -13,34 +13,34 @@ namespace
 		return i - d;
 	}
 
-	static int someFuncCalls = 0;
+	static int some_func_calls = 0;
 	void SomeFunc()
 	{
-		someFuncCalls++;
+		some_func_calls++;
 	}
 	void SomeFuncTwice()
 	{
-		someFuncCalls += 2;
+		some_func_calls += 2;
 	}
 
 	class DelTestClass
 	{
 	public:
-		static int staticValue;
+		static int static_value;
 		static int StaticFunc(int value)
 		{
-			staticValue += value;
-			return staticValue;
+			static_value += value;
+			return static_value;
 		}
 
-		int instanceValue = 0;
+		int instance_value = 0;
 		int InstanceFunc(int value)
 		{
-			instanceValue += value;
-			return instanceValue;
+			instance_value += value;
+			return instance_value;
 		}
 	};
-	int DelTestClass::staticValue = 0;
+	int DelTestClass::static_value = 0;
 
 	int CallIntDelegate(Delegate<int, int, int> d, int a, int b)
 	{
@@ -53,7 +53,7 @@ namespace
 	{
 		{
 			Delegate<double, int, double> other;
-			double delResult = 0.0;
+			double del_result = 0.0;
 
 			{
 				Delegate<double, int, double> del;
@@ -63,11 +63,11 @@ namespace
 				del.BindRaw(MinusFunc);
 				TEST_EXPR(del(10, 2.5) == 10 - 2.5);
 
-				delResult = del(10, 2.5);
+				del_result = del(10, 2.5);
 				other = del;
 			}
 
-			TEST_EXPR(other(10, 2.5) == delResult);
+			TEST_EXPR(other(10, 2.5) == del_result);
 		}
 
 		{
@@ -78,13 +78,13 @@ namespace
 
 			TEST_EXPR(del(5) == 5);
 			TEST_EXPR(del(2) == 7);
-			TEST_EXPR(a.instanceValue == 7);
+			TEST_EXPR(a.instance_value == 7);
 
 			del.BindObject(&b, &DelTestClass::InstanceFunc);
 			TEST_EXPR(del(3) == 3);
 			TEST_EXPR(del(1) == 4);
-			TEST_EXPR(b.instanceValue == 4);
-			TEST_EXPR(a.instanceValue == 7);
+			TEST_EXPR(b.instance_value == 4);
+			TEST_EXPR(a.instance_value == 7);
 		}
 
 		{

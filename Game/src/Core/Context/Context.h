@@ -14,8 +14,8 @@ struct Context
 	ContextData* data;
 	int width;
 	int height;
-	bool isOpen;
-	bool isFocused;
+	bool is_open;
+	bool is_focused;
 
 	InputState input;
 };

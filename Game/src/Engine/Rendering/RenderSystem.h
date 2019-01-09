@@ -15,5 +15,5 @@ public:
 
 private:
 	RenderPipeline pipeline;
-	RenderScene frameScene;
+	RenderScene frame_scene;
 };

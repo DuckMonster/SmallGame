@@ -15,7 +15,7 @@ public:
 	String text;
 
 private:
-	String stylePath;
-	String prevText;
+	String style_path;
+	String text_prev;
 	TextMesh mesh;
 };

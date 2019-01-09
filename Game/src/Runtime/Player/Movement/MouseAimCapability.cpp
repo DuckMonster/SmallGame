@@ -27,33 +27,33 @@ void MouseAimCapability::Setup()
 		sphere_collider->AddSphere(Vec3(0.f), 1.f);
 	}
 
-	collider->onOverlap.AddObject(this, &MouseAimCapability::HandleCollision);
+	collider->on_overlap.AddObject(this, &MouseAimCapability::HandleCollision);
 }
 
 void MouseAimCapability::Tick()
 {
-	CameraComponent* camera = gScene->GetStaticComponent<RenderStaticComponent>()->activeCamera;
+	CameraComponent* camera = gScene->GetStaticComponent<RenderStaticComponent>()->active_camera;
 
 	// Deproject mouse
-	Mat4 invMatrix;
-	camera->GetMatrixInv(invMatrix);
+	Mat4 matrix_inv;
+	camera->GetMatrixInv(matrix_inv);
 
 	Vec2 mouse(
-		gContext->input.mouseState.x,
-		gContext->input.mouseState.y
+		gContext->input.mouse_state.x,
+		gContext->input.mouse_state.y
 	);
 
-	Ray ray = Camera::Deproject(mouse, invMatrix);
+	Ray ray = Camera::Deproject(mouse, matrix_inv);
 	Plane plane = Plane::FromPointNormal(transform->GetPosition() + Vec3::Up, Vec3::Up);
 
 
 	// Project onto aim-plane
-	static float hOffset = 0;
-	hOffset += gContext->input.GetWheelDelta() * 0.2f;
+	static float offset_h = 0;
+	offset_h += gContext->input.GetWheelDelta() * 0.2f;
 
-	player->aimWorldPosition = ray.ProjectToPlane(plane);
-	sphere.transform->SetPosition(player->aimWorldPosition);
-	sphere.transform->SetScale(1.f + hOffset);
+	player->aim_world_position = ray.ProjectToPlane(plane);
+	sphere.transform->SetPosition(player->aim_world_position);
+	sphere.transform->SetScale(1.f + offset_h);
 }
 
 void MouseAimCapability::HandleCollision(Entity* other)

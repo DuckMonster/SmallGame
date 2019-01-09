@@ -3,10 +3,10 @@
 
 TimeStamp::TimeStamp()
 {
-	initTime = PerformanceClock::Now();
+	init_time = PerformanceClock::Now();
 }
 
 float TimeStamp::Duration()
 {
-	return PerformanceClock::SecondsSince(initTime);
+	return PerformanceClock::SecondsSince(init_time);
 }

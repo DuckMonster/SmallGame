@@ -69,22 +69,22 @@ int main(int argc, char* argv)
 	}
 
 	// Resource manager
-	ResourceManager resourceManager("res");
-	gResourceManager = &resourceManager;
+	ResourceManager resource_manager("res");
+	gResourceManager = &resource_manager;
 
 	// Debug draw
-	DebugDrawManager debugDrawManager;
-	gDebugDrawManager = &debugDrawManager;
+	DebugDrawManager debug_draw_manager;
+	gDebugDrawManager = &debug_draw_manager;
 
 	Scene scene;
 
-	while (gContext->isOpen)
+	while (gContext->is_open)
 	{
 		temp_stack.Reset();
 		ContextUpdateFrame();
 
 		// Get out if the window was closed this frame
-		if (!gContext->isOpen || gContext->input.GetKeyPressed(Key::Escape))
+		if (!gContext->is_open || gContext->input.GetKeyPressed(Key::Escape))
 			break;
 
 #if DEBUG
@@ -93,7 +93,7 @@ int main(int argc, char* argv)
 		HOTRELOAD_TIMER += Time::Delta();
 		if (HOTRELOAD_TIMER > 1.f)
 		{
-			resourceManager.UpdateHotReloading();
+			resource_manager.UpdateHotReloading();
 			HOTRELOAD_TIMER = 0.f;
 		}
 #endif

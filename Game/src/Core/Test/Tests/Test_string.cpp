@@ -31,16 +31,16 @@ namespace
 		{
 			StringBase<T> str;
 			str = "One Two Three";
-			StringBase<T> subStr = str.SubStr(0, 3);
-			TEST_EXPR(subStr == "One");
-			subStr = str.SubStr(4, 3);
-			TEST_EXPR(subStr == "Two");
-			subStr = str.SubStr(8, 5);
-			TEST_EXPR(subStr == "Three");
+			StringBase<T> sub_str = str.SubStr(0, 3);
+			TEST_EXPR(sub_str == "One");
+			sub_str = str.SubStr(4, 3);
+			TEST_EXPR(sub_str == "Two");
+			sub_str = str.SubStr(8, 5);
+			TEST_EXPR(sub_str == "Three");
 			TEST_ERROR(str.SubStr(0, 20));
 
-			subStr = str.SubStr(12, 1);
-			TEST_EXPR(subStr == "e");
+			sub_str = str.SubStr(12, 1);
+			TEST_EXPR(sub_str == "e");
 
 			TEST_NOERROR(str.SubStr(12, 0));
 			TEST_ERROR(str.SubStr(13, 0));

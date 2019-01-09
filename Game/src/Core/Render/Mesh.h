@@ -3,11 +3,11 @@
 
 struct Mesh
 {
-	VertexBuffer vertexBuffer;
-	uint32 drawCount;
-	uint32 drawOffset;
-	GLenum drawMode;
+	VertexBuffer vertex_buffer;
+	uint32 draw_count;
+	uint32 draw_offset;
+	GLenum draw_mode;
 
-	bool useElements;
+	bool use_elements;
 	void Draw() const;
 };

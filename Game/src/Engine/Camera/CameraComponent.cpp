@@ -9,7 +9,7 @@ REGISTER_PROP(CameraComponent, up);
 
 void CameraComponent::GetMatrix(Mat4& matrix)
 {
-	Mat4 lookAt = Mat4::LookAt(position, position + forward, up);
+	Mat4 look_at = Mat4::LookAt(position, position + forward, up);
 
 	float aspect = (float)gContext->width / (float)gContext->height;
 	//Mat4 projection = Mat4::Ortho(-5.f * aspect, 5.f * aspect, -5.f, 5.f, -20.f, 20.f);
@@ -17,9 +17,9 @@ void CameraComponent::GetMatrix(Mat4& matrix)
 	Vec4 test = projection * Vec4(0.f, 0.f, 10.f, 1.f);
 	test /= test.w;
 
-	Vec4 result = projection * lookAt * Vec4(0.f, 0.f, 0.f, 1.f);
+	Vec4 result = projection * look_at * Vec4(0.f, 0.f, 0.f, 1.f);
 
-	matrix = projection * lookAt;
+	matrix = projection * look_at;
 }
 
 void CameraComponent::GetMatrixInv(Mat4& matrix)

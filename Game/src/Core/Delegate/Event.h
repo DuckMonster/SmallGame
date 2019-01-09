@@ -11,11 +11,11 @@ public:
 
 	void Add(const EventDelegate& del)
 	{
-		callList.Add(del);
+		call_list.Add(del);
 	}
 	void Add(EventDelegate&& del)
 	{
-		callList.Add(std::move(del));
+		call_list.Add(std::move(del));
 	}
 
 	void AddRaw(void(*func)(InArgs...))
@@ -35,17 +35,17 @@ public:
 
 	void Broadcast(InArgs... args)
 	{
-		for (uint32 i = 0; i < callList.Size(); ++i)
+		for (uint32 i = 0; i < call_list.Size(); ++i)
 		{
-			callList[i](args...);
+			call_list[i](args...);
 		}
 	}
 
 	void Clear()
 	{
-		callList.Clear();
+		call_list.Clear();
 	}
 
 private:
-	Array<EventDelegate> callList;
+	Array<EventDelegate> call_list;
 };
