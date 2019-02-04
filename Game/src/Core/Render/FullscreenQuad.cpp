@@ -19,11 +19,12 @@ namespace
 		"	vec2(1.0, 1.0),"
 		"	vec2(0.0, 1.0)"
 		");"
+		"uniform mat4 u_Screen;"
 
 		"out vec2 f_UV;"
 
 		"void main() {"
-		"	gl_Position = vec4(verts[gl_VertexID], -1.0, 1.0);"
+		"	gl_Position = u_Screen * vec4(verts[gl_VertexID], -1.0, 1.0);"
 		"	f_UV = uvs[gl_VertexID];"
 		"}";
 
@@ -38,7 +39,7 @@ namespace
 		"}";
 }
 
-void FullscreenQuad::RenderTexture(const Texture& texture)
+void FullscreenQuad::RenderTexture(const Texture& texture, const Vec2& position, const Vec2& size)
 {
 	static GLuint vao;
 	static Material quad_material;
@@ -52,11 +53,16 @@ void FullscreenQuad::RenderTexture(const Texture& texture)
 		material_loaded = true;
 	}
 
+	Mat4 screen(1.f);
+	screen.SetDiagonal(Vec4(size * 0.5f, 0.f, 1.f));
+	screen[3] = Vec4(position, 0.f, 1.f);
+
 	glBindVertexArray(vao);
 	glDisable(GL_DEPTH_TEST);
 
+	texture.Bind();
 	glUseProgram(quad_material.program);
-	glBindTexture(GL_TEXTURE_2D, texture.handle);
+	quad_material.Set("u_Screen", screen);
 	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
 
 	glBindVertexArray(0);

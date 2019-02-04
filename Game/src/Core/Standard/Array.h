@@ -94,13 +94,6 @@ public:
 		other.capacity = 0;
 		other.size = 0;
 	}
-	~ArrayBase()
-	{
-		Clear();
-
-		if (data != nullptr)
-			InAllocator::Free(data);
-	}
 	// Allocator conversion
 	template<typename InOtherAlloc>
 	ArrayBase(const ArrayBase<InType, InOtherAlloc>& other)
@@ -113,6 +106,13 @@ public:
 		{
 			new(data + i) InType(other.data[i]);
 		}
+	}
+	~ArrayBase()
+	{
+		Clear();
+
+		if (data != nullptr)
+			InAllocator::Free(data);
 	}
 
 	// Adds an element at the end of the array
@@ -259,6 +259,51 @@ public:
 
 			capacity = in_capacity;
 		}
+	}
+
+	// = operators
+	ArrayBase& operator=(const ArrayBase& other)
+	{
+		Clear();
+		Reserve(other.size);
+
+		for(uint32 i=0; i<other.size; ++i)
+			new(data + i) InType(other[i]);
+
+		size = other.size;
+		return *this;
+	}
+	ArrayBase& operator=(ArrayBase&& other)
+	{
+		// For rvalues, we just wanna transfer the memory from the other array
+		// Clear and de-allocate memory
+		Clear();
+		if (data != nullptr)
+			InAllocator::Free(data);
+
+		// Then just transfer the pointers, sizes and such
+		data = other.data;
+		capacity = other.capacity;
+		size = other.size;
+
+		other.data = nullptr;
+		other.capacity = 0;
+		other.size = 0;
+
+		return *this;
+	}
+	template<typename InOtherAlloc>
+	ArrayBase& operator=(const ArrayBase<InType, InOtherAlloc>& other)
+	{
+		// Clear this array first
+		Clear();
+		Reserve(other.size);
+
+		for(uint32 i=0; i<other.size; ++i)
+			new(data + i) InType(other[i]);
+
+		size = other.size;
+		return *this;
 	}
 
 	InType& operator[](uint32 index);

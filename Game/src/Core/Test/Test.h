@@ -9,6 +9,16 @@ if (!result)\
 }\
 } while(0)
 
+#define TEST_EXPR_QUIET(expr) do {\
+bool result = !!(expr);\
+if (!result)\
+{\
+	Debug_Log("[%d]\t%s%s", __LINE__, #expr, result ? "" : " (FAIL)");\
+	Debug_Break();\
+	return false;\
+}\
+} while(0)
+
 #define TEST_ERROR(expr) do {\
 ErrorScope scope;\
 expr;\

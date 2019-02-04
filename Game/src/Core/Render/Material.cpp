@@ -61,6 +61,15 @@ void Material::Set(const char* name, float value)
 	glUniform1f(uniform, value);
 }
 
+void Material::Set(const char* name, int value)
+{
+	GLuint uniform = UniformCache::Get(program, name);
+	if (uniform == -1)
+		return;
+
+	glUniform1i(uniform, value);
+}
+
 #define DEF_UNIFORM(type, func)\
 void Material::Set(const char* name, const type& value)\
 {\

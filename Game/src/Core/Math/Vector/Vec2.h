@@ -5,11 +5,11 @@ struct Vec4;
 struct Vec2
 {
 	// Constant values
-	const static Vec2 Zero;
-	const static Vec2 One;
+	const static Vec2 zero;
+	const static Vec2 one;
 
-	const static Vec2 AxisX;
-	const static Vec2 AxisY;
+	const static Vec2 axis_x;
+	const static Vec2 axis_y;
 
 	Vec2() : x(0.f), y(0.f) {}
 	Vec2(float scalar) :

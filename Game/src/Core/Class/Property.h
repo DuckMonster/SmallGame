@@ -12,6 +12,7 @@ namespace StringHelpers
 	TString ToString(const Vec4& value);
 	TString ToString(const Quat& value);
 	TString ToString(const Color& value);
+	TString ToString(const Transform& transform);
 	TString ToString(const Resource* resource);
 	TString ToString(const Entity* entity);
 	TString ToString(const Component* component);

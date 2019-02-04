@@ -6,13 +6,17 @@
 #include "Core/Resource/MeshResource.h"
 #include "Core/Resource/MaterialResource.h"
 #include "Core/Resource/TextureResource.h"
-#include "Runtime/Player/Player.h"
-#include "Runtime/Camera/FollowCamera.h"
+#include "Engine/Shape/Shape.h"
 #include "Engine/Collision/Collision.h"
 #include "Engine/GUI/GuiSystem.h"
 #include "Engine/Rendering/RenderStaticComponent.h"
 #include "Engine/Collision/CollisionSystem.h"
+#include "Engine/Collision/CollisionDebugSystem.h"
 #include "Engine/Debug/Debug.h"
+#include "Engine/Light/DirectionalLightComponent.h"
+#include "Runtime/Player/Player.h"
+#include "Runtime/Camera/FollowCamera.h"
+#include "Runtime/Movement/MovementSystem.h"
 
 Scene* gScene;
 
@@ -24,7 +28,9 @@ Scene::Scene()
 	collision_scene = new CollisionScene();
 
 	AddSystem<CapabilitySystem>();
+	AddSystem<MovementSystem>();
 	AddSystem<CollisionSystem>();
+	AddSystem<CollisionDebugSystem>();
 	AddSystem<RenderSystem>();
 	AddSystem<GuiSystem>();
 	
@@ -33,29 +39,61 @@ Scene::Scene()
 	{
 		// Temp floor
 		auto entity = CreateEntity("Floor");
-		auto renderable = entity->AddComponent<RenderableComponent>();
 		auto transform = entity->AddComponent<TransformComponent>();
 		transform->SetScale(50.f);
 
-		renderable->mesh = &gResourceManager->Load<MeshResource>("Mesh/plane.fbx")->mesh;
-		renderable->material = &gResourceManager->Load<MaterialResource>("Material/floor.json")->material;
+		auto renderable = entity->AddComponent<RenderableComponent>();
+		renderable->AddRenderableLoad("Mesh/plane.fbx", "Material/floor.json");
+
+		auto collider = entity->AddComponent<ColliderComponent>();
+		collider->debug_draw = false;
+		collider->object->AddBox(
+			Vec3(0.f, -0.5f, 0.f),
+			Vec3(50.f, 1.f, 50.f),
+			Quat::identity
+		);
 	}
 	{
 		// Other test collider
-		auto entity = CreateEntity("TestCollider");
-		auto collider = entity->AddComponent<ColliderComponent>();
-		collider->on_overlap.AddLambda([](Entity* other) { Debug::PrintOneFrame("Did I hit something?"); });
-		collider->AddSphere(Vec3(7.f, 0.f, 0.f), 4.f);
-		// collider->AddBox(
-		// 	Vec3(-7.f, 2.f, 1.f),
-		// 	Vec3(4.f, 2.5f, 2.f),
-		// 	Quat::AngleAxis(PI / 4.f, Vec3::Up)
-		// );
-		collider->AddBox(Vec3(-7.f, 2.f, 2.f), Vec3(2.f, 2.f, 5.f));
+		ShapePrefab::CreateCube(
+			this, true,
+			Transform(
+				Vec3(-4.f, 0.f, 3.f),
+				Quat::identity,
+				Vec3(2.f, 0.5f, 4.f)
+			)
+		);
+		ShapePrefab::CreateCube(
+			this, true,
+			Transform(
+				Vec3(-5.f, 2.f, -1.f),
+				Quat::AngleAxis(Math::Radians(25.f), Vec::Normalize(Vec3(2.f, 4.f, -2.f))),
+				Vec3(7.f, 2.f, 4.f)
+			)
+		);
+
+		ShapePrefab::CreateSphere(
+			this, true,
+			Transform(
+				Vec3(8.f, 0.f, 2.f),
+				Quat::identity,
+				Vec3(1.f)
+			)
+		);
 	}
 	{
+		auto render_static = GetStaticComponent<RenderStaticComponent>();
+		// Camera
 		FollowCamera camera = FollowCamera::Create(this, player.entity);
-		GetStaticComponent<RenderStaticComponent>()->active_camera = camera.camera;
+		render_static->active_camera = camera.camera;
+
+		// Light source
+		Entity* entity = CreateEntity("Directional Light");
+		auto light = entity->AddComponent<DirectionalLightComponent>();
+
+		light->position = Vec3(5, 5, 5);
+		light->direction = Vec::Normalize(-light->position);
+		render_static->light = light;
 	}
 }
 

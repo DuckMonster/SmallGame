@@ -27,13 +27,17 @@
     <ClInclude Include="src\Core\Math\Constants.h" />
     <ClInclude Include="src\Core\Math\Matrix.h" />
     <ClInclude Include="src\Core\Math\Quat.h" />
+    <ClInclude Include="src\Core\Math\Random.h" />
+    <ClInclude Include="src\Core\Math\Transform.h" />
     <ClInclude Include="src\Core\Math\Vector.h" />
     <ClInclude Include="src\Core\Math\Vector\Vec2.h" />
     <ClInclude Include="src\Core\Math\Vector\Vec3.h" />
     <ClInclude Include="src\Core\Math\Vector\Vec4.h" />
     <ClInclude Include="src\Engine\Collision\ColliderComponent.h" />
     <ClInclude Include="src\Engine\Collision\Collision.h" />
+    <ClInclude Include="src\Engine\Collision\CollisionDebugSystem.h" />
     <ClInclude Include="src\Engine\Collision\CollisionSystem.h" />
+    <ClInclude Include="src\Engine\Collision\Primitives\Primitives.h" />
     <ClInclude Include="src\Engine\Debug\DebugDrawManager.h" />
     <ClInclude Include="src\Core\Debug\GLDebug.h" />
     <ClInclude Include="src\Engine\Debug\DebugPrintManager.h" />
@@ -57,6 +61,7 @@
     <ClInclude Include="src\Core\Test\Test.h" />
     <ClInclude Include="src\Core\Time\PerformanceClock.h" />
     <ClInclude Include="src\Core\Time\TimeStamp.h" />
+    <ClInclude Include="src\Engine\Light\DirectionalLightComponent.h" />
     <ClInclude Include="src\Engine\Widget\Container\VerticalBoxWidget.h" />
     <ClInclude Include="src\Engine\Widget\Debug\PerformanceWidget.h" />
     <ClInclude Include="src\CppWarn.h" />
@@ -71,6 +76,7 @@
     <ClInclude Include="src\Engine\Widget\Structs.h" />
     <ClInclude Include="src\Engine\Widget\Text\TextWidget.h" />
     <ClInclude Include="src\Engine\Widget\Widget.h" />
+    <ClInclude Include="src\Runtime\Movement\MovementComponent.h" />
     <ClInclude Include="src\Runtime\Player\Combat\PlayerFireCapability.h" />
     <ClInclude Include="src\Runtime\Player\Movement\AimLookCapability.h" />
     <ClInclude Include="src\Core\Component\Component.h" />
@@ -119,6 +125,7 @@
     <ClInclude Include="src\Runtime\Player\Player.h" />
     <ClInclude Include="src\Runtime\Projectile\Projectile.h" />
     <ClInclude Include="src\TypeDefs.h" />
+    <ClInclude Include="src\Runtime\Movement\MovementSystem.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Core\Class\Reflection.cpp" />
@@ -126,6 +133,8 @@
     <ClCompile Include="src\Core\Debug\Assert.cpp" />
     <ClCompile Include="src\Core\Math\Matrix.cpp" />
     <ClCompile Include="src\Core\Math\Quat.cpp" />
+    <ClCompile Include="src\Core\Math\Random.cpp" />
+    <ClCompile Include="src\Core\Math\Transform.cpp" />
     <ClCompile Include="src\Core\Math\Vector.cpp" />
     <ClCompile Include="src\Core\Math\Vector\Vec2.cpp" />
     <ClCompile Include="src\Core\Math\Vector\Vec3.cpp" />
@@ -138,7 +147,9 @@
     <ClCompile Include="src\Core\Test\Tests\Test_vector.cpp" />
     <ClCompile Include="src\Engine\Collision\ColliderComponent.cpp" />
     <ClCompile Include="src\Engine\Collision\Collision.cpp" />
+    <ClCompile Include="src\Engine\Collision\CollisionDebugSystem.cpp" />
     <ClCompile Include="src\Engine\Collision\CollisionSystem.cpp" />
+    <ClCompile Include="src\Engine\Collision\Primitives\Primitives.cpp" />
     <ClCompile Include="src\Engine\Debug\DebugDrawManager.cpp" />
     <ClCompile Include="src\Engine\Debug\DebugPrintManager.cpp" />
     <ClCompile Include="src\Core\Entity\Entity.cpp" />
@@ -167,6 +178,7 @@
     <ClCompile Include="src\Core\Time\TimeStamp.cpp" />
     <ClCompile Include="src\Engine\GUI\GuiSystem.cpp" />
     <ClCompile Include="src\Engine\GUI\Text\TextMesh.cpp" />
+    <ClCompile Include="src\Engine\Light\DirectionalLightComponent.cpp" />
     <ClCompile Include="src\Engine\Widget\Container\VerticalBoxWidget.cpp" />
     <ClCompile Include="src\Engine\Widget\Debug\InspectorWidget.cpp" />
     <ClCompile Include="src\Engine\Widget\Debug\PerformanceWidget.cpp" />
@@ -176,6 +188,7 @@
     <ClCompile Include="src\Engine\Rendering\RenderableComponent.cpp" />
     <ClCompile Include="src\Engine\Rendering\RenderStaticComponent.cpp" />
     <ClCompile Include="src\Engine\Transform\TransformComponent.cpp" />
+    <ClCompile Include="src\Runtime\Movement\MovementComponent.cpp" />
     <ClCompile Include="src\Runtime\Player\Combat\PlayerFireCapability.cpp" />
     <ClCompile Include="src\Runtime\Player\Movement\AimLookCapability.cpp" />
     <ClCompile Include="src\Core\Context\Context.cpp" />
@@ -213,6 +226,7 @@
     <ClCompile Include="src\Runtime\Player\Movement\PlayerMovementCapability.cpp" />
     <ClCompile Include="src\Runtime\Player\Player.cpp" />
     <ClCompile Include="src\Runtime\Projectile\Projectile.cpp" />
+    <ClCompile Include="src\Runtime\Movement\MovementSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="src\Core\Math\Math.inl" />

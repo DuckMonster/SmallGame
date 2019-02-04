@@ -7,6 +7,9 @@ Color Debug::default_color = Color::green;
 
 void Debug::Print(const char* format, ...)
 {
+	if (gPrintManager == nullptr)
+		return;
+
 	va_list vl;
 	va_start(vl, format);
 
@@ -17,6 +20,9 @@ void Debug::Print(const char* format, ...)
 
 void Debug::PrintOneFrame(const char* format, ...)
 {
+	if (gPrintManager == nullptr)
+		return;
+
 	va_list vl;
 	va_start(vl, format);
 
@@ -38,6 +44,9 @@ void Debug::DrawCube(const Vec3& origin, const Vec3& size, const Color& color /*
 
 void Debug::DrawCube(const Mat4& mat, const Color& color /* = default_color */)
 {
+	if (gDebugDrawManager == nullptr)
+		return;
+
 	gDebugDrawManager->AddCube(mat, color);
 }
 

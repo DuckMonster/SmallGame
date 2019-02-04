@@ -48,7 +48,8 @@ void ResourceManager::Reload(Resource* res)
 	res->last_modified_time = modified;
 
 	// Reload all dependent resources
-	for(Resource* dependent_resource : res->dependent)
+	TArray<Resource*> resources_to_reload = res->dependent;
+	for(Resource* dependent_resource : resources_to_reload)
 	{
 		Reload(dependent_resource);
 	}

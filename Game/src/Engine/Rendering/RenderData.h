@@ -27,7 +27,8 @@ struct RenderCamera
 
 struct RenderDirectionalLight
 {
-	Mat4 matrix;
+	Vec3 position;
+	Vec3 direction;
 };
 
 struct RenderScene
@@ -36,4 +37,5 @@ struct RenderScene
 	uint32 object_num = 0;
 
 	RenderCamera camera;
+	RenderDirectionalLight light;
 };

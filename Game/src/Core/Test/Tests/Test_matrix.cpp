@@ -26,7 +26,7 @@ namespace
 		}
 
 		{
-			Quat quat = Quat::AngleAxis(HALF_PI, Vec3::AxisY);
+			Quat quat = Quat::AngleAxis(HALF_PI, Vec3::axis_y);
 			Mat4 scale = Mat4::Scale(Vec3(4.f, 0.f, 0.f));
 			Mat4 translate = Mat4::Translation(Vec3(10.f, -2.f, 0.f));
 

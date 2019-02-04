@@ -2,8 +2,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "TypeDefs.h"
-#define Debug_Log(format, ...) printf(format "\n", __VA_ARGS__)
-#define Debug_Break() (__debugbreak(), 0)
+#define Debug_Log(format, ...) LogHelpers::DebugLog(format "\n", __VA_ARGS__)
+#define Debug_Break() (AssertHelpers::IsDebuggerAttached() && (__debugbreak(), 0))
 
 struct ErrorScope
 {
@@ -30,6 +30,12 @@ namespace AssertHelpers
 	bool AssertLogReturnFalse(const char* expr, const char* file, int line);
 	bool ErrorMessage(const char* file, int line, const char* msg, ...);
 	bool TryToCatchError();
+	bool IsDebuggerAttached();
+}
+
+namespace LogHelpers
+{
+	void DebugLog(const char* format, ...);
 }
 
 #define Assert(expr) (!!(expr) || AssertHelpers::AssertLogReturnFalse(#expr, __FILE__, __LINE__) || Debug_Break())

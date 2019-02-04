@@ -18,21 +18,46 @@ namespace
 
 bool ShaderResource::LoadInternal(const char* path)
 {
-	// Infer shader type from file
+	// Read file
+	char* source_c;
+	File::ReadAllTemporary(path, source_c);
+
+	source = source_c;
+	return true;
+}
+
+void ShaderResource::UnloadInternal()
+{
+	source = "";
+}
+
+GLuint ShaderResource::Compile(const Map<String, String>& parameters)
+{
+	const char* path = *GetPath();
+	TString src = *source;
+
+	// Infer shader type
 	GLenum type = GetShaderTypeFromFileName(path);
 	if (type == GL_INVALID_ENUM)
-		return false;
+	{
+		Error("Shader '%s' is not a valid shader type", path);
+		return -1;
+	}
 
-	// Read file
-	char* source;
-	File::ReadAllTemporary(path, source);
+	// Replace parameters in source
+	for(const KeyValuePair<String, String>& parameter : parameters)
+	{
+		TString param_name = TString::Printf("{%s}", *parameter.key);
+		src = src.Replace(*param_name, *parameter.value);
+	}
 
-	// Create and compile shader
-	handle = glCreateShader(type);
-	glShaderSource(handle, 1, &source, nullptr);
+	const char* src_ptr = *src;
+
+	GLuint handle = glCreateShader(type);
+	glShaderSource(handle, 1, &src_ptr, nullptr);
 	glCompileShader(handle);
 
-	// Check for compile errors
+	// Check for errors
 	GLint success;
 	glGetShaderiv(handle, GL_COMPILE_STATUS, &success);
 	if (success == GL_FALSE)
@@ -40,20 +65,8 @@ bool ShaderResource::LoadInternal(const char* path)
 		// Uh oh
 		char* buffer = talloc(1024);
 		glGetShaderInfoLog(handle, 1024, nullptr, buffer);
-		Debug_Log("COMPILE ERROR IN SHADER (%s)\n%s", path, buffer);
-	}
-	else
-	{
-		is_valid = true;
+		Error("Compile error in shader '%s'\n'%s", path, buffer);
 	}
 
 	return handle;
 }
-
-void ShaderResource::UnloadInternal()
-{
-	glDeleteShader(handle);
-	handle = GL_INVALID_INDEX;
-	is_valid = false;
-}
-

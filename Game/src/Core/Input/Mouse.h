@@ -3,7 +3,7 @@ enum class MouseButton : uint8
 {
 	Invalid,
 	Left,
-	Right,
+	right,
 	Middle,
 	X1,
 	X2,

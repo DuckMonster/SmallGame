@@ -105,6 +105,13 @@
     <ClInclude Include="src\Core\Math\Vector\Vec3.h" />
     <ClInclude Include="src\Core\Math\Vector\Vec4.h" />
     <ClInclude Include="src\Core\Math\Vector\Vec2.h" />
+    <ClInclude Include="src\Runtime\Movement\MovementSystem.h" />
+    <ClInclude Include="src\Engine\Collision\CollisionDebugSystem.h" />
+    <ClInclude Include="src\Runtime\Movement\MovementComponent.h" />
+    <ClInclude Include="src\Engine\Collision\Primitives\Primitives.h" />
+    <ClInclude Include="src\Core\Math\Random.h" />
+    <ClInclude Include="src\Core\Math\Transform.h" />
+    <ClInclude Include="src\Engine\Light\DirectionalLightComponent.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Core\Render\Material.cpp" />
@@ -195,6 +202,13 @@
     <ClCompile Include="src\Core\Math\Vector\Vec3.cpp" />
     <ClCompile Include="src\Core\Math\Vector\Vec4.cpp" />
     <ClCompile Include="src\Core\Math\Vector\Vec2.cpp" />
+    <ClCompile Include="src\Engine\Collision\CollisionDebugSystem.cpp" />
+    <ClCompile Include="src\Runtime\Movement\MovementComponent.cpp" />
+    <ClCompile Include="src\Runtime\Movement\MovementSystem.cpp" />
+    <ClCompile Include="src\Engine\Collision\Primitives\Primitives.cpp" />
+    <ClCompile Include="src\Core\Math\Random.cpp" />
+    <ClCompile Include="src\Core\Math\Transform.cpp" />
+    <ClCompile Include="src\Engine\Light\DirectionalLightComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="src\Core\Standard\Array.inl" />

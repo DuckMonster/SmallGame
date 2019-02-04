@@ -61,7 +61,7 @@ void FollowCameraCapability::Tick()
 		rotate_angle += Time::Delta() * 1.6f;
 	}
 
-	Quat rotation = Quat::AngleAxis(rotate_angle, Vec3::Up);
+	Quat rotation = Quat::AngleAxis(rotate_angle, Vec3::up);
 
 	// Translation
 	if (input.GetKey(Key::Z))

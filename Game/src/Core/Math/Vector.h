@@ -71,4 +71,9 @@ public:
 	static Vec2 ConstrainToPlane(const Vec2& v, const Vec2& normal);
 	static Vec3 ConstrainToPlane(const Vec3& v, const Vec3& normal);
 	static Vec4 ConstrainToPlane(const Vec4& v, const Vec4& normal);
+
+	// Reflects a vector off a normal
+	static Vec2 Reflect(const Vec2& v, const Vec2& normal);
+	static Vec3 Reflect(const Vec3& v, const Vec3& normal);
+
 };

@@ -1,4 +1,5 @@
 #include "CollisionSystem.h"
+#include "Engine/Transform/TransformComponent.h"
 #include "Engine/Debug/Debug.h"
 
 void CollisionSystem::Setup()
@@ -6,31 +7,22 @@ void CollisionSystem::Setup()
 
 }
 
-void CollisionSystem::Run()
+void CollisionSystem::ProcessEntity(Entity* entity, ColliderComponent* collider)
 {
-	CollisionScene* scene = GetScene()->GetCollisionScene();
-
-	// Update overlaps
-	scene->UpdateOverlaps();
-
-	for(ColliderObject* obj : scene->objects)
+	// Update matrix of collider object, if there is a transform
+	auto transform = entity->GetComponent<TransformComponent>();
+	if (transform != nullptr)
 	{
-		Color color = obj->overlapped_this_frame ?
-			Color::red :
-			Color::green;
-
-		// Draw cubes
-		for(BoxCollider& box : obj->boxes)
-		{
-			BoxCollider box_t = box.Transform(obj->transform);
-			Debug::DrawCube(box_t.mat, color);
-		}
-
-		// Draw spheres
-		for(SphereCollider& sphere : obj->spheres)
-		{
-			SphereCollider sph_t = sphere.Transform(obj->transform);
-			Debug::DrawSphere(sph_t.origin, sph_t.radius, color);
-		}
+		collider->object->transform = transform->GetMatrix();
 	}
+
+	// Activate colliders
+	collider->object->is_active = true;
+} 
+
+void CollisionSystem::RunEnd()
+{
+	// Update overlaps
+	CollisionScene* scene = GetScene()->GetCollisionScene();
+	//scene->UpdateOverlaps();
 }

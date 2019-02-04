@@ -5,7 +5,10 @@
 Entity::~Entity()
 {
 	for(Component* comp : components)
+	{
 		comp->Destroy();
+		delete comp;
+}
 }
 
 Component* Entity::AddComponent(Type* type)

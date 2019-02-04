@@ -41,8 +41,8 @@ namespace
 			TEST_EXPR(Math::NearlyEquals(Vec::Length(vec), len));
 			Math::NearlyEquals(0.f, 1.f);
 
-			TEST_EXPR(Vec::NearlyZero(Vec::Normalize(Vec3::Zero)));
-			Vec3 zero_vec = Vec3::Zero;
+			TEST_EXPR(Vec::NearlyZero(Vec::Normalize(Vec3::zero)));
+			Vec3 zero_vec = Vec3::zero;
 
 			Vec3 vec2 = Vec::Normalize(vec);
 			TEST_EXPR(Math::NearlyEquals(Vec::Length(vec), len));
@@ -50,12 +50,12 @@ namespace
 		}
 
 		{
-			TEST_EXPR(Vec::NearlyEquals(Vec::Cross(Vec3::AxisX, Vec3::AxisY), Vec3::AxisZ));
-			TEST_EXPR(Vec::NearlyEquals(Vec::Cross(Vec3::AxisY, Vec3::AxisX), -Vec3::AxisZ));
-			TEST_EXPR(Vec::NearlyEquals(Vec::Cross(Vec3::AxisY, Vec3::AxisZ), Vec3::AxisX));
-			TEST_EXPR(Vec::NearlyEquals(Vec::Cross(Vec3::AxisZ, Vec3::AxisY), -Vec3::AxisX));
-			TEST_EXPR(Vec::NearlyEquals(Vec::Cross(Vec3::AxisZ, Vec3::AxisX), Vec3::AxisY));
-			TEST_EXPR(Vec::NearlyEquals(Vec::Cross(Vec3::AxisX, Vec3::AxisZ), -Vec3::AxisY));
+			TEST_EXPR(Vec::NearlyEquals(Vec::Cross(Vec3::axis_x, Vec3::axis_y), Vec3::axis_z));
+			TEST_EXPR(Vec::NearlyEquals(Vec::Cross(Vec3::axis_y, Vec3::axis_x), -Vec3::axis_z));
+			TEST_EXPR(Vec::NearlyEquals(Vec::Cross(Vec3::axis_y, Vec3::axis_z), Vec3::axis_x));
+			TEST_EXPR(Vec::NearlyEquals(Vec::Cross(Vec3::axis_z, Vec3::axis_y), -Vec3::axis_x));
+			TEST_EXPR(Vec::NearlyEquals(Vec::Cross(Vec3::axis_z, Vec3::axis_x), Vec3::axis_y));
+			TEST_EXPR(Vec::NearlyEquals(Vec::Cross(Vec3::axis_x, Vec3::axis_z), -Vec3::axis_y));
 		}
 
 		return true;

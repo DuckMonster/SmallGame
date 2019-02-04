@@ -6,11 +6,11 @@ struct Vec3;
 struct Vec4
 {
 	// Static constant vectors
-	const static Vec4 Zero;
-	const static Vec4 One;
-	const static Vec4 AxisX;
-	const static Vec4 AxisY;
-	const static Vec4 AxisZ;
+	const static Vec4 zero;
+	const static Vec4 one;
+	const static Vec4 axis_x;
+	const static Vec4 axis_y;
+	const static Vec4 axis_z;
 	const static Vec4 AxisW;
 
 	Vec4() : x(0.f), y(0.f), z(0.f), w(0.f) {}

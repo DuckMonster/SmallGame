@@ -2,6 +2,7 @@
 #include "Assert.h"
 #include <windows.h>
 #include <stdarg.h>
+#include "Engine/Debug/Debug.h"
 #include "Core/OS/Path.h"
 
 ErrorScope* ErrorScope::active = nullptr;
@@ -52,4 +53,17 @@ bool AssertHelpers::TryToCatchError()
 
 	ErrorScope::active->Catch();
 	return true;
+}
+
+bool AssertHelpers::IsDebuggerAttached()
+{
+	return IsDebuggerPresent();
+}
+
+void LogHelpers::DebugLog(const char* format, ...)
+{
+	va_list vl;
+	va_start(vl, format);
+	vprintf(format, vl);
+	va_end(vl);
 }

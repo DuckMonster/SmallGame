@@ -43,6 +43,23 @@ public:
 		length += len;
 	}
 
+	void Add(const char* str, uint32 count)
+	{
+#ifdef DEBUG
+		if (strlen(str) < count)
+		{
+			Error("Tried to add string '%s' of length %d with count %d", str, strlen(str), count);
+			count = strlen(str);
+		}
+#endif
+
+		Reserve(length + count);
+
+		memcpy(data + length, str, count + 1);
+		data[length + count] = 0;
+		length += count;
+	}
+
 	// Copy string into this object
 	void Set(const char* str)
 	{
@@ -93,6 +110,44 @@ public:
 		}
 	}
 
+	// Returns the index of the first occurance of some substring
+	// 		or -1, if it doesn't exist
+	int32 Find(const char* substr, uint32 offset = 0)
+	{
+		if (substr == nullptr)
+		{
+			Error("Find with nullptr string");
+			return -1;
+		}
+
+		const char* sub_ptr = substr;
+
+		// Empty substring, we sure do contain this!
+		if (*sub_ptr == 0)
+			return 0;
+
+		for(uint32 i=offset; i<length; ++i)
+		{
+			if (data[i] == *sub_ptr)
+			{
+				sub_ptr++;
+				if (*sub_ptr == 0)
+				{
+					// That's the end of the sub-string! We're done!
+					// +1 because we incremented the sub_ptr
+					return i + (substr - sub_ptr) + 1;
+				}
+			}
+			else
+			{
+				sub_ptr = substr;
+			}
+		}
+
+		// If we made it this far, we didn't find substr in this string
+		return -1;
+	}
+
 	// Returns if the string is empty
 	bool IsEmpty() { return length == 0; }
 
@@ -113,6 +168,32 @@ public:
 		// Memcpy the section into a new string
 		StringBase result;
 		result.Set(data + offset, count);
+		return result;
+	}
+
+	// Replaces all occurances of a substr with a new one
+	StringBase Replace(const char* from, const char* to)
+	{
+		uint32 from_len = strlen(from);
+		uint32 to_len = strlen(to);
+
+		StringBase<TemporaryAllocator> result;
+		uint32 old_index = 0;
+
+		while(true)
+		{
+			uint32 found_index = Find(from, old_index);
+			if (found_index == -1)
+			{
+				result.Add(data + old_index, length - old_index);
+				break;
+			}
+
+			result.Add(data + old_index, found_index - old_index);
+			result.Add(to);
+			old_index = found_index + from_len;
+		}
+
 		return result;
 	}
 

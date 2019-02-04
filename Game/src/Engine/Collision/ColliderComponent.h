@@ -7,18 +7,14 @@ class TransformComponent;
 class ColliderComponent : public Component
 {
 public:
-	typedef Event<Entity*> OnOverlapEvent;
+	typedef Event<const OverlapResult&> OnOverlapEvent;
 
 	void Setup() override;
 	void Destroy() override;
 
-	SphereCollider* AddSphere() { return AddSphere(Vec3(0.f), 1.f); }
-	SphereCollider* AddSphere(const Vec3& origin, float radius);
-
-	BoxCollider* AddBox() { return AddBox(Vec3(0.f), Vec3(1.f)); }
-	BoxCollider* AddBox(const Vec3& position, const Vec3& size, const Quat& rotation = Quat::identity);
-
+	ColliderObject* object;
 	OnOverlapEvent on_overlap;
+	bool debug_draw = true;
 
 private:
 	// We want to poll if the transform is changed, because then we need
@@ -26,7 +22,6 @@ private:
 	void HandleTransformInvalidated(TransformComponent* transform);
 
 	// Called when our collider-object overlaps with some other collider
-	void HandleOverlap(ColliderObject* other);
-	ColliderObject* object;
+	void HandleOverlap(const OverlapResult& result);
 };
 

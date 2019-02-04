@@ -9,7 +9,7 @@ struct KeyValuePair
 	InValue value;
 };
 
-// One node in a buckets' linked list
+// one node in a buckets' linked list
 template<typename InKey, typename InValue>
 struct KeyValueNode
 {
@@ -220,9 +220,10 @@ public:
 	class Iterator
 	{
 	public:
-		Iterator(MapBase* map, uint32 bucket_index) :
+		Iterator(const MapBase* map, uint32 bucket_index) :
 			map(map), bucket_index(bucket_index)
 		{
+			IterateToNextValid();
 		}
 		Iterator(const Iterator& other) :
 			map(other.map), node(other.node), bucket_index(other.bucket_index)
@@ -232,34 +233,15 @@ public:
 		Iterator& operator++()
 		{
 			if (IsDone())
-				return;
+				return *this;
 
-			// If this is the last node in the bucket, advance the bucket
-			while (node == nullptr && !IsDone())
-			{
-				Bucket& bucket = map->buckets[bucket_index];
-
-				if (node == bucket.last)
-				{
-					// If the node is the last in the bucket (or nullptr if the bucket is empty) go to the next bucket
-					bucket_index++;
-				}
-				else if (node == nullptr)
-				{
-					// No node, start going through the bucket
-					node = bucket.root;
-				}
-				else
-				{
-					// Just keep going down
-					node = node->next;
-				}
-			}
+			node = node->next;
+			IterateToNextValid();
 
 			return *this;
 		}
 
-		KeyValuePair<InKey, InValue>& operator*()
+		const KeyValuePair<InKey, InValue>& operator*()
 		{
 			return node->pair;
 		}
@@ -273,14 +255,30 @@ public:
 			return !(operator==(other));
 		}
 
+		void IterateToNextValid()
+		{
+			// If this is the last node in the bucket, advance the bucket
+			while (node == nullptr && !IsDone())
+			{
+				bucket_index++;
+
+				// This is the last bucket, we're done here
+				if (bucket_index >= InNumBuckets)
+					break;
+
+				const Bucket& bucket = map->buckets[bucket_index];
+				node = bucket.root;
+			}
+		}
+
 		bool IsDone()
 		{
 			return bucket_index >= InNumBuckets;
 		}
 
 	public:
-		MapBase* map;
-		NodeType* node = nullptr;
+		const MapBase* map;
+		const NodeType* node = nullptr;
 		uint32 bucket_index = 0;
 	};
 
@@ -393,6 +391,16 @@ public:
 	// Allocator type conversion
 	template<typename InOtherAllocator>
 	MapBase& operator=(const MapBase<InKey, InValue, InOtherAllocator, InNumBuckets>& other) { Copy(other); return *this; }
+
+	// std-iterator compliant functions
+	Iterator begin() const
+	{
+		return Iterator(this, 0);
+	}
+	Iterator end() const
+	{
+		return Iterator(this, InNumBuckets);
+	}
 
 private:
 	// Copy another map

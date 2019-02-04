@@ -7,6 +7,8 @@
 #include "Engine/Transform/TransformComponent.h"
 #include "Engine/Rendering/RenderableComponent.h"
 #include "Engine/Collision/ColliderComponent.h"
+#include "Engine/Debug/Debug.h"
+#include "Runtime/Movement/MovementComponent.h"
 #include "Core/Resource/MaterialResource.h"
 
 REGISTER_TYPE(ProjectileComponent);
@@ -14,20 +16,29 @@ REGISTER_TYPE(ProjectileComponent);
 // CAPABILITY
 void ProjectileCapability::Setup()
 {
-	transform = GetOwner()->GetOrAddComponent<TransformComponent>();
 	projectile = GetOwner()->GetOrAddComponent<ProjectileComponent>();
+	movement = GetOwner()->GetOrAddComponent<MovementComponent>();
 
-	auto collider = GetOwner()->GetComponent<ColliderComponent>();
-	if (collider != nullptr)
-	{
-		collider->on_overlap.AddObject(this, &ProjectileCapability::HandleOverlap);
-	}
+	velocity = projectile->direction * 20.f;
 }
 
 void ProjectileCapability::Tick()
 {
+	// Handle collision hits
+	for(const OverlapResult& hit : movement->hits)
+	{
+		//Debug::Print("Hit %s", *hit.other->owner->GetName(), VAL);
+		if (Vec::Dot(velocity, hit.normal) > 0.f)
+			continue;
+
+		velocity = Vec::Reflect(velocity, hit.normal) * 0.8f;
+	}
+
+	// Gravity
+	velocity += Vec3::up * -5.f * Time::Delta();
+
 	// Update position
-	transform->Translate(projectile->direction * 10.f * Time::Delta());
+	movement->Translate(velocity * Time::Delta());
 	time -= Time::Delta();
 	if (time <= 0.f)
 	{
@@ -35,7 +46,7 @@ void ProjectileCapability::Tick()
 	}
 }
 
-void ProjectileCapability::HandleOverlap(Entity* other)
+void ProjectileCapability::HandleOverlap(const OverlapResult& result)
 {
 	// Kill ourselves on any overlap
 	GetOwner()->GetScene()->DestroyEntity(GetOwner());
@@ -55,11 +66,10 @@ ProjectilePrefab ProjectilePrefab::Create(Scene* scene, const Vec3& origin, cons
 	p.projectile->direction = Vec::Normalize(direction);
 
 	p.renderable = p.entity->AddComponent<RenderableComponent>();
-	p.renderable->mesh = &gResourceManager->Load<MeshResource>("Mesh/sphere.fbx")->mesh;
-	p.renderable->material = &gResourceManager->Load<MaterialResource>("Material/default.json")->material;
+	p.renderable->AddRenderableLoad("Mesh/sphere.fbx", "Material/default.json");
 
 	p.collider = p.entity->AddComponent<ColliderComponent>();
-	p.collider->AddSphere(Vec3(0.f), 1.f);
+	p.collider->object->AddSphere(Vec3(0.f), 1.f);
 
 	AddCapability<ProjectileCapability>(p.entity);
 

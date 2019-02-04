@@ -41,6 +41,16 @@ namespace StringHelpers
 		return TString::Printf("( %f, %f, %f, %f )", value.r, value.g, value.b, value.a);
 	}
 
+	TString ToString(const Transform& transform)
+	{
+		return TString::Printf(
+			"p: %s, r: %s, s: %s",
+			*ToString(transform.position),
+			*ToString(transform.rotation),
+			*ToString(transform.scale)
+		);
+	}
+
 	TString ToString(const Resource* resource)
 	{
 		return resource->GetPath();

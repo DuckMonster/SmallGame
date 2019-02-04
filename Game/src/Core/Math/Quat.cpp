@@ -5,13 +5,13 @@ namespace
 {
 	Quat QuatQuatMultiply(const Quat& b, const Quat& a)
 	{
-		// a x b will concatenate the rotations
+		// b * a will concatenate the rotations
 		// result is first (a), then (b)
 		// (r1, v1)(r2, v2) = (r1r2 - v1.v2, r1v2 + r2v1 + v1 x v2)
 		return Quat(
-			b.w * a.x + b.x * a.w + b.y * a.z + b.z * a.y,
-			b.w * a.y - b.x * a.z + b.y * a.w + b.z * a.x,
-			b.w * a.z + b.x * a.y - b.y * a.x + b.z * a.w,
+			b.w * a.x + b.x * a.w - b.y * a.z + b.z * a.y,
+			b.w * a.y + b.x * a.z + b.y * a.w - b.z * a.x,
+			b.w * a.z - b.x * a.y + b.y * a.x + b.z * a.w,
 			b.w * a.w - b.x * a.x - b.y * a.y - b.z * a.z
 		);
 	}
@@ -50,7 +50,7 @@ bool Quat::NearlyEquals(const Quat& a, const Quat& b, const float margin /*= KIN
 		Math::NearlyEquals(a.w, b.w, margin);
 }
 
-bool Quat::IsIdentity(const Quat& q)
+bool Quat::Isidentity(const Quat& q)
 {
 	return NearlyEquals(q, identity);
 }
@@ -92,6 +92,43 @@ Quat& Quat::operator*=(const Quat& rhs)
 	return *this;
 }
 
+Quat Quat::operator*(float scalar) const
+{
+	return Quat(
+		x * scalar,
+		y * scalar,
+		z * scalar,
+		w * scalar
+	);
+}
+Quat& Quat::operator*=(float scalar)
+{
+	x *= scalar;
+	y *= scalar;
+	z *= scalar;
+	w *= scalar;
+
+	return *this;
+}
+Quat Quat::operator/(float scalar) const
+{
+	return Quat(
+		x / scalar,
+		y / scalar,
+		z / scalar,
+		w / scalar
+	);
+}
+Quat& Quat::operator/=(float scalar)
+{
+	x /= scalar;
+	y /= scalar;
+	z /= scalar;
+	w /= scalar;
+
+	return *this;
+}
+
 Vec3 Quat::operator*(const Vec3& v) const
 {
 	// http://people.csail.mit.edu/bkph/articles/Quaternions.pdf
@@ -123,7 +160,7 @@ Vec3 Quat::Axis() const
 {
 	Vec3 v(x, y, z);
 
-	// Zero-rotation, undefined axis
+	// zero-rotation, undefined axis
 	if (Vec::NearlyZero(v))
 		return v;
 
@@ -145,4 +182,16 @@ Mat4 Quat::Matrix() const
 	m.m03 = 0.0f;				m.m13 = 0.0f;					m.m23 = 0.0f;				m.m33 = 1.0f;
 
 	return m;
+}
+
+Quat Quat::Conjugate(const Quat& q)
+{
+	return Quat(-q.x, -q.y, -q.z, q.w);
+}
+
+Quat Quat::FromToQuat(const Quat& from, const Quat& to)
+{
+	// diff * from = to
+	// diff = to * inverse(from)
+	return Quat::Normalize(to * Quat::Conjugate(from));
 }

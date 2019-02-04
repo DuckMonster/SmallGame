@@ -40,7 +40,7 @@ struct WinMouseParams
 struct WinMouseButtonParams
 {
 	uint8 Left : 1;
-	uint8 Right : 1;
+	uint8 right : 1;
 	uint8 Shift : 1;
 	uint8 Control : 1;
 	uint8 Middle : 1;
@@ -258,7 +258,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT Message, WPARAM wParam, LPARAM lParam)
 		if (!gContext->is_focused)
 			break;
 
-		gContext->input.SetMouseButton(MouseButton::Right, true);
+		gContext->input.SetMouseButton(MouseButton::right, true);
 		break;
 	}
 	case WM_RBUTTONUP:
@@ -266,7 +266,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT Message, WPARAM wParam, LPARAM lParam)
 		if (!gContext->is_focused)
 			break;
 
-		gContext->input.SetMouseButton(MouseButton::Right, false);
+		gContext->input.SetMouseButton(MouseButton::right, false);
 		break;
 	}
 	case WM_MBUTTONDOWN:

@@ -95,10 +95,32 @@ bool JsonValue::IsObject() const
 	return value->IsObject();
 }
 
-uint32 JsonValue::ArrayLen() const
+uint32 JsonValue::ArraySize() const
 {
 	if (!IsValid())
 		return 0;
 
 	return value->Size();
+}
+
+bool JsonValue::SerializeChildren(Map<String, JsonValue>& map)
+{
+	using namespace rapidjson;
+
+	if (!IsValid())
+		return false;
+
+	if (!Assert(IsObject()))
+		return false;
+
+	// Iterate through all members
+	for(Value::MemberIterator it = value->MemberBegin(); it != value->MemberEnd(); ++it)
+	{
+		Value& val = it->value;
+		const char* name = it->name.Get<const char*>();
+
+		map[name] = JsonValue(&val);
+	}
+
+	return true;
 }

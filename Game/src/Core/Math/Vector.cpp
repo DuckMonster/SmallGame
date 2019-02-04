@@ -74,7 +74,7 @@ Vec2 Vec::Normalize(const Vec2& v)
 	float len = v.x * v.x + v.y * v.y;
 	// In case length is almost zero, just return zero vector
 	if (len < KINDA_SMALL_NUMBER)
-		return Vec2::Zero;
+		return Vec2::zero;
 
 	len = Math::Sqrt(len); 
 	return Vec2(
@@ -87,7 +87,7 @@ Vec3 Vec::Normalize(const Vec3& v)
 	float len = v.x * v.x + v.y * v.y + v.z * v.z;
 	// In case length is almost zero, just return zero vector
 	if (len < KINDA_SMALL_NUMBER)
-		return Vec3::Zero;
+		return Vec3::zero;
 
 	len = Math::Sqrt(len); 
 	return Vec3(
@@ -101,7 +101,7 @@ Vec4 Vec::Normalize(const Vec4& v)
 	float len = v.x * v.x + v.y * v.y + v.z * v.z + v.w * v.w;
 	// In case length is almost zero, just return zero vector
 	if (len < KINDA_SMALL_NUMBER)
-		return Vec4::Zero;
+		return Vec4::zero;
 
 	len = Math::Sqrt(len); 
 	return Vec4(
@@ -232,4 +232,14 @@ Vec3 Vec::ConstrainToPlane(const Vec3& v, const Vec3& normal)
 Vec4 Vec::ConstrainToPlane(const Vec4& v, const Vec4& normal)
 {
 	return v - (normal * Vec::Dot(v, normal));
+}
+
+// Reflects a vector off a normal
+Vec2 Vec::Reflect(const Vec2& v, const Vec2& normal)
+{
+	return v - (normal * Vec::Dot(v, normal) * 2.f);
+}
+Vec3 Vec::Reflect(const Vec3& v, const Vec3& normal)
+{
+	return v - (normal * Vec::Dot(v, normal) * 2.f);
 }

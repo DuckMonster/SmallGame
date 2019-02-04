@@ -7,15 +7,19 @@
 #include "Core/Memory/Allocator.h"
 #include "Core/Debug/GLDebug.h"
 #include "Core/Time/TimeStamp.h"
+#include "Core/Math/Random.h"
 #include "Engine/Debug/DebugPrintManager.h"
 #include "Engine/Debug/DebugDrawManager.h"
 #include <windows.h>
+#include <time.h>
 
 #ifdef TEST
 #include "Core/Test/Test.h"
 int main()
 {
 	/* Test main starts here, only run tests */
+	// Seed RNG
+	Random::SetSeed((unsigned)time(NULL));
 
 	// Initialize temporary storage
 	TempStack temp_stack;
@@ -27,6 +31,9 @@ int main()
 #else
 int main(int argc, char* argv)
 {
+	// Seed RNG
+	Random::SetSeed((unsigned)time(NULL));
+
 	// Initialize temporary storage
 	TempStack temp_stack;
 	temp_stack.Resize(8);

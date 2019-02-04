@@ -84,7 +84,7 @@ namespace
 	}
 }
 
-const Mat4 Mat4::Identity = Mat4(
+const Mat4 Mat4::identity = Mat4(
 	1.f, 0.f, 0.f, 0.f,
 	0.f, 1.f, 0.f, 0.f,
 	0.f, 0.f, 1.f, 0.f,
@@ -199,6 +199,21 @@ Mat4 Mat4::LookAt(const Vec3& eye, const Vec3& target, const Vec3& up)
 	//		it will get inversed by the projection matrix.
 
 	Vec3 zaxis = Vec::Normalize(eye - target);
+	Vec3 xaxis = Vec::Normalize(Vec::Cross(up, zaxis));
+	Vec3 yaxis = Vec::Cross(zaxis, xaxis);
+
+	return Mat4(
+		xaxis.x, yaxis.x, zaxis.x, 0.f,
+		xaxis.y, yaxis.y, zaxis.y, 0.f,
+		xaxis.z, yaxis.z, zaxis.z, 0.f,
+		-Vec::Dot(xaxis, eye), -Vec::Dot(yaxis, eye), -Vec::Dot(zaxis, eye), 1.f
+	);
+}
+
+// Look at, but with a forward vector instead of a target
+Mat4 Mat4::LookAtForward(const Vec3& eye, const Vec3& forward, const Vec3& up)
+{
+	Vec3 zaxis = Vec::Normalize(-forward);
 	Vec3 xaxis = Vec::Normalize(Vec::Cross(up, zaxis));
 	Vec3 yaxis = Vec::Cross(zaxis, xaxis);
 

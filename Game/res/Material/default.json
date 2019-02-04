@@ -1,4 +1,13 @@
 {
 	"vertex": "Shader/default.vert",
-	"fragment": "Shader/default.frag"
+	"fragment": "Shader/default.frag",
+
+	"parameters":
+	{
+		"color": [1.0, 0.0, 0.0],
+		"color_shadow": [0.1, 0.2, 0.6],
+		"shadow_bias": 0.001,
+		"shadow_alpha": 0.3,
+		"ambient": 0.3
+	}
 }

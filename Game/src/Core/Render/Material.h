@@ -12,6 +12,7 @@ struct Material
 	Texture texture;
 
 	void Set(const char* anme, float value);
+	void Set(const char* anme, int value);
 	void Set(const char* name, const Vec2& value);
 	void Set(const char* name, const Vec3& value);
 	void Set(const char* name, const Vec4& value);

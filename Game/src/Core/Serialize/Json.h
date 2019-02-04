@@ -1,6 +1,7 @@
 #pragma once
 #include <rapidjson/document.h>
 #include <rapidjson/pointer.h>
+#include "Core/Standard/Map.h"
 
 class JsonValue;
 
@@ -27,6 +28,7 @@ private:
 class JsonValue
 {
 public:
+	JsonValue() : value(nullptr) {}
 	JsonValue(rapidjson::Value* value) : value(value) {}
 
 	template<typename T>
@@ -63,6 +65,9 @@ public:
 	template<typename T>
 	bool SerializeArray(const char* name, T* arr, uint32 count) { return GetChild(name).SerializeArray<T>(arr, count); }
 
+	// Get all children
+	bool SerializeChildren(Map<String, JsonValue>& map);
+
 	JsonValue GetChild(const char* name);
 	JsonValue GetArrayIndex(uint32 index);
 
@@ -73,10 +78,13 @@ public:
 	bool IsValid() const { return value != nullptr; }
 	bool IsArray() const;
 	bool IsObject() const;
-	uint32 ArrayLen() const;
+	template<typename T>
+	bool Is() const;
+
+	uint32 ArraySize() const;
 
 private:
-	rapidjson::Value* const value;
+	rapidjson::Value* value;
 };
 
 template<typename T>
@@ -98,7 +106,7 @@ bool JsonValue::SerializeArray(ArrayBase<T, TAlloc>& arr)
 	if (!Assert(IsArray()))
 		return false;
 
-	uint32 len = ArrayLen();
+	uint32 len = ArraySize();
 	arr.Resize(len);
 	SerializeArray(&arr[0], len);
 	return true;
@@ -113,7 +121,7 @@ bool JsonValue::SerializeArray(T* arr, uint32 count)
 	if (!Assert(IsArray()))
 		return false;
 
-	uint32 len = ArrayLen();
+	uint32 len = ArraySize();
 	len = count < len ? count : len;
 	for (uint32 i = 0; i < len; ++i)
 	{
@@ -121,4 +129,19 @@ bool JsonValue::SerializeArray(T* arr, uint32 count)
 	}
 
 	return true;
+}
+
+template<typename T>
+bool JsonValue::Is() const
+{
+	if (!IsValid())
+		return false;
+
+	if (IsArray())
+		return false;
+
+	if (IsObject())
+		return false;
+
+	return value->Is<T>();
 }

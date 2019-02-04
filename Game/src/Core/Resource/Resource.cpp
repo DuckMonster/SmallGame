@@ -9,6 +9,8 @@ void Resource::AddDependency(Resource* other)
 
 	dependecies.AddUnique(other);
 	other->dependent.AddUnique(this);
+
+	Debug_Log("%s --> %s", *path, *other->path);
 }
 
 void Resource::ClearDependencies()

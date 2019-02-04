@@ -1,4 +1,6 @@
 {
 	"parent": "Material/default.json",
-	"fragment": "Shader/floor.frag"
+	"parameters": {
+		"color": [0.5, 0.7, 0.35]
+	}
 }

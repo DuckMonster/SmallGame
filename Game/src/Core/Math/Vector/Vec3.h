@@ -5,16 +5,16 @@ struct Vec4;
 struct Vec3
 {
 	// Static vector constants
-	const static Vec3 Zero;
-	const static Vec3 One;
+	const static Vec3 zero;
+	const static Vec3 one;
 
-	const static Vec3 AxisX;
-	const static Vec3 AxisY;
-	const static Vec3 AxisZ;
+	const static Vec3 axis_x;
+	const static Vec3 axis_y;
+	const static Vec3 axis_z;
 
-	const static Vec3 Forward;
-	const static Vec3 Up;
-	const static Vec3 Right;
+	const static Vec3 forward;
+	const static Vec3 up;
+	const static Vec3 right;
 
 	Vec3() : x(0.f), y(0.f), z(0.f) {}
 	Vec3(float scalar) :

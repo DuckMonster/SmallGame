@@ -2,14 +2,16 @@
 #include "AimLookCapability.h"
 #include "Core/Math/Math.h"
 #include "Engine/Transform/TransformComponent.h"
+#include "Runtime/Movement/MovementComponent.h"
 #include "Runtime/Player/Player.h"
+#include "Engine/Debug/Debug.h"
 
 void AimLookCapability::Setup()
 {
 	player		= GetOwner()->GetOrAddComponent<PlayerComponent>();
-	transform	= player->mesh_entity->GetOrAddComponent<TransformComponent>();
+	transform	= GetOwner()->GetOrAddComponent<TransformComponent>();
+	movement	= GetOwner()->GetOrAddComponent<MovementComponent>();
 }
-
 void AimLookCapability::Tick()
 {
 	Vec3 direction = player->aim_world_position - transform->GetWorldPosition();
@@ -19,6 +21,6 @@ void AimLookCapability::Tick()
 	angle += angle_delta * 20.f * Time::Delta();
 	angle = Math::UnwindRadians(angle);
 
-	Quat quat = Quat::AngleAxis(-angle, Vec3::Up);
-	transform->SetRotation(quat);
+	Quat quat = Quat::AngleAxis(-angle, Vec3::up);
+	movement->SetRotation(quat);
 }

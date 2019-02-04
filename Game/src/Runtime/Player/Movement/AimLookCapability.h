@@ -3,6 +3,7 @@
 
 class PlayerComponent;
 class TransformComponent;
+class MovementComponent;
 
 class AimLookCapability : public Capability
 {
@@ -13,6 +14,7 @@ public:
 private:
 	PlayerComponent* player;
 	TransformComponent* transform;
+	MovementComponent* movement;
 
 	float angle = 0.f;
 };

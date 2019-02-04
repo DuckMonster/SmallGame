@@ -6,7 +6,7 @@ class Quat;
 
 struct Mat4
 {
-	static const Mat4 Identity;
+	static const Mat4 identity;
 
 	// Creates a scaling matrix
 	static Mat4 Scale(const Vec3& scale);
@@ -27,6 +27,7 @@ struct Mat4
 
 	// Returns a look-at matrix
 	static Mat4 LookAt(const Vec3& eye, const Vec3& target, const Vec3& up);
+	static Mat4 LookAtForward(const Vec3& eye, const Vec3& forward, const Vec3& up);
 
 	// Returns the inverse of a matrix
 	static Mat4 Inverse(const Mat4& mat);

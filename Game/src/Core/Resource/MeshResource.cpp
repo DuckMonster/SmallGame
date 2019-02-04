@@ -50,7 +50,7 @@ bool MeshResource::LoadInternal(const char* path)
 		for (uint32 face_index = 0; face_index < scene_mesh->mNumFaces; ++face_index)
 		{
 			const aiFace& face = scene_mesh->mFaces[face_index];
-			Assert(face.mNumIndices == 3);  // Right now we only support triangles
+			Assert(face.mNumIndices == 3);  // right now we only support triangles
 
 			memcpy(index_data + 3 * face_index, face.mIndices, sizeof(uint32) * 3);
 		}

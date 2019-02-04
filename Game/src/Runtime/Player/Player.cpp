@@ -10,6 +10,7 @@
 #include "Engine/Capability/CapabilityStatics.h"
 #include "Engine/Collision/ColliderComponent.h"
 #include "Engine/Camera/CameraComponent.h"
+#include "Runtime/Movement/MovementComponent.h"
 #include "Movement/PlayerMovementCapability.h"
 #include "Movement/MouseAimCapability.h"
 #include "Movement/AimLookCapability.h"
@@ -27,24 +28,15 @@ PlayerPrefab PlayerPrefab::Create(Scene* scene)
 	p.component = p.entity->AddComponent<PlayerComponent>();
 	p.transform = p.entity->AddComponent<TransformComponent>();
 	p.collider = p.entity->AddComponent<ColliderComponent>();
+	p.renderable = p.entity->AddComponent<RenderableComponent>();
+	p.movement = p.entity->AddComponent<MovementComponent>();
 
 	// Create colliders
-	p.collider->AddBox(Vec3(0.f, 1.f, 0.f), Vec3(1.f, 2.f, 1.f));
-
-	/* Create mesh entity */
-	p.mesh_entity = scene->CreateEntity("Player Mesh");
-	p.mesh_transform = p.mesh_entity->AddComponent<TransformComponent>();
-	p.mesh_transform->SetParent(p.transform);
-	p.mesh_renderable = p.mesh_entity->AddComponent<RenderableComponent>();
+	p.collider->object->AddBox(Vec3(0.f, 1.f, 0.f), Vec3(1.f, 2.f, 1.f), Quat::identity);
+	p.collider->debug_draw = false;
 
 	// Load renderable
-	MeshResource* mesh			= gResourceManager->Load<MeshResource>("Mesh/character.fbx");
-	MaterialResource* material	= gResourceManager->Load<MaterialResource>("Material/default.json");
-
-	p.mesh_renderable->mesh = &mesh->mesh;
-	p.mesh_renderable->material = &material->material;
-
-	p.component->mesh_entity = p.mesh_entity;
+	p.renderable->AddRenderableLoad("Mesh/character.fbx", "Material/player.json");
 
 	// Add capabilities
 	AddCapability<PlayerMovementCapability>(p.entity);

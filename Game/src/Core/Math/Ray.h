@@ -28,7 +28,7 @@ struct Ray
 		float d = Vec::Dot(plane.normal, -direction);
 		if (d <= 0.f)
 		{
-			return Vec3::Zero;
+			return Vec3::zero;
 		}
 
 		return GetPoint(h / d);

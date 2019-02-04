@@ -1,10 +1,12 @@
 #pragma once
 #include "Engine/Capability/Capability.h"
+#include "Engine/Collision/Collision.h"
 
 class Scene;
 class TransformComponent;
 class RenderableComponent;
 class ColliderComponent;
+class MovementComponent;
 
 // COMPONENT
 class ProjectileComponent : public Component
@@ -21,11 +23,13 @@ public:
 	void Tick() override;
 
 private:
-	void HandleOverlap(Entity* other);
+	void HandleOverlap(const OverlapResult& result);
 
 	float time = 3.f;
 	ProjectileComponent* projectile;
-	TransformComponent* transform;
+	MovementComponent* movement;
+
+	Vec3 velocity;
 };
 
 // PREFAB

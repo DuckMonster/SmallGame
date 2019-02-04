@@ -17,6 +17,13 @@ void Time::Update()
 	ptime now = PerformanceClock::Now();
 	last_frame_delta = PerformanceClock::GetDeltaSeconds(last_frame_time, now);
 	last_frame_time = now;
+
+	// Limit delta to 100 ms
+	if (last_frame_delta > 0.1f)
+	{
+		Debug_Log("Frame delta clamped (%f)", last_frame_delta);
+		last_frame_delta = 0.1f;
+	}
 }
 
 float Time::Delta()

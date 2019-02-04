@@ -6,6 +6,7 @@ class TransformComponent;
 class RenderableComponent;
 class ColliderComponent;
 class CameraComponent;
+class MovementComponent;
 
 // COMPONENT
 class PlayerComponent : public Component
@@ -13,7 +14,6 @@ class PlayerComponent : public Component
 public:
 	Vec3 aim_world_position;
 	CameraComponent* follower_camera = nullptr;
-	Entity* mesh_entity = nullptr;
 };
 
 // PREFAB
@@ -24,9 +24,7 @@ struct PlayerPrefab
 	Entity* entity;
 	PlayerComponent* component;
 	TransformComponent* transform;
+	RenderableComponent* renderable;
 	ColliderComponent* collider;
-
-	Entity* mesh_entity;
-	TransformComponent* mesh_transform;
-	RenderableComponent* mesh_renderable;
+	MovementComponent* movement;
 };

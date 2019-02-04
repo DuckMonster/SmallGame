@@ -124,8 +124,8 @@ DebugDrawManager::DebugDrawManager()
 
 	// Create line (will be filled in later)
 	mesh_line.vertex_buffer.Create(1);
-	mesh_line.vertex_buffer.BindBuffer(0, 0, 3, 6, 0);
-	mesh_line.vertex_buffer.BindBuffer(0, 1, 3, 6, 3);
+	mesh_line.vertex_buffer.BindBuffer(0, 0, 3, 7, 0);
+	mesh_line.vertex_buffer.BindBuffer(0, 1, 4, 7, 3);
 	mesh_line.draw_mode = GL_LINES;
 	mesh_line.draw_offset = 0;
 	mesh_line.use_elements = false;
@@ -157,6 +157,8 @@ void DebugDrawManager::AddLine(const Vec3& start, const Vec3& end, const Color& 
 
 void DebugDrawManager::DrawAndClear(const Mat4& camera)
 {
+	glDepthFunc(GL_LEQUAL);
+
 	// -- CUBES --
 	{
 		glUseProgram(mat_cube->program);
@@ -187,21 +189,24 @@ void DebugDrawManager::DrawAndClear(const Mat4& camera)
 			mat_sphere->Set("u_Color", spheres[i].color * Color(0.6f, 0.6f, 0.6f, 1.f));
 			mesh_sphere->Draw();
 
-			glDepthFunc(GL_LEQUAL);
 			mat_sphere->Set("u_Color", spheres[i].color);
 			mesh_sphere_lines.Draw();
-			glDepthFunc(GL_LESS);
 		}
 	}
 
 	// -- LINES --
 	{
+		glUseProgram(mat_line->program);
+		mat_line->Set("u_Camera", camera);
 		mesh_line.vertex_buffer.BufferData(0, lines.Ptr(), sizeof(Line) * lines.Size());
+		mesh_line.draw_count = lines.Size() * 2.f;
 		mesh_line.Draw();
 	}
 
 	cubes.ClearNoDestruct();
 	spheres.ClearNoDestruct();
 	lines.ClearNoDestruct();
+
+	glDepthFunc(GL_LESS);
 }
 

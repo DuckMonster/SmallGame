@@ -13,6 +13,7 @@
 #include "Core/Math/Math.h"
 #include "Core/Math/Vector.h"
 #include "Core/Math/Quat.h"
+#include "Core/Math/Transform.h"
 #include "Core/Time/Time.h"
 #include "Core/Defer.h"
 #include "Core/Memory/TempStack.h"

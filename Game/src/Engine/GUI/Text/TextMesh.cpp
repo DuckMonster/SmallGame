@@ -118,7 +118,7 @@ void TextMesh::Draw(int x, int y, const Mat4& screen)
 	// Bind texture
 	FontResource* font = style->font;
 	Texture& texture = font->texture->texture;
-	glBindTexture(GL_TEXTURE_2D, texture.handle);
+	texture.Bind();
 
 	// Draw background
 	Material& mat_background = font->background_material->material;

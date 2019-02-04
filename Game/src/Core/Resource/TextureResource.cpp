@@ -67,7 +67,8 @@ bool TextureResource::LoadInternal(const char* path)
 	texture.Create();
 	texture.width = header.width;
 	texture.height = header.height;
-	glBindTexture(GL_TEXTURE_2D, texture.handle);
+
+	texture.Bind();
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, header.width, header.width, 0, GL_RGBA, GL_UNSIGNED_BYTE, pix);
 
 	return true;

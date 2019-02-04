@@ -1,6 +1,7 @@
 #pragma once
 #include "Engine/Shape/Shape.h"
 #include "Engine/Capability/Capability.h"
+#include "Engine/Collision/Collision.h"
 
 class PlayerComponent;
 class TransformComponent;
@@ -15,11 +16,7 @@ public:
 	void Tick() override;
 
 private:
-	void HandleCollision(Entity* other);
-
 	PlayerComponent* player;
 	TransformComponent* transform;
 	ColliderComponent* collider;
-
-	ShapePrefab sphere;
 };

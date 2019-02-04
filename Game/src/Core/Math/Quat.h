@@ -15,12 +15,16 @@ public:
 
 	static bool NearlyZero(const Quat& q, const float margin = KINDA_SMALL_NUMBER);
 	static bool NearlyEquals(const Quat& a, const Quat& b, const float margin = KINDA_SMALL_NUMBER);
-	static bool IsIdentity(const Quat& q);
+	static bool Isidentity(const Quat& q);
 	static bool IsUnit(const Quat& q);
 
 	static float LengthSqrd(const Quat& q);
 	static float Length(const Quat& q);
 	static Quat Normalize(const Quat& q);
+
+	static Quat Conjugate(const Quat& q);
+
+	static Quat FromToQuat(const Quat& from, const Quat& to);
 
 	Quat() : x(0.f), y(0.f), z(0.f), w(1.f) {}
 	Quat(float x, float y, float z, float w) :
@@ -28,6 +32,12 @@ public:
 
 	Quat operator*(const Quat& rhs) const;
 	Quat& operator*=(const Quat& rhs);
+
+	// Scalar operators
+	Quat operator*(float scalar) const;
+	Quat& operator*=(float scalar);
+	Quat operator/(float scalar) const;
+	Quat& operator/=(float scalar);
 
 	Vec3 operator*(const Vec3& vec) const;
 	Vec4 operator*(const Vec4& vec) const;

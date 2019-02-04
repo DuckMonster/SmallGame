@@ -17,3 +17,10 @@ void Texture::Destroy()
 	glDeleteTextures(1, &handle);
 	handle = GL_INVALID_INDEX;
 }
+
+void Texture::Bind(uint32 index/* = 0*/) const
+{
+	glActiveTexture(GL_TEXTURE0 + index);
+	glBindTexture(GL_TEXTURE_2D, handle);
+	glActiveTexture(GL_TEXTURE0);
+}

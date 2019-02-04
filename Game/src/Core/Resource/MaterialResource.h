@@ -15,6 +15,11 @@ public:
 	ShaderResource* fragment_resource = nullptr;
 	TextureResource* texture_resource = nullptr;
 
+	GLuint vertex_handle;
+	GLuint fragment_handle;
+
 	Material material;
 	bool is_valid = false;
+
+	Map<String, String> parameters;
 };

@@ -20,7 +20,7 @@ Texture& FrameBuffer::AddTexture()
 	texture.width = width;
 	texture.height = height;
 
-	glBindTexture(GL_TEXTURE_2D, texture.handle);
+	texture.Bind();
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
 
 	glBindFramebuffer(GL_FRAMEBUFFER, handle);
@@ -40,7 +40,7 @@ Texture& FrameBuffer::AddDepthTexture()
 	texture.width = width;
 	texture.height = height;
 
-	glBindTexture(GL_TEXTURE_2D, texture.handle);
+	texture.Bind();
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, width, height, 0, GL_DEPTH_COMPONENT, GL_FLOAT, nullptr);
 
 	glBindFramebuffer(GL_FRAMEBUFFER, handle);
@@ -60,7 +60,7 @@ Texture& FrameBuffer::AddDepthStencilTexture()
 	texture.width = width;
 	texture.height = height;
 
-	glBindTexture(GL_TEXTURE_2D, texture.handle);
+	texture.Bind();
 	glTexStorage2D(GL_TEXTURE_2D, 2, GL_DEPTH24_STENCIL8, width, height);
 
 	glBindFramebuffer(GL_FRAMEBUFFER, handle);
