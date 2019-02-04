@@ -1,8 +1,5 @@
-
 #include "Property.h"
 #include "Core/Resource/Resource.h"
-#include "Core/Entity/Entity.h"
-#include "Core/Component/Component.h"
 
 namespace StringHelpers
 {
@@ -55,15 +52,4 @@ namespace StringHelpers
 	{
 		return resource->GetPath();
 	}
-
-	TString ToString(const Entity* entity)
-	{
-		return entity->GetName();
-	}
-
-	TString ToString(const Component* component)
-	{
-		return TString::Printf("%s.%s", *component->GetOwner()->GetName(), *component->GetType()->name);
-	}
-
 }

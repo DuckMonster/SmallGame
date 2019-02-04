@@ -1,8 +1,8 @@
 #include <PCH.h>
 #include "../Test.h"
-#include "Core/Class/Type.h"
-#include "Core/Class/TypedObject.h"
-#include "Core/Class/TypeHelpers.h"
+#include "Core/Type/Type.h"
+#include "Core/Type/TypedObject.h"
+#include "Core/Type/TypeHelpers.h"
 
 namespace
 {
