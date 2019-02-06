@@ -9,7 +9,7 @@ PrintWidget::PrintWidget()
 void PrintWidget::Update()
 {
 	SlottedWidget::Update();
-	const Array<DebugPrintManager::Message>& messages = gPrintManager->GetMessages();
+	const Array<DebugPrintManager::Message>& messages = print_manager.GetMessages();
 
 	text->text = "{print}";
 
@@ -33,5 +33,5 @@ void PrintWidget::Update()
 		}
 	}
 
-	gPrintManager->RemoveExpired();
+	print_manager.RemoveExpired();
 }

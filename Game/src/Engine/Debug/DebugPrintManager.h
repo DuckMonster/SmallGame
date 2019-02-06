@@ -18,4 +18,4 @@ private:
 	Array<Message> messages;
 };
 
-extern DebugPrintManager* gPrintManager;
+extern DebugPrintManager print_manager;

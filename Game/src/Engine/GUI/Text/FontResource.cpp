@@ -30,11 +30,11 @@ bool FontResource::LoadInternal(const char* path)
 
 	/* LOAD DEPENDENT RESOURCES */
 	if (foreground_path != nullptr)
-		foreground_material = gResourceManager->Load<MaterialResource>(foreground_path);
+		foreground_material = resource_manager.Load<MaterialResource>(foreground_path);
 	if (background_path != nullptr)
-		background_material = gResourceManager->Load<MaterialResource>(background_path);
+		background_material = resource_manager.Load<MaterialResource>(background_path);
 	if (texture_path != nullptr)
-		texture = gResourceManager->Load<TextureResource>(texture_path);
+		texture = resource_manager.Load<TextureResource>(texture_path);
 
 	bool success = true;
 	success |= Assert(foreground_material != nullptr);

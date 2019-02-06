@@ -18,6 +18,7 @@
     <ClCompile Include="src\Core\Context\Context.cpp" />
     <ClCompile Include="src\Core\Debug\Assert.cpp" />
     <ClCompile Include="src\Core\Hash\Hash.cpp" />
+    <ClCompile Include="src\Core\Input\Input.cpp" />
     <ClCompile Include="src\Core\Math\Math.cpp" />
     <ClCompile Include="src\Core\Math\Matrix.cpp" />
     <ClCompile Include="src\Core\Math\Quat.cpp" />

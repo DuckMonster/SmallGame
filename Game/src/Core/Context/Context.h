@@ -1,8 +1,7 @@
 #pragma once
-#include "Core/Input/Input.h"
 struct ContextData;
 
-enum class ContextEventType
+enum class Context_Event_Type
 {
 	Invalid,
 	Closed,
@@ -11,16 +10,14 @@ enum class ContextEventType
 
 struct Context
 {
-	ContextData* data;
-	int width;
-	int height;
-	bool is_open;
-	bool is_focused;
-
-	InputState input;
+	ContextData* data	= nullptr;
+	int width			= 0;
+	int height			= 0;
+	bool is_open		= false;
+	bool is_focused		= false;
 };
 
-extern Context* gContext;
+extern Context context;
 
 bool CreateContext();
 void ContextUpdateFrame();

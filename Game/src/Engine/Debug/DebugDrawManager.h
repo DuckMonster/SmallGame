@@ -29,7 +29,7 @@ class DebugDrawManager
 	};
 
 public:
-	DebugDrawManager();
+	void LoadResources();
 
 	void AddCube(const Mat4& mat, const Color& color);
 	void AddSphere(const Vec3& origin, float radius, const Color& color);
@@ -38,6 +38,8 @@ public:
 	void DrawAndClear(const Mat4& camera);
 
 private:
+	bool resources_loaded = false;
+
 	Array<Cube> cubes;
 	Array<Sphere> spheres;
 	Array<Line> lines;
@@ -53,4 +55,4 @@ private:
 	Mesh mesh_line;
 };
 
-extern DebugDrawManager* gDebugDrawManager;
+extern DebugDrawManager debug_draw_manager;

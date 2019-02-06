@@ -52,7 +52,7 @@ bool StyleResource::LoadInternal(const char* path)
 	StyleResource* parent = nullptr;
 	if (parent_path != nullptr)
 	{
-		parent = gResourceManager->Load<StyleResource>(parent_path);
+		parent = resource_manager.Load<StyleResource>(parent_path);
 		if (parent != nullptr)
 		{
 			// Copy over palette from parent, before we write our own stuff
@@ -65,7 +65,7 @@ bool StyleResource::LoadInternal(const char* path)
 	// Load font
 	if (font_path != nullptr)
 	{
-		font = gResourceManager->Load<FontResource>(font_path);
+		font = resource_manager.Load<FontResource>(font_path);
 	}
 
 	if (font == nullptr)

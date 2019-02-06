@@ -3,7 +3,7 @@
 #include "Resource.h"
 
 int ResourceScope::num_loading = 0;
-ResourceManager* gResourceManager = nullptr;
+ResourceManager resource_manager("res");
 
 ResourceManager::ResourceManager(const char* root) : root_path(Path::Clean(root))
 {

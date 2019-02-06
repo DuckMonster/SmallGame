@@ -34,7 +34,7 @@ bool MaterialResource::LoadInternal(const char* path)
 	// Load parent material
 	if (parent_path != nullptr)
 	{
-		parent = gResourceManager->Load<MaterialResource>(parent_path);
+		parent = resource_manager.Load<MaterialResource>(parent_path);
 		if (parent == nullptr)
 		{
 			Error("Failed to load parent '%s' when loading material '%s'", parent_path, path);
@@ -125,7 +125,7 @@ bool MaterialResource::LoadInternal(const char* path)
 	// Load vertex shader
 	if (vert_path != nullptr)
 	{
-		vertex_resource = gResourceManager->Load<ShaderResource>(vert_path);
+		vertex_resource = resource_manager.Load<ShaderResource>(vert_path);
 
 		if (vertex_resource != nullptr)
 			AddDependency(vertex_resource);
@@ -138,7 +138,7 @@ bool MaterialResource::LoadInternal(const char* path)
 	// Load fragment shader
 	if (frag_path != nullptr)
 	{
-		fragment_resource = gResourceManager->Load<ShaderResource>(frag_path);
+		fragment_resource = resource_manager.Load<ShaderResource>(frag_path);
 
 		if (fragment_resource != nullptr)
 			AddDependency(fragment_resource);
@@ -167,7 +167,7 @@ bool MaterialResource::LoadInternal(const char* path)
 	// Load texture
 	if (texture_path != nullptr)
 	{
-		texture_resource = gResourceManager->Load<TextureResource>(texture_path);
+		texture_resource = resource_manager.Load<TextureResource>(texture_path);
 		if (texture_resource == nullptr)
 			Error("Failed to load texture '%s' when loading material '%s'", texture_path, path);
 		else

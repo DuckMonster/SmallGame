@@ -14,5 +14,5 @@ void HeapAllocator::Free(void* ptr)
 
 void* TemporaryAllocator::Malloc(uint32 size)
 {
-	return gTempStack->Malloc(size);
+	return temp_stack.Malloc(size);
 }

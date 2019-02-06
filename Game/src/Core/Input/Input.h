@@ -92,3 +92,5 @@ struct InputState
 		return mouse_state.wheel - mouse_state.prev_wheel;
 	}
 };
+
+extern InputState input;

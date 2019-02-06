@@ -1,5 +1,5 @@
 #pragma once
-#define talloc(size) ((char*)gTempStack->Malloc(size))
+#define talloc(size) ((char*)temp_stack.Malloc(size))
 
 class TempStack
 {
@@ -29,4 +29,4 @@ public:
 	uint32 prev_offset;
 };
 
-extern TempStack* gTempStack;
+extern TempStack temp_stack;

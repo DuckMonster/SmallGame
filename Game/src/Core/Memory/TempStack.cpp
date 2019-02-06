@@ -2,7 +2,7 @@
 #include "TempStack.h"
 #include "Core/Math/Math.h"
 
-TempStack* gTempStack = nullptr;
+TempStack temp_stack;
 
 void* TempStack::Malloc(uint32 size)
 {

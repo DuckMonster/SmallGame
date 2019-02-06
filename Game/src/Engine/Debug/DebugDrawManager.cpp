@@ -4,7 +4,7 @@
 #include "Core/Resource/MaterialResource.h"
 #include "Core/Resource/MeshResource.h"
 
-DebugDrawManager* gDebugDrawManager = nullptr;
+DebugDrawManager debug_draw_manager;
 
 namespace
 {
@@ -110,16 +110,19 @@ namespace
 	}
 }
 
-DebugDrawManager::DebugDrawManager()
+void DebugDrawManager::LoadResources()
 {
-	mat_cube = &gResourceManager->Load<MaterialResource>("Material/Debug/cube.json")->material;
-	mat_sphere = &gResourceManager->Load<MaterialResource>("Material/Debug/sphere.json")->material;
-	mat_line = &gResourceManager->Load<MaterialResource>("Material/Debug/line.json")->material;
+	if (resources_loaded)
+		return;
 
-	mesh_cube = &gResourceManager->Load<MeshResource>("Mesh/Debug/cube.fbx")->mesh;
+	mat_cube = &resource_manager.Load<MaterialResource>("Material/Debug/cube.json")->material;
+	mat_sphere = &resource_manager.Load<MaterialResource>("Material/Debug/sphere.json")->material;
+	mat_line = &resource_manager.Load<MaterialResource>("Material/Debug/line.json")->material;
+
+	mesh_cube = &resource_manager.Load<MeshResource>("Mesh/Debug/cube.fbx")->mesh;
 	LoadCubeLines(mesh_cube_lines);
 
-	mesh_sphere = &gResourceManager->Load<MeshResource>("Mesh/Debug/sphere.fbx")->mesh;
+	mesh_sphere = &resource_manager.Load<MeshResource>("Mesh/Debug/sphere.fbx")->mesh;
 	LoadSphereLines(mesh_sphere_lines);
 
 	// Create line (will be filled in later)
@@ -129,6 +132,8 @@ DebugDrawManager::DebugDrawManager()
 	mesh_line.draw_mode = GL_LINES;
 	mesh_line.draw_offset = 0;
 	mesh_line.use_elements = false;
+
+	resources_loaded = true;
 }
 
 void DebugDrawManager::AddCube(const Mat4& mat, const Color& color)
@@ -157,6 +162,8 @@ void DebugDrawManager::AddLine(const Vec3& start, const Vec3& end, const Color& 
 
 void DebugDrawManager::DrawAndClear(const Mat4& camera)
 {
+	LoadResources();
+
 	glDepthFunc(GL_LEQUAL);
 
 	// -- CUBES --

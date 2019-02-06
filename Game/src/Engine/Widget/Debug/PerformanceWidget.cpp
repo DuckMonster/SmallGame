@@ -60,6 +60,6 @@ void PerformanceWidget::Update()
 
 	/*-- UPDATE STORAGE --*/
 	{
-		storage->text = TString::Printf("{cyan}TEMP STACK %d/%d B{}", gTempStack->prev_offset, gTempStack->data_size);
+		storage->text = TString::Printf("{cyan}TEMP STACK %d/%d B{}", temp_stack.prev_offset, temp_stack.data_size);
 	}
 }

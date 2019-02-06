@@ -2,7 +2,7 @@
 #include "DebugPrintManager.h"
 #include "Core/Time/Time.h"
 
-DebugPrintManager* gPrintManager = nullptr;
+DebugPrintManager print_manager;
 
 void DebugPrintManager::Print(const char* message, float duration /*= -1.f*/)
 {

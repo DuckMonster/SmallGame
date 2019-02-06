@@ -67,6 +67,7 @@
     <ClCompile Include="src\Engine\Widget\SlottedWidget.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\PCH.cpp" />
+    <ClCompile Include="src\Core\Input\Input.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Core\Context\Context.h" />

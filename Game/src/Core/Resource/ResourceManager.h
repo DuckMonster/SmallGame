@@ -97,4 +97,4 @@ TRes* ResourceManager::Load(const char* path)
 	return res;
 }
 
-extern ResourceManager* gResourceManager;
+extern ResourceManager resource_manager;

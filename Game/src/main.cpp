@@ -2,14 +2,13 @@
 #include <GL/glew.h>
 #include "Core/Context/Context.h"
 #include "Core/Scene/Scene.h"
-#include "Core/Resource/ResourceManager.h"
 #include "Core/Memory/TempStack.h"
 #include "Core/Memory/Allocator.h"
 #include "Core/Debug/GLDebug.h"
 #include "Core/Time/TimeStamp.h"
 #include "Core/Math/Random.h"
-#include "Engine/Debug/DebugPrintManager.h"
-#include "Engine/Debug/DebugDrawManager.h"
+#include "Core/Resource/ResourceManager.h"
+#include "Core/Input/Input.h"
 #include <windows.h>
 #include <time.h>
 
@@ -21,10 +20,6 @@ int main()
 	// Seed RNG
 	Random::SetSeed((unsigned)time(NULL));
 
-	// Initialize temporary storage
-	TempStack temp_stack;
-	gTempStack = &temp_stack;
-
 	// Run tests
 	Test::Run();
 }
@@ -33,15 +28,6 @@ int main(int argc, char* argv)
 {
 	// Seed RNG
 	Random::SetSeed((unsigned)time(NULL));
-
-	// Initialize temporary storage
-	TempStack temp_stack;
-	temp_stack.Resize(8);
-	gTempStack = &temp_stack;
-
-	// Initialize print manager
-	DebugPrintManager print_manager;
-	gPrintManager = &print_manager;
 
 	// Create context
 	CreateContext();
@@ -75,24 +61,19 @@ int main(int argc, char* argv)
 #endif
 	}
 
-	// Resource manager
-	ResourceManager resource_manager("res");
-	gResourceManager = &resource_manager;
-
-	// Debug draw
-	DebugDrawManager debug_draw_manager;
-	gDebugDrawManager = &debug_draw_manager;
-
 	Scene scene;
 
-	while (gContext->is_open)
+	while (context.is_open)
 	{
 		temp_stack.Reset();
 		ContextUpdateFrame();
 
 		// Get out if the window was closed this frame
-		if (!gContext->is_open || gContext->input.GetKeyPressed(Key::Escape))
+		if (!context.is_open || input.GetKeyPressed(Key::Escape))
 			break;
+
+		if (input.GetKeyPressed(Key::Spacebar))
+			Debug_Log("Space!");
 
 #if DEBUG
 		// Resource hotreloading

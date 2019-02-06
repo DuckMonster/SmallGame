@@ -5,6 +5,7 @@
 #include <GL/wglew.h>
 #include <GL/GL.h>
 #include "Core/Time/PerformanceClock.h"
+#include "Core/Input/Input.h"
 
 struct ContextData
 {
@@ -48,7 +49,7 @@ struct WinMouseButtonParams
 	uint8 X2 : 1;
 };
 
-Context* gContext = nullptr;
+Context context;
 
 namespace
 {
@@ -171,23 +172,23 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT Message, WPARAM wParam, LPARAM lParam)
 		wglSwapIntervalEXT(0);
 
 		// Set context data now that we have it
-		gContext->data->hWnd = hWnd;
-		gContext->data->hDc = device_context;
-		gContext->data->hGlContext = gl_context;
+		context.data->hWnd = hWnd;
+		context.data->hDc = device_context;
+		context.data->hGlContext = gl_context;
 		break;
 	}
 
 	// -- ACTIVATE (focus) --
 	case WM_ACTIVATE:
 	{
-		gContext->is_focused = wParam > 0;
+		context.is_focused = wParam > 0;
 		break;
 	}
 
 	// -- KEY DOWN --
 	case WM_KEYDOWN:
 	{
-		if (!gContext->is_focused)
+		if (!context.is_focused)
 			break;
 
 		WinKeyParams* key = (WinKeyParams*)&lParam;
@@ -202,14 +203,14 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT Message, WPARAM wParam, LPARAM lParam)
 			break;
 		}
 
-		gContext->input.SetKey((Key)key->scancode, true);
+		input.SetKey((Key)key->scancode, true);
 		break;
 	}
 
 	// -- KEY UP --
 	case WM_KEYUP:
 	{
-		if (!gContext->is_focused)
+		if (!context.is_focused)
 			break;
 
 		WinKeyParams* key = (WinKeyParams*)&lParam;
@@ -220,74 +221,74 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT Message, WPARAM wParam, LPARAM lParam)
 			break;
 		}
 
-		gContext->input.SetKey((Key)key->scancode, false);
+		input.SetKey((Key)key->scancode, false);
 		break;
 	}
 
 	// -- MOUSE MOVE --
 	case WM_MOUSEMOVE:
 	{
-		if (!gContext->is_focused)
+		if (!context.is_focused)
 			break;
 
 		WinMouseParams* mouse = (WinMouseParams*)&lParam;
-		gContext->input.mouse_state.x = mouse->x;
-		gContext->input.mouse_state.y = mouse->y;
+		input.mouse_state.x = mouse->x;
+		input.mouse_state.y = mouse->y;
 		break;
 	}
 
 	// -- MOUSE INPUTS --
 	case WM_LBUTTONDOWN:
 	{
-		if (!gContext->is_focused)
+		if (!context.is_focused)
 			break;
 
-		gContext->input.SetMouseButton(MouseButton::Left, true);
+		input.SetMouseButton(MouseButton::Left, true);
 		break;
 	}
 	case WM_LBUTTONUP:
 	{
-		if (!gContext->is_focused)
+		if (!context.is_focused)
 			break;
 
-		gContext->input.SetMouseButton(MouseButton::Left, false);
+		input.SetMouseButton(MouseButton::Left, false);
 		break;
 	}
 	case WM_RBUTTONDOWN:
 	{
-		if (!gContext->is_focused)
+		if (!context.is_focused)
 			break;
 
-		gContext->input.SetMouseButton(MouseButton::right, true);
+		input.SetMouseButton(MouseButton::right, true);
 		break;
 	}
 	case WM_RBUTTONUP:
 	{
-		if (!gContext->is_focused)
+		if (!context.is_focused)
 			break;
 
-		gContext->input.SetMouseButton(MouseButton::right, false);
+		input.SetMouseButton(MouseButton::right, false);
 		break;
 	}
 	case WM_MBUTTONDOWN:
 	{
-		if (!gContext->is_focused)
+		if (!context.is_focused)
 			break;
 
-		gContext->input.SetMouseButton(MouseButton::Middle, true);
+		input.SetMouseButton(MouseButton::Middle, true);
 		break;
 	}
 	case WM_MBUTTONUP:
 	{
-		if (!gContext->is_focused)
+		if (!context.is_focused)
 			break;
 
-		gContext->input.SetMouseButton(MouseButton::Middle, false);
+		input.SetMouseButton(MouseButton::Middle, false);
 		break;
 	}
 	case WM_XBUTTONDOWN:
 	{
-		if (!gContext->is_focused)
+		if (!context.is_focused)
 			break;
 
 		// Find out which XButton by looking at the high-order of wParam
@@ -299,12 +300,12 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT Message, WPARAM wParam, LPARAM lParam)
 		}
 
 		MouseButton btn = high_word == 1 ? MouseButton::X1 : MouseButton::X2;
-		gContext->input.SetMouseButton(btn, true);
+		input.SetMouseButton(btn, true);
 		break;
 	}
 	case WM_XBUTTONUP:
 	{
-		if (!gContext->is_focused)
+		if (!context.is_focused)
 			break;
 
 		// Find out which XButton by looking at the high-order of wParam
@@ -316,7 +317,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT Message, WPARAM wParam, LPARAM lParam)
 		}
 
 		MouseButton btn = high_word == 1 ? MouseButton::X1 : MouseButton::X2;
-		gContext->input.SetMouseButton(btn, false);
+		input.SetMouseButton(btn, false);
 		break;
 	}
 
@@ -327,7 +328,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT Message, WPARAM wParam, LPARAM lParam)
 
 		// The delta is in order of this WHEEL_DELTA constant
 		delta /= WHEEL_DELTA;
-		gContext->input.mouse_state.wheel += delta;
+		input.mouse_state.wheel += delta;
 		break;
 	}
 
@@ -335,10 +336,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT Message, WPARAM wParam, LPARAM lParam)
 	case WM_SIZE:
 	{
 		WinSizeParams* size = (WinSizeParams*)&lParam;
-		gContext->width = size->width;
-		gContext->height = size->height;
+		context.width = size->width;
+		context.height = size->height;
 
-		glViewport(0, 0, gContext->width, gContext->height);
+		glViewport(0, 0, context.width, context.height);
 
 		break;
 	}
@@ -346,10 +347,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT Message, WPARAM wParam, LPARAM lParam)
 	// -- DESTROY --
 	case WM_DESTROY:
 	{
-		wglDeleteContext(gContext->data->hGlContext);
-		delete gContext->data;
-		gContext->data = nullptr;
-		gContext->is_open = false;
+		wglDeleteContext(context.data->hGlContext);
+		delete context.data;
+		context.data = nullptr;
+		context.is_open = false;
 
 		break;
 	}
@@ -363,7 +364,7 @@ bool CreateContext()
 	static bool class_was_registered = false;
 	static LPCSTR class_name = "WindowClass";
 
-	Assert(gContext == nullptr);
+	Assert(!context.is_open);
 
 	HINSTANCE hInstance = GetModuleHandle(NULL);
 
@@ -385,15 +386,14 @@ bool CreateContext()
 	}
 
 	// Create the global context data
-	gContext = new Context();
-	gContext->width = 640;
-	gContext->height = 480;
-	gContext->is_open = true;
-	gContext->data = new ContextData;
-	gContext->data->hInstance = hInstance;
+	context.width = 640;
+	context.height = 480;
+	context.is_open = true;
+	context.data = new ContextData;
+	context.data->hInstance = hInstance;
 
 	// Open window
-	CreateWindow(class_name, "Hello World!", WS_OVERLAPPEDWINDOW | WS_VISIBLE, 0, 0, 1600, 1024, 0, 0, hInstance, 0);
+	CreateWindow(class_name, "Hello World!", WS_OVERLAPPEDWINDOW | WS_VISIBLE, CW_USEDEFAULT, CW_USEDEFAULT, 1600, 1024, 0, 0, hInstance, 0);
 
 	PerformanceClock::Init();
 	Time::Init();
@@ -403,8 +403,8 @@ bool CreateContext()
 void ContextUpdateFrame()
 {
 	// Reset mouse wheel for this frame
-	gContext->input.mouse_state.prev_wheel = gContext->input.mouse_state.wheel;
-	gContext->input.input_frame++;
+	input.mouse_state.prev_wheel = input.mouse_state.wheel;
+	input.input_frame++;
 	Sleep(1);
 
 	MSG msg = { 0 };
@@ -421,23 +421,20 @@ void ContextUpdateFrame()
 void ContextSwapBuffer()
 {
 	Time::EndFrame();
-	Assert(gContext != nullptr);
+	Assert(context.is_open);
 
 	// Swap dat
-	SwapBuffers(gContext->data->hDc);
+	SwapBuffers(context.data->hDc);
 }
 
 void DestroyContext()
 {
-	if (gContext == nullptr)
+	if (!context.is_open)
 		return;
 
-	if (gContext->data != nullptr)
+	if (context.data != nullptr)
 	{
 		// The context is still open, so manually clean up here
-		DestroyWindow(gContext->data->hWnd);
+		DestroyWindow(context.data->hWnd);
 	}
-
-	delete gContext;
-	gContext = nullptr;
 }

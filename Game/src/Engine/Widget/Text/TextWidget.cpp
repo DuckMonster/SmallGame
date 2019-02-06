@@ -32,5 +32,5 @@ WidgetSize TextWidget::GetSize()
 void TextWidget::SetStyle(const char* path)
 {
 	style_path = path;
-	mesh.style = gResourceManager->Load<StyleResource>(path);
+	mesh.style = resource_manager.Load<StyleResource>(path);
 }
